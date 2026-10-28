@@ -1,0 +1,2 @@
+# Hero video pending
+The user supplied a 1024×576 reference video. A commercial-usage-approved master and responsive cut are pending. The Home includes an accessible video element and fallback, but playback is intentionally not activated without an approved binary. Upload hero-film.mp4, prepare a poster, and set the data-src attribute of #hero-film. Do not present the filmed room as the actual studio without confirmation.
