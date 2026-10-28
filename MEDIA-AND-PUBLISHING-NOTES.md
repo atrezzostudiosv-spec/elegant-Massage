@@ -1,2 +1,9 @@
-# Preview-only media and release controls
-This is a noindex preview, not a published commercial website. Current images are temporary Unsplash illustrative references and must be checked for licensing and replaced with authorized photography. They do not depict verified premises or employees. The Home video is structurally supported but inactive pending media validation. Photos from the original site must be verified with the owner. Prices from the historic 2024 menu are not carried over because Setmore lists different amounts. Specialty services need reconfirmation. Real browser QA is still pending.
+# Elegant Massage — release controls
+
+The business has authorized use of illustrative cinematic photos and richer descriptions based on its existing services; such images must not be presented as verified staff or real premises. Existing Setmore links are untouched.
+
+Contact uses FormSubmit with temporary test destination atrezzostudiosv@gmail.com and explicit user disclosure. Delivery is NOT VERIFIED; FormSubmit may need recipient activation.
+
+The Home references assets/video/elegant-massage-cinematic-hero-desktop.mp4, assets/video/elegant-massage-cinematic-hero-mobile.mp4 and assets/images/elegant-massage-cinematic-treatment-hero-poster.webp. These binaries were encoded from the user-provided video but cannot yet be considered committed to GitHub. The static photo fallback remains. Do not claim working video without fetching the actual media URLs.
+
+The demo is noindex and disallowed by robots.txt. Publication, indexing, successful submissions and browser QA are not verified.
