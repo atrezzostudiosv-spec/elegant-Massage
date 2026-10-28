@@ -1,0 +1,33 @@
+name: Atrezzo Visual QA — Elegant Massage
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install browser test dependency
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Serve static demo and inspect in browser
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/elegant-http.log 2>&1 &
+          sleep 2
+          node tests/visual-qa.cjs
+      - name: Upload visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elegant-massage-responsive-qa
+          path: qa-artifacts/
+          if-no-files-found: warn
+          retention-days: 10
