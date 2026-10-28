@@ -1,2 +1,7 @@
-# Hero video pending
-The user supplied a 1024×576 reference video. A commercial-usage-approved master and responsive cut are pending. The Home includes an accessible video element and fallback, but playback is intentionally not activated without an approved binary. Upload hero-film.mp4, prepare a poster, and set the data-src attribute of #hero-film. Do not present the filmed room as the actual studio without confirmation.
+# Hero assets
+Drop-in media files produced from the supplied 10-second video:
+- assets/video/elegant-massage-cinematic-hero-desktop.mp4
+- assets/video/elegant-massage-cinematic-hero-mobile.mp4
+- assets/images/elegant-massage-cinematic-treatment-hero-poster.webp
+
+The Home HTML references all three and JS chooses portrait on narrow viewports. Reduced motion and Save-Data show a static visual. The binary assets have not been uploaded to GitHub via its text-only file connector.
