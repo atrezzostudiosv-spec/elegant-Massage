@@ -68,3 +68,11 @@ a.service-row[href*="specialty-techniques"] .scene{background-image:url('../imag
 .hero--home .hero__background{background-image:url('../images/elegant-massage-cinematic-hero-mobile-atrezzo.webp');background-position:center 46%}
 .hero--home::before{background:linear-gradient(0deg,rgba(11,27,19,.86),rgba(11,27,19,.42) 70%,rgba(11,27,19,.1))}
 }
+
+/* Distinct service hero image art direction */
+body[data-page="services"] .hero__background{background-image:url('../images/elegant-massage-massage-touch-detail.webp')}
+body[data-page="body"] .hero__background{background-image:url('../images/elegant-massage-body-massage-cinematic.webp')}
+body[data-page="foot"] .hero__background{background-image:url('../images/elegant-massage-foot-reflexology-atrezzo.webp')}
+body[data-page="combo"] .hero__background{background-image:url('../images/elegant-massage-combination-massage-atrezzo.webp')}
+body[data-page="chair"] .hero__background{background-image:url('../images/elegant-massage-chair-massage-atrezzo.webp')}
+body[data-page="couples"] .hero__background{background-image:url('../images/elegant-massage-couples-massage-atrezzo.webp')}
