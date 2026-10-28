@@ -49,13 +49,14 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
    // Trigger actual IntersectionObserver reveals through normal scrolling before a full-page screenshot.
    const totalHeight=await page.evaluate(()=>document.documentElement.scrollHeight);
    for(let y=0;y<totalHeight;y+=Math.max(300,Math.round(width*.55))){
-     await page.evaluate(y=>window.scrollTo(0,y),y);
+     await page.evaluate(y=>window.scrollTo({top:y,behavior:"instant"}),y);
      await page.waitForTimeout(55);
    }
-   await page.evaluate(()=>window.scrollTo(0,0));
+   await page.evaluate(()=>window.scrollTo({top:0,behavior:"instant"}));
    await page.waitForTimeout(1000);
    const unrevealed=await page.locator('.reveal:not(.visible)').count();
-   assert(unrevealed<=1,width+': unrevealed text after natural scroll: '+unrevealed);
+   const hiddenLabels=await page.locator('.reveal:not(.visible)').evaluateAll(xs=>xs.map(el=>el.textContent.trim().slice(0,65)));
+   assert(unrevealed<=1,width+': unrevealed text after natural scroll: '+unrevealed+' '+JSON.stringify(hiddenLabels));
    await page.screenshot({path:path.join(out,'home-'+width+'-full.png'),fullPage:true,animations:'disabled'});
    assert(errors.length===0,width+': JS errors '+errors.join(' | '));
    results.push({width,...summary,errors});
