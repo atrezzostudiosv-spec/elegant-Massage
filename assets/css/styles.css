@@ -22,7 +22,7 @@
 }}
 
 /* Home cinematic media — local approved poster; illustrative remote fallback */
-.hero--home .hero__background{background-image:url('../images/elegant-massage-cinematic-treatment-hero-poster.webp'),url('../images/elegant-massage-cinematic-hero-atrezzo.webp')}
+.hero--home .hero__background{background-image:url('../images/elegant-massage-cinematic-hero-atrezzo.webp'),url('../images/elegant-massage-cinematic-hero-atrezzo.webp')}
 .hero--home .hero__film{object-position:55% center}
 .hero__film[hidden]{display:none}
 @media(max-width:640px){.hero--home .hero__background{background-position:60% center}}
