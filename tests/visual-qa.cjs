@@ -19,7 +19,7 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
    page.on('pageerror',e=>errors.push(e.message));
    const response=await page.goto(BASE+'/',{waitUntil:'domcontentloaded',timeout:30000});
    await page.locator('h1').waitFor();
-   await page.waitForTimeout(900);
+   await page.waitForFunction(()=>{const v=document.querySelector('#hero-film');return !!v&&(v.readyState>=2||!!v.error)},{},{timeout:8000}).catch(()=>{}); await page.waitForTimeout(180);
    const summary=await page.evaluate(()=>({
     width:innerWidth,body:document.body.scrollWidth,html:document.documentElement.scrollWidth,
     h1:document.querySelector('h1')?.textContent?.trim(),
@@ -33,7 +33,8 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
    assert(summary.body<=width+2&&summary.html<=width+2,width+': horizontal overflow body='+summary.body+', html='+summary.html);
    assert(summary.titleVisible,width+': clipped H1');
    assert(summary.bookingHref==='https://elegantmassage.setmore.com/',width+': altered booking link');
-   assert(summary.imageBackground.includes('elegant-massage-cinematic-hero-atrezzo.webp'),width+': missing Atrezzo hero poster');
+   assert(!summary.video.hidden&&summary.video.readyState>=2&&!summary.video.error,width+': cinematic video not playing: '+JSON.stringify(summary.video));
+   assert(summary.imageBackground.includes(width<=640?'elegant-massage-cinematic-hero-mobile-atrezzo.webp':'elegant-massage-cinematic-hero-atrezzo.webp'),width+': missing responsive Atrezzo hero poster');
    if(width<=768){
      const toggle=page.locator('button.toggle');await toggle.click();await page.waitForTimeout(150);
      assert(await page.locator('.navigation').isVisible(),width+': mobile navigation not visible after toggle');
