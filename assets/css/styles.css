@@ -83,3 +83,17 @@ body[data-page="menu"] .hero__background{background-image:url('../images/elegant
 body[data-page="about"] .hero__background{background-image:url('../images/elegant-massage-flower-mound-reception-desk.webp')}
 body[data-page="gallery"] .hero__background{background-image:url('../images/elegant-massage-flower-mound-treatment-area.webp')}
 body[data-page="contact"] .hero__background{background-image:url('../images/elegant-massage-flower-mound-storefront-exterior.webp')}
+
+/* QA correction: portrait source + background-size zoom caused repeated photo tiles.
+   Keep full-bleed scene composition at all widths; allow sticky narrative without scroll-jacking. */
+@media(min-width:1000px){
+ .sensory-panel{
+  animation:none!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+ }
+ .sensory-panel:nth-child(1){
+  background-image:url('../images/elegant-massage-body-massage-cinematic.webp');
+ }
+}
