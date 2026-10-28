@@ -1,7 +1,9 @@
-# Hero assets
-Drop-in media files produced from the supplied 10-second video:
+# Elegant Massage cinematic hero
+Both videos are uploaded in the repository:
 - assets/video/elegant-massage-cinematic-hero-desktop.mp4
 - assets/video/elegant-massage-cinematic-hero-mobile.mp4
-- assets/images/elegant-massage-cinematic-treatment-hero-poster.webp
+Poster:
+- assets/images/elegant-massage-cinematic-hero-atrezzo.webp
+- assets/images/elegant-massage-cinematic-hero-mobile-atrezzo.webp
 
-The Home HTML references all three and JS chooses portrait on narrow viewports. Reduced motion and Save-Data show a static visual. The binary assets have not been uploaded to GitHub via its text-only file connector.
+AI illustrations are editorial, not documentary claims. Browser playback and mobile sizing still require testing. Videos honor muted, reduced motion and data saving in site JS.

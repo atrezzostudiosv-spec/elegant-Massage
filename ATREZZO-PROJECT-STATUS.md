@@ -1,25 +1,25 @@
-# ATREZZO — Elegant Massage: project status
+# ATREZZO — Elegant Massage project status
 
-Updated 2026-10-28. Direct GitHub workflow; no Gemini.
+Updated 2026-10-28. Development is directly in GitHub.
 
-## Approved decisions
-- Complete visual-design permission and use of cinematic illustrative imagery for the spa website.
-- Content remains anchored to original business services and publicly listed bookings. No invented treatments, reviews, therapists, certifications, pricing or results.
-- All Book Now links continue to https://elegantmassage.setmore.com/.
-- Temporary test contact recipient: atrezzostudiosv@gmail.com (FormSubmit). The demo form expressly warns it is NOT delivering to Elegant Massage.
-- Keep noindex until publication approval.
+## Approved
+- 13-page site, approved original business services and content.
+- Bespoke Atrezzo cinematic illustrative images, warm editorial style, full-bleed video Home.
+- Existing Setmore booking URL unchanged.
+- Test contact FormSubmit to Atrezzo, not Elegant Massage; not yet tested end-to-end.
+- Demo stays noindex until publication approved.
 
-## Status
-| Area | Status | Verification |
+## Progress
+| Area | Status | Evidence |
 |---|---|---|
-| Audit / Architecture | CLOSED | Previous approval |
-| Editorial direction | APPROVED | Sensory home, fullbleed video, subtle natural-scroll motion |
-| Frontend 13 pages | IN VALIDATION | GitHub source exists, browser visual QA outstanding |
-| Contact test form | IN VALIDATION | HTML POST, field validation, antispam, demo disclosure implemented; inbox delivery not tested |
-| Video and poster | IN VALIDATION | Desktop/mobile media and WebP poster encoded locally; binary files not yet in GitHub |
-| Booking | IMPLEMENTED IN CODE | Original Setmore URL unchanged; real browser click pending |
-| Responsive/a11y | PENDING | Test 375/768/1024/1440 and reduced motion |
-| Production | NOT AUTHORIZED | Remain noindex; do not claim published |
+| Audit, architecture and art direction | CLOSED | Approved in conversation |
+| Media production | IMPLEMENTED IN SOURCE | 20 optimized WebP and 2 MP4 committed to GitHub |
+| Home | IN VALIDATION | New cinematic poster/video, service visuals, sensory image chapters and real-location photo |
+| Gallery | IN VALIDATION | 8 real-location images from original site, optimized |
+| Contact form | IN VALIDATION | HTML wired; inbox receipt unverified |
+| Inner services | IN VALIDATION | Asset system in CSS; individual hero assignments next |
+| Responsive visual browser QA | NOT TESTED | 375 / 768 / 1024 / 1440 required |
+| Publication | NOT AUTHORIZED | noindex and disallow retained |
 
-## Next action
-Deliver approved media binaries into repository, then test the contact form and full visual navigation. No previous phase must be repeated.
+## Next
+Complete distinct photographic hero assignments for service pages, then browser QA for Home and gallery, and test actual FormSubmit inbox receipt. Do not assume anything is visually verified merely because media is committed.

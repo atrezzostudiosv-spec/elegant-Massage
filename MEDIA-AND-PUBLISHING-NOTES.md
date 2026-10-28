@@ -1,9 +1,7 @@
-# Elegant Massage — release controls
+# Elegant Massage — media and release
 
-The business has authorized use of illustrative cinematic photos and richer descriptions based on its existing services; such images must not be presented as verified staff or real premises. Existing Setmore links are untouched.
+Client-approved AI illustrative imagery, video reference stills and original business photographs are now stored directly in GitHub in assets/images and assets/video. Never claim AI subjects are real employees or AI rooms are verified premises. Gallery and location sections use actual original-site photos.
 
-Contact uses FormSubmit with temporary test destination atrezzostudiosv@gmail.com and explicit user disclosure. Delivery is NOT VERIFIED; FormSubmit may need recipient activation.
+All Book Now links remain https://elegantmassage.setmore.com/.
 
-The Home references assets/video/elegant-massage-cinematic-hero-desktop.mp4, assets/video/elegant-massage-cinematic-hero-mobile.mp4 and assets/images/elegant-massage-cinematic-treatment-hero-poster.webp. These binaries were encoded from the user-provided video but cannot yet be considered committed to GitHub. The static photo fallback remains. Do not claim working video without fetching the actual media URLs.
-
-The demo is noindex and disallowed by robots.txt. Publication, indexing, successful submissions and browser QA are not verified.
+Contact form uses FormSubmit addressed temporarily to Atrezzo and clearly warns visitors that the destination is a test. Real delivery remains unverified. Demo is noindex and robots.txt disallows indexing. Do not publish without approval and browser QA.
