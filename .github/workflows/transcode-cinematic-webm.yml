@@ -1,0 +1,39 @@
+name: Build compatible cinematic WebM assets
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/transcode-cinematic-webm.yml'
+jobs:
+  transcode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Encode Chromium-compatible VP9 videos
+        run: |
+          set -euo pipefail
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg
+          fi
+          ffmpeg -hide_banner -loglevel error -y -i assets/video/elegant-massage-cinematic-hero-desktop.mp4 -an -c:v libvpx-vp9 -b:v 0 -crf 34 -row-mt 1 -deadline good -cpu-used 5 -pix_fmt yuv420p assets/video/elegant-massage-cinematic-hero-desktop.webm
+          ffmpeg -hide_banner -loglevel error -y -i assets/video/elegant-massage-cinematic-hero-mobile.mp4 -an -c:v libvpx-vp9 -b:v 0 -crf 34 -row-mt 1 -deadline good -cpu-used 5 -pix_fmt yuv420p assets/video/elegant-massage-cinematic-hero-mobile.webm
+          test -s assets/video/elegant-massage-cinematic-hero-desktop.webm
+          test -s assets/video/elegant-massage-cinematic-hero-mobile.webm
+          ls -lh assets/video/*.webm
+      - name: Commit browser-compatible media
+        run: |
+          git config user.name 'Atrezzo Visual QA'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add assets/video/*.webm
+          if git diff --cached --quiet; then
+            echo 'Already current'
+          else
+            git commit -m 'build(media): add cinematic VP9 WebM hero variants'
+            git push origin HEAD:main
+          fi
