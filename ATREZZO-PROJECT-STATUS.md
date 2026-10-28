@@ -42,3 +42,13 @@ Original facts retained: massage techniques trained/practiced in China (historic
 
 Implementation: expanded Home and 7 service pages plus About, Massage Menu, Services and Contact to provide explanatory content grounded in source. Added intro photo spread, additional listed service entries, and factual trust strip. **No new treatments, discounts or reviews**.
 New image assets for reflexology generated locally; their GitHub upload and final responsive use remain separate tasks. New screenshot is inspiration, not a photograph of this business.
+
+
+## 2026-10-28 — Editorial rewrite + revalidation completed
+- Original business video, HTML archive and 2024 menu audited. Bellissima screenshot used only as a design reference, never as a commercial source.
+- 13-page structure unchanged; Home and seven service guides enriched with source-based content. Original site fax, Facebook and China-rooted massage heritage recovered appropriately. Site copy refined to visitor-facing English.
+- Full source inventory and price provenance: `docs/ATREZZO-RELAX-LUXURY-AUDITORIA-CONTENIDO-Y-ARQUITECTURA.md`.
+- Photography guide: `docs/ATREZZO-RELAX-LUXURY-FOTOGRAFIA-SHOT-LIST.md`.
+- Visual Playwright regression completed successfully (run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40773785743, 13 routes / 375, 768, 1024, 1440 px / reduced motion / video / nav).
+- 2 new independent reflexology photos + 2 mobile variants generated as a downloadable ZIP, **not committed** as binary assets.
+- Next action: finish and integrate high-resolution service-specific hero photography and inspect internal-page layouts. Demo stays `noindex`; Atrezzo test form delivery remains unverified.
