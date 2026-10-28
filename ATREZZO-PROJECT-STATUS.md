@@ -33,3 +33,12 @@ GitHub Actions, Playwright Chromium, run: https://github.com/atrezzostudiosv-spe
 
 ## Next single action
 Carry out visual review/approval of Home from evidence and then proceed to individual service-page composition and browser QA, without changing approved Home art direction.
+
+
+## 2026-10-28 — Additional content direction from business reference
+User supplied a screen recording of the **original Elegant Massage site** and a separate Bellissima salon screenshot used as a visual composition reference only. This reopens only editorial depth, image planning, and affected Home/service components; previously closed architecture and technical QA are preserved subject to targeted regression testing.
+
+Original facts retained: massage techniques trained/practiced in China (historical self-description, not verified current staff), eight historic treatments, Flower Mound location, telephone, fax, email, Facebook and Setmore booking. Fake staff/testimonials and old photo prices excluded.
+
+Implementation: expanded Home and 7 service pages plus About, Massage Menu, Services and Contact to provide explanatory content grounded in source. Added intro photo spread, additional listed service entries, and factual trust strip. **No new treatments, discounts or reviews**.
+New image assets for reflexology generated locally; their GitHub upload and final responsive use remain separate tasks. New screenshot is inspiration, not a photograph of this business.

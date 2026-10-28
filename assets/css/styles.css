@@ -97,3 +97,21 @@ body[data-page="contact"] .hero__background{background-image:url('../images/eleg
   background-image:url('../images/elegant-massage-body-massage-cinematic.webp');
  }
 }
+
+/* ATREZZO RELAX LUXURY — editorial composition adapted from approved reference, not salon content */
+.atrezzo-opening{background:#f4f0e8;overflow:hidden}
+.atrezzo-opening__layout{grid-template-columns:minmax(0,1fr) minmax(0,.96fr);gap:clamp(3rem,8vw,9rem)}
+.atrezzo-opening h2{max-width:13ch}
+.atrezzo-opening__photo{position:relative}
+.atrezzo-opening__photo>.scene{min-height:580px;background-position:62% center;filter:saturate(.85)}
+.image-index{display:block;font-size:.66rem;letter-spacing:.14em;color:#6c7e6c;text-transform:uppercase;margin-top:.8rem}
+.atrezzo-opening__layout p:not(.lede){max-width:62ch}
+.facts-ribbon{background:#334d38;color:#efece2;padding:2rem 0}
+.facts-ribbon__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem}
+.facts-ribbon__grid>div:not(:first-child){border-left:1px solid #ffffff42;padding-left:2rem}
+.facts-ribbon__grid p{font-family:Newsreader,Georgia,serif;font-size:clamp(1.4rem,2.2vw,2rem);line-height:1.1;margin:.35rem 0 0}
+.facts-ribbon__grid .eyebrow{color:#c7d2bd}
+.service-row .scene{border-radius:2px;box-shadow:0 13px 44px #13261912}
+@media(min-width:950px){.section--white .service-row:nth-of-type(even) .scene{transform:translateY(9px)}}
+@media(max-width:870px){.atrezzo-opening__layout{grid-template-columns:1fr}.atrezzo-opening__photo>.scene{min-height:420px}.facts-ribbon__grid{gap:1.2rem}}
+@media(max-width:600px){.facts-ribbon__grid{grid-template-columns:1fr}.facts-ribbon__grid>div:not(:first-child){border-left:0;border-top:1px solid #ffffff42;padding:1rem 0 0}.atrezzo-opening__photo>.scene{min-height:350px}.atrezzo-opening h2{font-size:clamp(2.9rem,12vw,5rem)}}
