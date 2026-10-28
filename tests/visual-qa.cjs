@@ -65,7 +65,7 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
   const context=await browser.newContext({viewport:{width:1360,height:900},reducedMotion:'reduce'});
   const page=await context.newPage();
   await page.goto(BASE+'/',{waitUntil:'domcontentloaded'});
-  const reduced=await page.evaluate(()=>({videoHidden:document.querySelector('#hero-film').hidden,htmlWidth:document.documentElement.scrollWidth,winWidth:innerWidth,opacity:getComputedStyle(document.querySelector('.intro .reveal')).opacity}));
+  const reduced=await page.evaluate(()=>({videoHidden:document.querySelector('#hero-film').hidden,htmlWidth:document.documentElement.scrollWidth,winWidth:innerWidth,opacity:getComputedStyle(document.querySelector('.atrezzo-opening .reveal')).opacity}));
   assert(reduced.videoHidden,'reduced motion should disable autoplay film');
   assert(reduced.opacity==='1','reduced motion should keep reveal content visible');
   results.push({reducedMotion:reduced});
