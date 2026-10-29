@@ -1,7 +1,7 @@
 name: Atrezzo Visual QA — Elegant Massage
 on:
   push:
-    branches: [main]
+    branches: [main, 'feature/chair-cinematic-photo-integration']
   workflow_dispatch:
 jobs:
   qa:
