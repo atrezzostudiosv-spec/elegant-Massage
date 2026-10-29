@@ -186,3 +186,14 @@ body[data-page="contact"] .hero:before{background:linear-gradient(90deg,rgba(0,0
 @media(prefers-reduced-motion:reduce){
  .em-pause__photo{filter:saturate(.75)}
 }
+
+/* Documentary and illustrative photo roles deliberately differ between hero and detail.
+   Prevent adjacent identical images on About and Body Massage. */
+body[data-page="about"] .scene--room.scene--portrait{
+  background-image:url('../images/elegant-massage-flower-mound-waiting-area.webp');
+  background-position:54% center;
+}
+body[data-page="body"] .scene--massage.scene--portrait{
+  background-image:url('../images/elegant-massage-warm-oil-cinematic.webp');
+  background-position:center;
+}

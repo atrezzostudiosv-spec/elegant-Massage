@@ -127,3 +127,5 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - CTA sigue en Setmore, formulario de demo en atrezzostudiosv@gmail.com sin recepción real probada, `noindex` conservado. Chair visual high-res aún por integrar.
 
 - Revisión manual V4 inicial: el recorte auténtico de sala vacía al comienzo disminuía cohesión; sustituido por detalle de masaje ilustrativo en Intro, con descripción y caption honestos. Se mantiene la fotografía auténtica de recepción en la sección local. Requiere QA posterior.
+
+- Segunda inspección visual de las páginas interiores: About y Body repetían exactamente imágenes entre hero y fotografía de contenido. About conserva hero de recepción y presenta una **foto original diferente de espera**; Body conserva hero y muestra detalle ilustrativo de aceite. Copy introductorio About sustituye texto genérico por información de servicios reales, sin afirmar datos de empleados.
