@@ -262,3 +262,6 @@ body[data-page] .content-layout article h3{font-size:clamp(2.35rem,8.5vw,3.7rem)
 .em-other-treatment,.em-other-treatment__image,.site-header{transition:none!important}
 .em-ritual .sensory-panel{position:relative!important;height:auto!important;min-height:70svh!important}
 }
+
+/* Responsive regression: prevent the offset editorial hairline from protruding past the tablet viewport. */
+@media(max-width:870px){.em-intro__visual:after{right:0}}
