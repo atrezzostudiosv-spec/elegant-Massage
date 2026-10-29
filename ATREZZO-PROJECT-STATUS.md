@@ -125,3 +125,5 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Home: `em-ritual` repetido de tres escenas sustituido por pausa de elección con pressure/focus/timing, sin bloquear scroll; intro utiliza fotografía histórica REAL del local, no repite imagen de hero. Reglas de autenticidad conservadas.
 - Informe detallado: `docs/FASE-05-SEGUNDA-AUDITORIA-DIRECCION-ARTISTICA-V4.md`. QA visual/responsive de esta revisión pendiente de ejecutar y cerrar.
 - CTA sigue en Setmore, formulario de demo en atrezzostudiosv@gmail.com sin recepción real probada, `noindex` conservado. Chair visual high-res aún por integrar.
+
+- Revisión manual V4 inicial: el recorte auténtico de sala vacía al comienzo disminuía cohesión; sustituido por detalle de masaje ilustrativo en Intro, con descripción y caption honestos. Se mantiene la fotografía auténtica de recepción en la sección local. Requiere QA posterior.

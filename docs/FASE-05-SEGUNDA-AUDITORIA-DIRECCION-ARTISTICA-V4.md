@@ -7,7 +7,7 @@
 | Hallazgo | Evidencia | Intervención concreta |
 |---|---|---|
 | Titulares desproporcionados | Home H1 `clamp(5rem,11vw,11rem)`, sección tratamientos h2 `9vw`, titulares fotográficos `7.7vw`. A 1440px dominaban mucho más que la fotografía. | H1 `7.15vw` máx 7.3rem; tratamientos `6.35vw` máx 6.8rem; titulares de escena `5.6vw`. Escalas móviles independientes. |
-| Ritmo visual mecánico | Hero, introducción, Body y primer capítulo sticky repetían figura humana similar. | Introducción pasa a fotografía **original del local** (treatment area). Se elimina secuencia de 3 fotos repetitivas. |
+| Ritmo visual mecánico | Hero, introducción, Body y primer capítulo sticky repetían figura humana similar. | Introducción utiliza una toma ilustrativa de detalle distinta del Hero; las fotografías **originales del local** se reservan para la sección documental y Gallery. Se elimina secuencia de 3 fotos repetitivas. |
 | Scroll largo sin información nueva | Tres capítulos grandes repetían Body/Foot y «booking» ya explicados | Una pausa editorial de elección con 3 criterios verificables (pressure / focus / timing), una única fotografía ilustrativa y sin fijación prolongada. |
 | Exceso de secciones demasiado grandes | 90svh en dos services, 69–85svh en casi todas | Reducidas alturas visuales y paddings a una pauta modulada; respirar donde hay contenido, no entre bloques sin relación. |
 | Falta de sofisticación tipográfica | Serif de gran tamaño en hero, intro, servicios, índice, contacto y CTA | Escala descendente consistente; textos de 45–55 caracteres, renglones cómodos, detalles de línea y etiquetas discretas. |
@@ -22,7 +22,7 @@
 - **Colores:** se preservan Forest Green `#294638`, Warm Ivory `#f6f1e9`, Charcoal `#101b16`, bronce `#b7966b`. No importar el sistema cromático de Thaissage.
 - **Tipografía:** Newsreader/DM Sans (existentes). Menor escala, más ritmo y claridad, menos dramatismo gratuito.
 - **Contenido:** servicios reales, información verificable, Booking Setmore, local auténtico. No añadir wellness clínico, certificaciones, precios, promesas curativas ni testimonios ficticios.
-- **Estructura Home:** hero cinematográfico y CTA → intro con foto real + marco de elección → tres técnicas destacadas con composiciones diferenciadas → índice tipográfico de otras tres → pausa editorial útil con criterios de selección → documentación local → FAQ → único cierre de reserva.
+- **Estructura Home:** hero cinematográfico y CTA → intro con fotografía ilustrativa diferente al Hero + marco de elección → tres técnicas destacadas con composiciones diferenciadas → índice tipográfico de otras tres → pausa editorial útil con criterios de selección → documentación local → FAQ → único cierre de reserva.
 - **Movimiento:** M1 discreto para textos, M2 zoom suave solo en dos fotografías existentes; sin nueva secuencia M3 de tres pantallas repetidas. No wheel hijacking, no bloqueo de navegación, `prefers-reduced-motion` respetado.
 - **Interior pages:** mantienen layout y textos únicos, pero escala y separación refinadas; no se impone un Home de Thaissage en todas.
 
@@ -35,3 +35,6 @@
 - Verificación responsive objetivo: 375, 768, 1024, 1440px, contraste, fotografía, menús, foco, carga, enlaces y movimiento reducido.
 
 **Regla de cierre:** no afirmar aprobación visual total sin revisar capturas reales; esta fase está en validación mientras corre GitHub Actions.
+
+## Refinamiento tras inspección de capturas
+La captura V4 inicial mostraba una fotografía documental de una sala vacía en la introducción; rompía el tono editorial. La sustituimos por un detalle ilustrativo de masaje con óleo, y dejamos la recepción original del cliente como evidencia en su sección de ubicación. El recurso empleado ya existía en el repositorio; comprobar nitidez del recorte antes de considerarlo acabado.

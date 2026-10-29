@@ -36,7 +36,7 @@ body .header-row{min-height:80px}
 .em-intro__copy>p.lede{font-size:clamp(1.14rem,1.55vw,1.34rem);color:#2c4032;line-height:1.58;margin-bottom:1.5rem}
 .em-intro__copy .em-link{margin-top:.7rem;color:#304e3b}
 .em-intro__visual{margin:0}
-.em-intro__image{height:clamp(450px,50vw,690px);background-image:url('../images/elegant-massage-flower-mound-treatment-area.webp');background-position:center 48%;background-size:cover;filter:saturate(.78) contrast(1.035);border-radius:1px}
+.em-intro__image{height:clamp(450px,50vw,690px);background-image:url('../images/elegant-massage-warm-oil-cinematic.webp');background-position:center 48%;background-size:cover;filter:saturate(.78) contrast(1.035);border-radius:1px}
 .em-intro__visual:after{display:none}
 .em-intro__visual figcaption{letter-spacing:.115em;font-size:.6rem;color:#7a8277}
 /* Collection head: tight hierarchy, deliberate baseline */
