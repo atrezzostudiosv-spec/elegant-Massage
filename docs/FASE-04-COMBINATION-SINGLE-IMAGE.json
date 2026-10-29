@@ -1,0 +1,27 @@
+{
+  "purpose": "Combination Massage Home cinematic full-bleed scene, single image (no diptych)",
+  "source": "https://www.pexels.com/photo/a-man-having-a-back-massage-7365398/",
+  "source_image_url": "https://images.pexels.com/photos/7365398/pexels-photo-7365398.jpeg?auto=compress&cs=tinysrgb&w=2600",
+  "photographer": "Sergey Torbik",
+  "source_photo_id": 7365398,
+  "license": "https://www.pexels.com/license/",
+  "source_sha256": "8d1c16aad3573fd8305c1d9854f3ce10083d35dda64ba2df2d0c5f3581e73595",
+  "origin": "licensed illustrative stock, not real Elegant Massage staff or premises",
+  "alt": "Illustrative photograph of a relaxing back massage in a spa setting",
+  "outputs": [
+    {
+      "path": "assets/images/elegant-massage-combination-single-desktop.webp",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 161364,
+      "sha256": "66af29450308c3a6b6b1488469808aad932c22b0f3005e480a332ff145ec1947"
+    },
+    {
+      "path": "assets/images/elegant-massage-combination-single-mobile.webp",
+      "width": 900,
+      "height": 1200,
+      "bytes": 74862,
+      "sha256": "3cc60f238f282cdf9ad5c2d9dd2390d2af356938e805804e4bc335cde4e8e9d7"
+    }
+  ]
+}
