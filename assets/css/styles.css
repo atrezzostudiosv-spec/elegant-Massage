@@ -117,44 +117,56 @@ body[data-page="contact"] .hero__background{background-image:url('../images/eleg
 @media(max-width:600px){.facts-ribbon__grid{grid-template-columns:1fr}.facts-ribbon__grid>div:not(:first-child){border-left:0;border-top:1px solid #ffffff42;padding:1rem 0 0}.atrezzo-opening__photo>.scene{min-height:350px}.atrezzo-opening h2{font-size:clamp(2.9rem,12vw,5rem)}}
 
 
-/* ATREZZO / FASE 4 PHOTO SET 01 — Service-specific licensed illustrative photography.
-   Do not touch approved Home footage, Home photography, authentic location gallery
-   or the unrelated pages. Stock images are not portrayed as business staff/premises. */
-body[data-page="foot"] .hero__background {
+/* ATREZZO FASE 4 — validated service photo mappings; Home and real Gallery untouched.
+   Images depict treatments illustratively, not employees/rooms of Elegant Massage.
+   Portrait sources use art-directed WebP, plus desktop/mob crop below. */
+body[data-page="foot"] .hero__background{
   background-image:url('../images/elegant-massage-foot-reflexology-editorial-desktop.webp');
   background-position:58% center;
 }
-body[data-page="couples"] .hero__background {
-  background-image:url('../images/elegant-massage-couples-editorial-desktop.webp');
-  background-position:55% center;
-}
-body[data-page="four"] .hero__background {
-  background-image:url('../images/elegant-massage-two-therapists-editorial-desktop.webp');
-  background-position:52% center;
-}
-body[data-page="foot"] .scene--detail.scene--portrait {
+body[data-page="foot"] .scene--detail.scene--portrait{
   background-image:url('../images/elegant-massage-foot-reflexology-editorial-mobile.webp');
   background-position:50% 50%;
 }
-body[data-page="couples"] .scene--detail.scene--portrait {
-  background-image:url('../images/elegant-massage-couples-editorial-mobile.webp');
-  background-position:52% 50%;
+body[data-page="couples"] .hero__background{
+  background-image:url('../images/elegant-massage-couples-batch02-desktop.webp');
+  background-position:58% 48%;
 }
-body[data-page="four"] .scene--detail.scene--portrait {
-  background-image:url('../images/elegant-massage-two-therapists-editorial-mobile.webp');
+body[data-page="couples"] .scene--detail.scene--portrait{
+  background-image:url('../images/elegant-massage-couples-batch02-mobile.webp');
   background-position:50% 50%;
 }
-@media(max-width:640px) {
-  body[data-page="foot"] .hero__background {
+body[data-page="four"] .hero__background{
+  background-image:url('../images/elegant-massage-four-hands-batch02-desktop.webp');
+  background-position:60% center;
+}
+body[data-page="four"] .scene--detail.scene--portrait{
+  background-image:url('../images/elegant-massage-four-hands-batch02-mobile.webp');
+  background-position:50% 48%;
+}
+body[data-page="combo"] .hero__background{
+  background-image:url('../images/elegant-massage-combination-batch02-desktop.webp');
+  background-position:60% 50%;
+}
+body[data-page="combo"] .scene--detail.scene--portrait{
+  background-image:url('../images/elegant-massage-combination-batch02-mobile.webp');
+  background-position:center center;
+}
+@media(max-width:640px){
+  body[data-page="foot"] .hero__background{
     background-image:url('../images/elegant-massage-foot-reflexology-editorial-mobile.webp');
     background-position:center 50%;
   }
-  body[data-page="couples"] .hero__background {
-    background-image:url('../images/elegant-massage-couples-editorial-mobile.webp');
+  body[data-page="couples"] .hero__background{
+    background-image:url('../images/elegant-massage-couples-batch02-mobile.webp');
+    background-position:center 45%;
+  }
+  body[data-page="four"] .hero__background{
+    background-image:url('../images/elegant-massage-four-hands-batch02-mobile.webp');
     background-position:center 42%;
   }
-  body[data-page="four"] .hero__background {
-    background-image:url('../images/elegant-massage-two-therapists-editorial-mobile.webp');
-    background-position:center 45%;
+  body[data-page="combo"] .hero__background{
+    background-image:url('../images/elegant-massage-combination-batch02-mobile.webp');
+    background-position:center 42%;
   }
 }

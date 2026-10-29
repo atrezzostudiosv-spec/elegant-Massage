@@ -77,3 +77,12 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Browser automation **SUCCESS** on commit \`f04c654\`: https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40859554532. It checks all 13 routes, Home, and new 3-service image decoding/crop selection, no horizontal overflow, Setmore CTA, 375/768/1024/1440px screenshot pairs.
 - Screen captures inspected: Foot Reflexology compositions acceptable in this first set; **Couples mobile hero/portrait only show one guest clearly**, weakening two-person storytelling; **Four Hands currently shows two therapists, but does not demonstrate simultaneous four-hand back technique convincingly and has a clinical-lighting mismatch.** These are **open artistic defects** for the next targeted photo pass, not declared finished.
 - Photos must remain labeled as illustrative; do not mistake automation PASS for complete aesthetic sign-off. FormSubmit test inbox receipt remains unverified. Fase 4 stays **IN PROGRESS**.
+
+
+## 2026-10-29 — Phase 4 / Photography batch 02 integration
+- Batch02 source-provenance WebP assets produced in repository using GitHub Actions, contact sheet manually reviewed. Manifest: \`docs/FASE-04-LOTE-02-MANIFEST.json\`.
+- Integrated new Couples Massage (two guests visible in mobile diptych), Four Hands (two practitioners & one client; clinical-setting mismatch remains visually under review), Combination Massage (distinct coordinated foot and back images). Kept Foot Reflexology and previously closed Home unchanged.
+- Chair Massage candidate NOT integrated, despite successful asset build, because corporate-office photograph is visually off-brand. This route remains photo-incomplete.
+- Exact implementation and constraints \`docs/FASE-04-LOTE-02-INTEGRACION-Y-QA.md\`.
+- Updated visual QA script to require four photo routes at all four widths, correct responsive selection/decoding and Setmore. The run triggered by this commit must be checked before claiming verification.
+- Contact demo continues to use Atrezzo test mailbox only; real submission/delivery remains unverified. Keep noindex.

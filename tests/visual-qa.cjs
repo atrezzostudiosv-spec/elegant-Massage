@@ -82,8 +82,9 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
   // Phase 4: service-photo art direction—test four widths and both hero / detail.
   const photographicRoutes=[
     {route:'/massage-services/foot-reflexology/',name:'foot-reflexology',stem:'elegant-massage-foot-reflexology-editorial'},
-    {route:'/massage-services/couples-massage/',name:'couples',stem:'elegant-massage-couples-editorial'},
-    {route:'/massage-services/four-hands-massage/',name:'four-hands',stem:'elegant-massage-two-therapists-editorial'}
+    {route:'/massage-services/couples-massage/',name:'couples',stem:'elegant-massage-couples-batch02'},
+    {route:'/massage-services/four-hands-massage/',name:'four-hands',stem:'elegant-massage-four-hands-batch02'},
+    {route:'/massage-services/combination-massage/',name:'combination',stem:'elegant-massage-combination-batch02'}
   ];
   for(const width of widths){
     const photosCtx=await browser.newContext({viewport:{width,height:width===375?812:900},reducedMotion:'reduce'});
