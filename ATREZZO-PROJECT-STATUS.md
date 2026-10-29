@@ -136,3 +136,12 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Inspected Home complete layout at 1440/375, Body Massage / About / Contact / service directory 1440; changes verified: less aggressive serif scale, proper editorial pacing, fewer duplicate large photo scenes and unique About/Body imagery.
 - No user visual approval yet: `Understated Wellness Editorial` V4 is delivered for review, not client-published. Remaining visual concerns: real facility photographs are visibly less polished than cinematic scenes, Chair hero replacement not yet uploaded, and not all service screenshots were individually art-approved.
 - Demo remains `noindex`; booking goes to Setmore. Form test recipient still `atrezzostudiosv@gmail.com`, delivery not verified.
+
+
+## 2026-10-29 — Home: three full-bleed service scenes (user-approved request)
+- User explicitly requested Body → Foot → Combination to pause full screen, slow zoom, following scene drops over previous, and last scene continues zoom until release. This intentionally reopens ONLY Home featured treatments composition.
+- 3 featured service copy blocks and links preserved. Foot no longer has split ivory/photo; every scene is one full background.
+- Combination image 03 is a new single licensed illustrative photo (Pexels / Sergey Torbik 7365398), NOT diptych; responsive assets generated in repo with manifest SHA-256. Do not present as actual Elegant Massage employee or facility.
+- Three-scene CSS/JS use native scroll, sticky on desktop, reversible downward scroll, reduced-motion and mobile normal-flow fallbacks. No wheel interception. Existing V3 zoom logic gated to prevent conflict.
+- Technical/visual acceptance and source provenance: docs/FASE-05-TRES-ESCENAS-SCROLL.md. Await QA and browser screenshots to mark validated.
+- No changes to form destination (atrezzostudiosv@gmail.com test, actual email unverified), Setmore booking, other 12 routes, Home header/video or noindex.

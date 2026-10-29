@@ -172,6 +172,104 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
   }));
   assert(story.featured===3&&story.secondary===3&&story.scenes===3&&story.faq===3&&story.realPlace&&story.oldRows===0,
     'New editorial structure incomplete: '+JSON.stringify(story));
+
+  // ATREZZO — 3 full-screen service chapters. Real native-scroll progress,
+  // last-image zoom must complete BEFORE exiting the sticky container.
+  const combos=[
+    'elegant-massage-body-massage-cinematic.webp',
+    'elegant-massage-foot-reflexology-editorial-desktop.webp',
+    'elegant-massage-combination-single-desktop.webp'
+  ];
+  for(const width of widths){
+    const ctx=await browser.newContext({
+      viewport:{width,height:width===375?812:900},
+      reducedMotion:'no-preference'
+    });
+    const p=await ctx.newPage();
+    const response=await p.goto(BASE+'/',{waitUntil:'domcontentloaded'});
+    assert(response?.status()===200,'cinema home HTTP '+width);
+    const initial=await p.evaluate(()=>{
+      const root=document.querySelector('#treatments-cinema'),stage=root?.querySelector('.em-cinema__stage');
+      const panels=[...root.querySelectorAll('.em-treatment-feature')];
+      const images=panels.map(panel=>getComputedStyle(panel.querySelector('.em-treatment-feature__image')).backgroundImage);
+      return {count:panels.length,fullWidth:panels.every(x=>Math.abs(x.getBoundingClientRect().width-innerWidth)<2),
+        immersive:root.classList.contains('is-immersive'),sticky:getComputedStyle(stage).position,
+        images,body:document.body.scrollWidth,viewport:innerWidth,
+        stageHeight:stage.offsetHeight,rootHeight:root.offsetHeight};
+    });
+    assert(initial.count===3&&initial.fullWidth,'cinema: three full-width chapters missing at '+width);
+    assert(initial.body<=width+2,'cinema: horizontal overflow '+width);
+    assert(initial.images[2].includes('combination-single-'+(width<=640?'mobile':'desktop')+'.webp'),
+      'cinema: Combination still divided or incorrect single image '+width+' '+initial.images[2]);
+    if(width===375||width===768){
+      assert(!initial.immersive&&initial.sticky!=='sticky','cinema: mobile should use native full-bleed stacked flow '+width);
+      await p.locator('.em-treatment-feature--combination').screenshot({
+        path:path.join(out,'cinema-combination-mobile-'+width+'.png'),animations:'disabled'});
+    }else{
+      assert(initial.immersive&&initial.sticky==='sticky','cinema: desktop native sticky not activated '+width);
+      assert(initial.rootHeight>=initial.stageHeight*4,'cinema: timeline too short to finish third zoom '+width);
+      const samples=[];
+      for(const progress of [.16,.42,.79,.995]){
+        const start=await p.locator('#treatments-cinema').evaluate(root=>{
+          const stage=root.querySelector('.em-cinema__stage');
+          return {top:window.scrollY+root.getBoundingClientRect().top,
+            travel:root.offsetHeight-stage.offsetHeight};
+        });
+        await p.evaluate(({start,progress})=>window.scrollTo({top:start.top+progress*start.travel,behavior:'instant'}),{start,progress});
+        await p.waitForTimeout(190);
+        const sampled=await p.evaluate(()=>{
+          const root=document.querySelector('#treatments-cinema');
+          const panels=[...root.querySelectorAll('.em-treatment-feature')];
+          return {active:panels.findIndex(x=>x.classList.contains('is-current')),
+            offsets:panels.map(x=>parseFloat(x.style.getPropertyValue('--em-slide'))),
+            zooms:panels.map(x=>parseFloat(x.style.getPropertyValue('--em-zoom'))),
+            third:panels[2].querySelector('.em-treatment-feature__image').getBoundingClientRect().width,
+            aria:panels.map(x=>x.getAttribute('aria-hidden')),
+            counter:root.querySelector('.em-cinema__counter').textContent.trim()};
+        });
+        samples.push({progress,...sampled});
+        if(width===1440){
+          await p.locator('.em-cinema__stage').screenshot({
+            path:path.join(out,'cinema-three-acts-'+String(Math.round(progress*100)).padStart(2,'0')+'.png'),
+            animations:'disabled'});
+        }
+      }
+      assert(samples[0].active===0&&samples[1].active===1&&samples[2].active===2,
+        'cinema: scenes do not change in order at '+width+' '+JSON.stringify(samples.map(x=>x.active)));
+      assert(samples[2].offsets[2]===0&&samples[3].offsets[2]===0,
+        'cinema: third scene not fully settled at '+width);
+      assert(samples[3].zooms[2]-samples[2].zooms[2]>.055,
+        'cinema: final photograph stops zooming too early at '+width);
+      assert(samples[3].zooms[2]>=1.10,
+        'cinema: third zoom did not complete before releasing sticky '+width);
+      // No wheel hijack: the next section appears with regular scroll after completion.
+      const end=await p.locator('#treatments-cinema').evaluate(root=>
+        window.scrollY+root.getBoundingClientRect().top+root.offsetHeight+30);
+      await p.evaluate(y=>window.scrollTo({top:y,behavior:'instant'}),end);
+      await p.waitForTimeout(90);
+      const after=await p.evaluate(()=>({
+        next:document.querySelector('.em-other-treatments')?.getBoundingClientRect().top,
+        scrollY:window.scrollY
+      }));
+      assert(after.next<window.innerHeight,'cinema: cannot leave third scene using native scroll '+width);
+      results.push({cinemaWidth:width,samples,after});
+    }
+    await ctx.close();
+  }
+  // Accessibility fallback must not pin or hide the three treatments.
+  const reducedCtx=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
+  const reducedPage=await reducedCtx.newPage();
+  await reducedPage.goto(BASE+'/',{waitUntil:'domcontentloaded'});
+  const reducedCinema=await reducedPage.evaluate(()=>{
+    const root=document.querySelector('#treatments-cinema'),stage=root.querySelector('.em-cinema__stage');
+    const panels=[...root.querySelectorAll('.em-treatment-feature')];
+    return {immersive:root.classList.contains('is-immersive'),
+      sticky:getComputedStyle(stage).position,
+      allAccessible:panels.every(panel=>!panel.inert&&panel.getAttribute('aria-hidden')!=='true')};
+  });
+  assert(!reducedCinema.immersive&&reducedCinema.sticky!=='sticky'&&reducedCinema.allAccessible,
+    'cinema: reduced-motion fallback is not fully accessible');
+  await reducedCtx.close();
   for(const route of [
     '/massage-services/body-massage/','/massage-services/foot-reflexology/',
     '/massage-services/combination-massage/','/massage-services/chair-massage/',

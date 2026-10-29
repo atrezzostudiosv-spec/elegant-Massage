@@ -46,7 +46,7 @@
 
   // Only the 2 panoramic treatment photographs receive a subtle native-scroll
   // settling zoom; the text, document and navigation stay in normal flow.
-  if (!prefersReducedMotion.matches && doc.body.classList.contains('elegant-home')) {
+  if (!doc.querySelector('.em-cinema') && !prefersReducedMotion.matches && doc.body.classList.contains('elegant-home')) {
     const photos = Array.from(doc.querySelectorAll(
       '.em-treatment-feature--body .em-treatment-feature__image, .em-treatment-feature--combination .em-treatment-feature__image'
     ));
