@@ -19,8 +19,8 @@ from PIL import Image, ImageOps
 OUTPUT = Path("assets/images")
 OUTPUT.mkdir(parents=True, exist_ok=True)
 SCENES = [
-    ("elegant-massage-chair-massage-cinematic-desktop.webp", (1600, 900), (0.55, 0.48), 84),
-    ("elegant-massage-chair-massage-cinematic-mobile.webp", (900, 1200), (0.58, 0.50), 84),
+    ("elegant-massage-chair-massage-cinematic-desktop.webp", (1600, 900), (0.50, 0.50), 84),
+    ("elegant-massage-chair-massage-cinematic-mobile.webp", (900, 1200), (0.75, 0.50), 84),
 ]
 
 def main():
