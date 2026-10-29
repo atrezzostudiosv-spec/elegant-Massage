@@ -118,3 +118,10 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - GitHub Pages deployment for dd954a23: SUCCESS; same preview address https://atrezzostudiosv-spec.github.io/elegant-Massage/.
 - Visual refinement (not functional blocker): the real storefront signage competes somewhat with the Contact hero headline; evaluate photographic crop/overlay only after selective art review. High-resolution Chair hero remains to be integrated; other low-resolution legacy photos to be checked individually. Do not claim complete Phase 4 approval.
 - Demo still noindex; FormSubmit action still routes test submissions to atrezzostudiosv@gmail.com but actual delivery remains UNTESTED; public launch not approved.
+
+## 2026-10-29 — Editorial V4: segunda auditoría de tipografía y composición
+- Evidencia: capturas completas del V3 a 375/768/1440 + inspección de código y principios de Thaissage/Ranchman. Hallazgos: jerarquía tipográfica excesiva (H1 11vw, tratamiento H2 9vw), repeticiones de fotografía, ritmo de secciones muy grandes, bloque sticky redundante y Contact signage compitiendo con texto.
+- Intervención focalizada: `assets/css/atrezzo-editorial-v4.css` conectado después del v3 en todas las 13 rutas; H1/H2 y servicios con escala más refinada, espaciado y alturas calmadas, Contact scrim corregido.
+- Home: `em-ritual` repetido de tres escenas sustituido por pausa de elección con pressure/focus/timing, sin bloquear scroll; intro utiliza fotografía histórica REAL del local, no repite imagen de hero. Reglas de autenticidad conservadas.
+- Informe detallado: `docs/FASE-05-SEGUNDA-AUDITORIA-DIRECCION-ARTISTICA-V4.md`. QA visual/responsive de esta revisión pendiente de ejecutar y cerrar.
+- CTA sigue en Setmore, formulario de demo en atrezzostudiosv@gmail.com sin recepción real probada, `noindex` conservado. Chair visual high-res aún por integrar.

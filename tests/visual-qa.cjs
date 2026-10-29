@@ -44,7 +44,7 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
      assert(!(await page.locator('.navigation').isVisible()),width+': Escape failed to close mobile navigation');
    }
    await page.screenshot({path:path.join(out,'home-'+width+'-hero.png'),animations:'disabled'});
-   const section=page.locator('.sensory').first();await section.scrollIntoViewIfNeeded();await page.waitForTimeout(550);
+   const section=page.locator('.em-pause').first();await section.scrollIntoViewIfNeeded();await page.waitForTimeout(550);
    await page.screenshot({path:path.join(out,'home-'+width+'-sensory.png'),animations:'disabled'});
    // Trigger actual IntersectionObserver reveals through normal scrolling before a full-page screenshot.
    const totalHeight=await page.evaluate(()=>document.documentElement.scrollHeight);
@@ -137,7 +137,7 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
       const data=await p.evaluate(()=>({
         width:innerWidth,body:document.body.scrollWidth,html:document.documentElement.scrollWidth,
         h1:(()=>{const r=document.querySelector('h1')?.getBoundingClientRect();return r?{left:r.left,right:r.right}:null})(),
-        editorialCss:[...document.styleSheets].some(x=>x.href?.includes('atrezzo-editorial-v3.css')),
+        editorialCss:[...document.styleSheets].some(x=>x.href?.includes('atrezzo-editorial-v4.css')),
         booking:document.querySelector('.header-cta')?.getAttribute('href'),
         sticky:(()=>{const e=document.querySelector('.em-mobile-booking');return e?{display:getComputedStyle(e).display,url:e.href}:null})()
       }));
@@ -161,7 +161,7 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
   const story=await page.evaluate(()=>({
     featured:document.querySelectorAll('.em-treatment-feature').length,
     secondary:document.querySelectorAll('.em-other-treatment').length,
-    scenes:document.querySelectorAll('.em-ritual .sensory-panel').length,
+    scenes:document.querySelectorAll('.em-pause__step').length,
     faq:document.querySelectorAll('.em-practical details').length,
     realPlace:!!document.querySelector('.em-place__photograph'),
     oldRows:document.querySelectorAll('.service-row').length
