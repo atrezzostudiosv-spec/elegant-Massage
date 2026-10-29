@@ -60,15 +60,15 @@
     "outputs": [
       {
         "path": "assets/images/elegant-massage-four-hands-batch02-desktop.webp",
-        "bytes": 54772,
-        "sha256": "179d1f06d5e0289d8f4cf91423b7109eac792003b3138c2d74cff9062ae9e208",
+        "bytes": 56370,
+        "sha256": "6479e6aebc5fe150fdffa4deba012fbe38ea9d721610c5b25f1e22bdb7ac7295",
         "width": 1600,
         "height": 900
       },
       {
         "path": "assets/images/elegant-massage-four-hands-batch02-mobile.webp",
-        "bytes": 49710,
-        "sha256": "309c3a94adce93aa2a5c73030bf19faf6930abf659d0a0385101ce27e57f0c59",
+        "bytes": 50530,
+        "sha256": "f3acae5d804490c53f29e0e4f23df5debd16b98daf7e4fe81387ad5127207974",
         "width": 900,
         "height": 1200
       }
@@ -98,15 +98,15 @@
     "outputs": [
       {
         "path": "assets/images/elegant-massage-chair-batch02-desktop.webp",
-        "bytes": 106226,
-        "sha256": "9bc4f3d94eb950952bc74ebd01fb6754ebf05ea345d51e0f8db2362817b4c379",
+        "bytes": 89638,
+        "sha256": "b68da8815f3d68b3f23bb8e8fab36ca687f2b7f9bf2e58a72cfde061278fa97a",
         "width": 1600,
         "height": 900
       },
       {
         "path": "assets/images/elegant-massage-chair-batch02-mobile.webp",
-        "bytes": 84906,
-        "sha256": "ba973a5fc45187da0ec50eefdebaacdb4a7aa97cf4f44ea1960f671838858015",
+        "bytes": 71658,
+        "sha256": "a07707de2c233ed71c8b5f7bf800989f09fdb53bc27caf4ce79c99b58baa0a55",
         "width": 900,
         "height": 1200
       }
