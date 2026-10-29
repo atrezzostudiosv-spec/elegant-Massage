@@ -153,6 +153,10 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
           animations:'disabled'
         });
       }
+      if((width===375||width===1440)&&['/massage-services/','/massage-services/body-massage/','/about/','/gallery/','/contact/'].includes(route)){
+        // Design audit: full-page composition, not just a successful hero element.
+        await p.screenshot({path:path.join(out,'editorial-v4-full-'+route.split('/').filter(Boolean).join('-')+'-'+width+'.png'),fullPage:true,animations:'disabled'});
+      }
       results.push({editorialRoute:route,viewport:width,...data});
     }
     await ctx.close();
