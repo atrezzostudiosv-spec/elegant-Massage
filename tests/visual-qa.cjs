@@ -251,7 +251,7 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
         next:document.querySelector('.em-other-treatments')?.getBoundingClientRect().top,
         scrollY:window.scrollY
       }));
-      assert(after.next<window.innerHeight,'cinema: cannot leave third scene using native scroll '+width);
+      assert(after.next<initial.stageHeight,'cinema: cannot leave third scene using native scroll '+width);
       results.push({cinemaWidth:width,samples,after});
     }
     await ctx.close();
