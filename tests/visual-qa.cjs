@@ -79,6 +79,53 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
     assert(data.book>0,route+': no Setmore CTA');
     results.push({route,status:response?.status(),...data});
   }
+  // Phase 4: service-photo art direction—test four widths and both hero / detail.
+  const photographicRoutes=[
+    {route:'/massage-services/foot-reflexology/',name:'foot-reflexology',stem:'elegant-massage-foot-reflexology-editorial'},
+    {route:'/massage-services/couples-massage/',name:'couples',stem:'elegant-massage-couples-editorial'},
+    {route:'/massage-services/four-hands-massage/',name:'four-hands',stem:'elegant-massage-two-therapists-editorial'}
+  ];
+  for(const width of widths){
+    const photosCtx=await browser.newContext({viewport:{width,height:width===375?812:900},reducedMotion:'reduce'});
+    const photosPage=await photosCtx.newPage();
+    for(const record of photographicRoutes){
+      const response=await photosPage.goto(BASE+record.route,{waitUntil:'networkidle'});
+      assert(response?.status()===200,record.route+': photographic page HTTP error '+width);
+      const observed=await photosPage.evaluate(async ({stem,mobile})=>{
+        const hero=document.querySelector('.hero__background');
+        const detail=document.querySelector('.scene--detail.scene--portrait');
+        const cssValue=el=>getComputedStyle(el).backgroundImage;
+        const heroCss=cssValue(hero),detailCss=cssValue(detail);
+        async function decodeBackground(urlCss){
+          const m=urlCss.match(/url\(["']?(.*?)["']?\)/);
+          if(!m)return {ok:false,error:'background URL absent'};
+          const url=m[1];
+          const result=await new Promise(resolve=>{
+            const img=new Image();img.onload=()=>resolve({ok:true,width:img.naturalWidth,height:img.naturalHeight,url});
+            img.onerror=()=>resolve({ok:false,error:'image failed to decode',url});img.src=url;
+          });
+          return result;
+        }
+        return {heroCss,detailCss,hero:await decodeBackground(heroCss),
+          detail:await decodeBackground(detailCss),
+          bodyWidth:document.body.scrollWidth,viewportWidth:innerWidth,
+          photoAlt:detail.getAttribute('aria-label'),book:document.querySelector('.header-cta')?.getAttribute('href')};
+      },{stem:record.stem,mobile:width<=640});
+      const heroExpected=record.stem+'-'+(width<=640?'mobile':'desktop')+'.webp';
+      const detailExpected=record.stem+'-mobile.webp';
+      assert(observed.heroCss.includes(heroExpected),record.route+': incorrect hero crop '+width+' '+observed.heroCss);
+      assert(observed.detailCss.includes(detailExpected),record.route+': incorrect detail crop '+width);
+      assert(observed.hero.ok&&observed.hero.width===(width<=640?900:1600),record.route+': hero failed to decode '+width+' '+JSON.stringify(observed.hero));
+      assert(observed.detail.ok&&observed.detail.width===900,record.route+': detail failed to decode '+width);
+      assert(observed.bodyWidth<=width+2,record.route+': overflow at '+width+' body='+observed.bodyWidth);
+      assert(observed.book==='https://elegantmassage.setmore.com/',record.route+': changed booking target');
+      assert(observed.photoAlt?.startsWith('Illustrative '),record.route+': missing stock illustration label');
+      await photosPage.locator('.hero').screenshot({path:path.join(out,'phase04-'+record.name+'-'+width+'-hero.png'),animations:'disabled'});
+      await photosPage.locator('.scene--detail.scene--portrait').first().screenshot({path:path.join(out,'phase04-'+record.name+'-'+width+'-detail.png'),animations:'disabled'});
+      results.push({photoRoute:record.route,viewport:width,...observed});
+    }
+    await photosCtx.close();
+  }
   await page.goto(BASE+'/contact/',{waitUntil:'domcontentloaded'});
   const form=page.locator('form.contact-form');
   assert(await form.count()===1,'contact form missing');
