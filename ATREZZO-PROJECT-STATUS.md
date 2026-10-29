@@ -110,3 +110,11 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Nuevo CSS assets/css/atrezzo-editorial-v3.css y JS assets/js/atrezzo-experience-v3.js en las 13 rutas. Booking móvil persiste enlazando al Setmore existente.
 - Se eliminaron sólo las transiciones genéricas YOUR NEXT STEP de los interiores, nunca contenido de servicios. Reparadas rutas de footer en páginas profundas.
 - Formulario test mantiene atrezzostudiosv@gmail.com; envío real no verificado. Demo continúa noindex. Chair WebP aún por integrar. QA y revisión visual de nuevo diseño pendientes de evidencia.
+
+## 2026-10-29 — Editorial V3 responsive regression and visual inspection
+- Visual QA on code commit dd954a23: **SUCCESS**, zero automated assertions failed: https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40876720762.
+- Automated scope: all 13 routes at 375, 768, 1024 and 1440px; no horizontal overflow; hero headings within viewport; new CSS loaded; Setmore URLs intact; fixed bottom mobile booking bar; Home has 3 distinct features + 3 secondary services, three native-scroll photo scenes, real local proof and three grounded FAQs; deep footer routes resolve correctly; prior visual/video and photo checks preserved.
+- Visual evidence/screenshots downloaded and manually reviewed for Home 375/768/1440 plus representative Body and Contact mobile heroes. One tablet 7px overflow was found and corrected by confining an offset editorial border to the viewport (CSS commit dd954a23).
+- GitHub Pages deployment for dd954a23: SUCCESS; same preview address https://atrezzostudiosv-spec.github.io/elegant-Massage/.
+- Visual refinement (not functional blocker): the real storefront signage competes somewhat with the Contact hero headline; evaluate photographic crop/overlay only after selective art review. High-resolution Chair hero remains to be integrated; other low-resolution legacy photos to be checked individually. Do not claim complete Phase 4 approval.
+- Demo still noindex; FormSubmit action still routes test submissions to atrezzostudiosv@gmail.com but actual delivery remains UNTESTED; public launch not approved.
