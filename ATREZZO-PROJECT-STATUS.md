@@ -1,6 +1,6 @@
 # ATREZZO — Elegant Massage project status
 
-Updated: 2026-10-28. Direct GitHub development; no Gemini.
+Updated: 2026-10-29. Direct GitHub development; no Gemini.
 
 ## Confirmed business instructions
 - 13-page multipage structure, using services and facts from the original website and Setmore.
@@ -12,8 +12,9 @@ Updated: 2026-10-28. Direct GitHub development; no Gemini.
 ## Phase register
 | Workstream | Status | Verified evidence |
 |---|---|---|
-| Audit, strategy, editorial structure and art direction | CLOSED | Earlier approved project phases |
+| Audit, strategy, editorial structure and art direction | CLOSED | Earlier approved project phases; 13-page architecture in repo takes precedence over later 10-page local draft |
 | 13-page implementation | IN VALIDATION | Navigation and 13 routes structurally checked in Playwright |
+| Fase 3 — 13-page editorial content and SEO inventory | CLOSED (documentary/editorial scope) | All 13 current pages transcribed and traced in docs/FASE-03-CONTENIDO-EDITORIAL-13-PAGINAS.md and docs/FASE-03-MATRIZ-TRAZABILIDAD.csv; commercial details still need prelaunch verification |
 | Home audiovisual compatibility | VERIFIED IN CHROMIUM | VP9 WebM mobile and desktop plays with readyState 4 at 375, 768, 1024 and 1440; MP4 retained as alternate |
 | Home layout and responsive | BROWSER QA PASSED, AWAITING VISUAL APPROVAL | No horizontal overflow, header and CTA accessible, H1 visible, scroll reveals tested at four widths |
 | Cinematic scroll composition | BROWSER QA PASSED | Photo tiling fixed, native scrolling preserved, reduced-motion fallback checked |
@@ -32,7 +33,7 @@ GitHub Actions, Playwright Chromium, run: https://github.com/atrezzostudiosv-spe
 - Unapproved/decorative site design should not be considered signed off solely from automated tests.
 
 ## Next single action
-Carry out visual review/approval of Home from evidence and then proceed to individual service-page composition and browser QA, without changing approved Home art direction.
+Integrate and review service-specific cinematic photography on the 13 existing routes, preserving approved Home art direction; then run targeted responsive and link regression.
 
 
 ## 2026-10-28 — Additional content direction from business reference
@@ -52,3 +53,13 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Visual Playwright regression completed successfully (run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40773785743, 13 routes / 375, 768, 1024, 1440 px / reduced motion / video / nav).
 - 2 new independent reflexology photos + 2 mobile variants generated as a downloadable ZIP, **not committed** as binary assets.
 - Next action: finish and integrate high-resolution service-specific hero photography and inspect internal-page layouts. Demo stays `noindex`; Atrezzo test form delivery remains unverified.
+
+
+## 2026-10-29 — Fase 3 editorial consolidation (direct GitHub work)
+- Compared latest client chat brief with the *actual* repository before editing. The local 10-route design proposal is superseded by the existing 13-route implementation and previously checked navigation; **no route was removed or renamed**.
+- Consolidated complete existing 13-page visitor-facing text, SEO titles, descriptions, page links and factual-source caveats: `docs/FASE-03-CONTENIDO-EDITORIAL-13-PAGINAS.md`.
+- Added machine-readable route/source/copy matrix: `docs/FASE-03-MATRIZ-TRAZABILIDAD.csv`.
+- Applied precise copy-only fixes to `massage-services/specialty-techniques/index.html`, `gallery/index.html`, and `massage-menu/index.html`; no layout, animation, Home video, CTA booking destination, palette or photograph changed.
+- Existing gallery images and past QA remain preserved. New code regressions must still be checked in the latest GitHub Actions run; previous successful QA does not automatically certify this commit.
+- Pending owner reconfirmation: live Setmore catalog/durations/prices (especially Couples and specialty techniques), current hours, former staff narrative and vintage gallery photography. Historical Menu2024 prices are not displayed as current.
+- Demo remains `noindex,nofollow` and `robots.txt` restricted; contact form still routes to Atrezzo and real delivery has not been tested.
