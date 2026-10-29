@@ -32,3 +32,12 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
           fi
+
+      - name: Upload editorial candidate review contact sheet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elegant-photo-batch02-review
+          path: qa-artifacts/elegant-batch02-contact-sheet.jpg
+          if-no-files-found: warn
+          retention-days: 10
