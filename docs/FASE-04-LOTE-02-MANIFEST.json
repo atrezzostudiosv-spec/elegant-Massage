@@ -1,0 +1,167 @@
+[
+  {
+    "scene": "couples",
+    "page": "/massage-services/couples-massage/",
+    "category": "licensed_stock_illustrative",
+    "alt": "Illustrative photograph of two guests receiving massage treatments",
+    "sources": [
+      {
+        "id": 19695952,
+        "author": "Jonathan Borba",
+        "url": "https://www.pexels.com/photo/a-man-and-a-woman-taking-a-massage-19695952/",
+        "asset_url": "https://images.pexels.com/photos/19695952/pexels-photo-19695952.jpeg?auto=compress&cs=tinysrgb&w=2400",
+        "license": "https://www.pexels.com/license/",
+        "raw_sha256": "2942592bc14fcf114af517e2ee20100b3be561bbef672e4248e0461133c5225f",
+        "source_resolution": [
+          2400,
+          1600
+        ],
+        "use": "illustrative licensed stock, not business staff/facilities"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "assets/images/elegant-massage-couples-batch02-desktop.webp",
+        "bytes": 151510,
+        "sha256": "b24ab26b0353958bcf5c67235ca36fab01b2b5a9732a691d2a88ac261f08977e",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "path": "assets/images/elegant-massage-couples-batch02-mobile.webp",
+        "bytes": 93760,
+        "sha256": "ff02c9b7349a5de5bea4b82b17d0434cc5cd98f2fa2c23e62f48147b4fd2a55a",
+        "width": 900,
+        "height": 1200
+      }
+    ],
+    "notes": "Mobile version is two editorial cropped views of the same photo for both guests to remain visible; NOT new rooms or real Elegant Massage clientele."
+  },
+  {
+    "scene": "four-hands",
+    "page": "/massage-services/four-hands-massage/",
+    "category": "licensed_stock_illustrative",
+    "alt": "Illustrative scene of two massage therapists working on one client",
+    "sources": [
+      {
+        "id": 5888079,
+        "author": "Gustavo Fring",
+        "url": "https://www.pexels.com/photo/a-woman-having-a-back-massage-5888079/",
+        "asset_url": "https://images.pexels.com/photos/5888079/pexels-photo-5888079.jpeg?auto=compress&cs=tinysrgb&w=2400",
+        "license": "https://www.pexels.com/license/",
+        "raw_sha256": "78009861039ea25b1c2e1528983d6dab5723f2fcf69e3eb11fca0e7652ee9c66",
+        "source_resolution": [
+          2400,
+          1600
+        ],
+        "use": "illustrative licensed stock, not business staff/facilities"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "assets/images/elegant-massage-four-hands-batch02-desktop.webp",
+        "bytes": 54772,
+        "sha256": "179d1f06d5e0289d8f4cf91423b7109eac792003b3138c2d74cff9062ae9e208",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "path": "assets/images/elegant-massage-four-hands-batch02-mobile.webp",
+        "bytes": 49710,
+        "sha256": "309c3a94adce93aa2a5c73030bf19faf6930abf659d0a0385101ce27e57f0c59",
+        "width": 900,
+        "height": 1200
+      }
+    ],
+    "notes": "Composition to be human-inspected; does NOT prove business-specific technique."
+  },
+  {
+    "scene": "chair-massage",
+    "page": "/massage-services/chair-massage/",
+    "category": "licensed_stock_illustrative",
+    "alt": "Illustrative seated chair-massage session",
+    "sources": [
+      {
+        "id": 4085451,
+        "author": "Stephanie Allen",
+        "url": "https://www.pexels.com/photo/getting-a-back-massage-4085451/",
+        "asset_url": "https://images.pexels.com/photos/4085451/pexels-photo-4085451.jpeg?auto=compress&cs=tinysrgb&w=2400",
+        "license": "https://www.pexels.com/license/",
+        "raw_sha256": "925600c06663ea05bb3a6cd46b1f56c222beaaa978a6109503c881b2e66d6a4c",
+        "source_resolution": [
+          2400,
+          1588
+        ],
+        "use": "illustrative licensed stock, not business staff/facilities"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "assets/images/elegant-massage-chair-batch02-desktop.webp",
+        "bytes": 106226,
+        "sha256": "9bc4f3d94eb950952bc74ebd01fb6754ebf05ea345d51e0f8db2362817b4c379",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "path": "assets/images/elegant-massage-chair-batch02-mobile.webp",
+        "bytes": 84906,
+        "sha256": "ba973a5fc45187da0ec50eefdebaacdb4a7aa97cf4f44ea1960f671838858015",
+        "width": 900,
+        "height": 1200
+      }
+    ],
+    "notes": "Chair equipment is illustrative, not a claim about available facilities."
+  },
+  {
+    "scene": "combination-massage",
+    "page": "/massage-services/combination-massage/",
+    "category": "licensed_stock_illustrative",
+    "alt": "Editorial two-scene composition showing foot and back massage separately",
+    "sources": [
+      {
+        "id": 5240676,
+        "author": "Anete Lusina",
+        "url": "https://www.pexels.com/photo/focused-masseuse-doing-feet-massage-5240676/",
+        "asset_url": "https://images.pexels.com/photos/5240676/pexels-photo-5240676.jpeg?auto=compress&cs=tinysrgb&w=2400",
+        "license": "https://www.pexels.com/license/",
+        "raw_sha256": "dde06d848179c9528a53d8368b6df5792573c7ddb734f43cc11741a18ddd8e1a",
+        "source_resolution": [
+          2400,
+          3595
+        ],
+        "use": "illustrative licensed stock, not business staff/facilities"
+      },
+      {
+        "id": 4599392,
+        "author": "Antoni Shkraba",
+        "url": "https://www.pexels.com/photo/masseuse-massaging-a-person-s-back-4599392/",
+        "asset_url": "https://images.pexels.com/photos/4599392/pexels-photo-4599392.jpeg?auto=compress&cs=tinysrgb&w=2400",
+        "license": "https://www.pexels.com/license/",
+        "raw_sha256": "2615f98d7e9d9354509cd990d832473f01c2d02ad9e1da497f1efca3829223fd",
+        "source_resolution": [
+          2400,
+          3600
+        ],
+        "use": "illustrative licensed stock, not business staff/facilities"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "assets/images/elegant-massage-combination-batch02-desktop.webp",
+        "bytes": 99900,
+        "sha256": "10313b7a9ae6a904c22a3ca42e182ec7624f462bc0465b54918547383eb5c499",
+        "width": 1600,
+        "height": 900
+      },
+      {
+        "path": "assets/images/elegant-massage-combination-batch02-mobile.webp",
+        "bytes": 62746,
+        "sha256": "86a162e4f4123c7e4df93b0d8266dd27ad72a008a5f87f28689cc5ee25715e9e",
+        "width": 900,
+        "height": 1200
+      }
+    ],
+    "notes": "Separate techniques depicted on two distinct photographs; does not imply simultaneous treatment or exact appointment inclusions."
+  }
+]
