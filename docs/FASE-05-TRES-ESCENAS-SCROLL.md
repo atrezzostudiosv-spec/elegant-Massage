@@ -30,4 +30,8 @@ No se altera la página individual de Combination Massage ni su registro de cont
 4. Links originales activos, textos sin solapamientos, foco de teclado, reduced motion y fallback sin JS.
 5. Confirmar FormSubmit de test a atrezzostudiosv@gmail.com, demo noindex y publicación no autorizada.
 
-**Estado:** pendiente de pruebas GitHub Actions y revisión visual final. No declarar verificado solo por almacenar HTML/CSS/JS.
+**Estado de implementación:** verificado técnicamente y con revisión de capturas; pendiente de aprobación visual del cliente.
+**QA GitHub Actions:** SUCCESS — https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40892163753
+**Despliegue GitHub Pages:** SUCCESS — https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40892163115
+**Evidencia:** capturas 16%, 42%, 79%, 100% y mobile 375/768, más comprobación del zoom terminal y salida natural al índice siguiente.
+**Limitación:** ni la prueba técnica ni las capturas garantizan aprobación artística del cliente; conservar noindex hasta autorización de publicación.
