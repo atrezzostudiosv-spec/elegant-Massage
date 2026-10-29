@@ -63,3 +63,11 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Existing gallery images and past QA remain preserved. New code regressions must still be checked in the latest GitHub Actions run; previous successful QA does not automatically certify this commit.
 - Pending owner reconfirmation: live Setmore catalog/durations/prices (especially Couples and specialty techniques), current hours, former staff narrative and vintage gallery photography. Historical Menu2024 prices are not displayed as current.
 - Demo remains `noindex,nofollow` and `robots.txt` restricted; contact form still routes to Atrezzo and real delivery has not been tested.
+
+
+## 2026-10-29 — Fase 4 / Photography batch 01
+- **Visual production in progress**, source assets now in repo: 3 licensed stock originals cropped to 6 responsive WebP (1600×900 and 900×1200), image sources, authors and hashes documented in \`docs/FASE-04-RECURSOS-PRODUCIDOS.json\`.
+- Integrated only Foot Reflexology, Couples Massage and Four Hands Massage **hero + portrait detail**; original Home, videos and authentic gallery images preserved. New alt labels specify illustrative stock, not real staff/facilities.
+- Traceable implementation \`docs/FASE-04-INTEGRACION-LOTE-01.md\`. Four Hands photo represents two practitioners with one client and is **illustrative**, not evidence of the business's exact choreography.
+- Form test action remains \`https://formsubmit.co/atrezzostudiosv@gmail.com\`. Recipient is Atrezzo for tests, not Elegant Massage. Actual inbox delivery not verified.
+- This batch requires new GitHub Actions visual regression. Do not close Fase 4 until all remaining service imagery and responsive visual checks are complete.
