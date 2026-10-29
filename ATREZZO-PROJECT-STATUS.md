@@ -93,3 +93,11 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Screenshots of Couples, Four Hands and Combination hero were **visually inspected** at 375 and 1440 px. Couples mobile now shows both guests; Combination shows two clearly separated foot/back scenes and readable CTA; Four Hands depicts two practitioners with one client and keeps text legible, but backdrop remains more clinical than boutique, so art direction remains **IN VALIDATION**.
 - Chair Massage still has no new approved hero; intentionally excluded its corporate-toned candidate. Priority next: produce an authentic-looking illustrative seated massage in a suitable wellness atmosphere, then integrate and verify at four widths.
 - These results close batch02 technical integration, **NOT entire Phase 4**. Keep demo noindex; FormSubmit test mailbox remains Atrezzo, actual inbox delivery unverified.
+
+
+## 2026-10-29 — Fase 4 / Chair Massage original image production
+- AI-generated single-scene Chair Massage photograph produced at 1536×1024; manually visually assessed: realistic seated ergonomics, hands at shoulders, warm boutique environment; no textual overlay.
+- Prepared responsive **1600×900 WebP (144,540 B)** and **900×1200 WebP (104,496 B)** in local handoff ZIP plus image provenance metadata.
+- GitHub \`scripts/atrezzo_ingest_chair_massage.py\` and \`docs/FASE-04-CHAIR-MASSAGE-PRODUCCION.md\` added. **Binary image assets NOT YET COMMITTED**, because connected GitHub editing actions do not accept generated local image file references. Chair CSS/HTML intentionally not switched to nonexistent URLs.
+- Remaining gate: actual binary transfer, CSS integration, and browser visual QA at 375/768/1024/1440. Home still untouched.
+- Contact demo action remains \`https://formsubmit.co/atrezzostudiosv@gmail.com\`, not client address; real email delivery remains unverified. Demo stays noindex.
