@@ -71,3 +71,9 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Traceable implementation \`docs/FASE-04-INTEGRACION-LOTE-01.md\`. Four Hands photo represents two practitioners with one client and is **illustrative**, not evidence of the business's exact choreography.
 - Form test action remains \`https://formsubmit.co/atrezzostudiosv@gmail.com\`. Recipient is Atrezzo for tests, not Elegant Massage. Actual inbox delivery not verified.
 - This batch requires new GitHub Actions visual regression. Do not close Fase 4 until all remaining service imagery and responsive visual checks are complete.
+
+
+## 2026-10-29 — Fase 4 photo batch 01: QA and visual judgment
+- Browser automation **SUCCESS** on commit \`f04c654\`: https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40859554532. It checks all 13 routes, Home, and new 3-service image decoding/crop selection, no horizontal overflow, Setmore CTA, 375/768/1024/1440px screenshot pairs.
+- Screen captures inspected: Foot Reflexology compositions acceptable in this first set; **Couples mobile hero/portrait only show one guest clearly**, weakening two-person storytelling; **Four Hands currently shows two therapists, but does not demonstrate simultaneous four-hand back technique convincingly and has a clinical-lighting mismatch.** These are **open artistic defects** for the next targeted photo pass, not declared finished.
+- Photos must remain labeled as illustrative; do not mistake automation PASS for complete aesthetic sign-off. FormSubmit test inbox receipt remains unverified. Fase 4 stays **IN PROGRESS**.

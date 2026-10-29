@@ -28,3 +28,12 @@ Se conserva \`https://formsubmit.co/atrezzostudiosv@gmail.com\` y el consentimie
 
 ## Resto de fotografía
 Quedan pendientes Chair Massage, Combination, Ashiatsu, Pregnancy y el refinamiento de las fotos de servicio que aún son de baja resolución. No repetir ni modificar diseños aprobados del Home.
+
+
+## QA visual de este lote — inspección de capturas del 29/10/2026
+
+- **Resultado automatizado:** PASS — https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40859554532 (cuatro anchos, seis imágenes, 13 rutas, imágenes decodificadas, sin overflow observado).
+- **Foot Reflexology:** hero y vertical con la técnica de pies reconocible; aceptable como primer bloque.
+- **Couples Massage:** desktop muestra a dos personas, pero en móvil el segundo invitado queda casi fuera del encuadre. Requiere nueva variante móvil de dirección de arte; NO aprobar fotografía definitiva.
+- **Four Hands:** desktop y retrato muestran una persona asistida por dos terapeutas, pero la acción visible no representa con precisión el trabajo simultáneo de cuatro manos y el espacio es excesivamente clínico. Requiere fotografía más adecuada a la escena y nueva composición móvil; NO aprobar como hero definitivo.
+- **Formularios:** la comprobación del atributo \`action\` confirma correo de test a Atrezzo; un envío y su recepción reales siguen **NO COMPROBADOS**.
