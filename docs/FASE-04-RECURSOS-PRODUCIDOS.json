@@ -1,0 +1,95 @@
+[
+  {
+    "id": "foot-reflexology",
+    "page": "/massage-services/foot-reflexology/",
+    "source": "https://www.pexels.com/photo/crop-masseuse-kneading-feet-of-client-5240640/",
+    "download_url": "https://images.pexels.com/photos/5240640/pexels-photo-5240640.jpeg?auto=compress&cs=tinysrgb&w=2400",
+    "photographer": "Anete Lusina",
+    "license": "https://www.pexels.com/license/",
+    "provenance": "licensed_stock_illustrative_not_client_location_or_staff",
+    "alt": "Illustrative close-up of hands working on a client's feet during a massage",
+    "source_dimensions": [
+      2400,
+      1602
+    ],
+    "source_sha256": "065e151e64d0ce8ce2b296266e70073f24813eeda60ac2af6505e448cc4e2a75",
+    "output": [
+      {
+        "path": "assets/images/elegant-massage-foot-reflexology-editorial-desktop.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 68960,
+        "sha256": "d46dacdac818b1baa53dcb6690ceb6db3c8fc52b12df4ab3b628e1cb897801e1"
+      },
+      {
+        "path": "assets/images/elegant-massage-foot-reflexology-editorial-mobile.webp",
+        "width": 900,
+        "height": 1200,
+        "bytes": 48326,
+        "sha256": "082dcc2d37d175f012866b73ca11c3a33093c460c616918631336496f1e7b2f1"
+      }
+    ]
+  },
+  {
+    "id": "couples-massage",
+    "page": "/massage-services/couples-massage/",
+    "source": "https://www.pexels.com/photo/a-couple-getting-a-massage-7365434/",
+    "download_url": "https://images.pexels.com/photos/7365434/pexels-photo-7365434.jpeg?auto=compress&cs=tinysrgb&w=2400",
+    "photographer": "Sergey Torbik",
+    "license": "https://www.pexels.com/license/",
+    "provenance": "licensed_stock_illustrative_not_client_location_or_staff",
+    "alt": "Illustrative scene of two people enjoying massage treatments together",
+    "source_dimensions": [
+      2400,
+      1350
+    ],
+    "source_sha256": "626e0434f4262d24fe38f5fc148a0c0b24c495698e36fde1c51fc6481f93005f",
+    "output": [
+      {
+        "path": "assets/images/elegant-massage-couples-editorial-desktop.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 58006,
+        "sha256": "10b02981892eec86fe609d63fe3f23096014e78ef02edda3cd793a797f00eec5"
+      },
+      {
+        "path": "assets/images/elegant-massage-couples-editorial-mobile.webp",
+        "width": 900,
+        "height": 1200,
+        "bytes": 42598,
+        "sha256": "76d4689ccd85d0930bed35275e001d26e096d5e0bc84a4930b34a7c97a13aab2"
+      }
+    ]
+  },
+  {
+    "id": "four-hands",
+    "page": "/massage-services/four-hands-massage/",
+    "source": "https://www.pexels.com/photo/a-woman-having-a-massage-5888096/",
+    "download_url": "https://images.pexels.com/photos/5888096/pexels-photo-5888096.jpeg?auto=compress&cs=tinysrgb&w=2400",
+    "photographer": "Gustavo Fring",
+    "license": "https://www.pexels.com/license/",
+    "provenance": "licensed_stock_illustrative_not_client_location_or_staff",
+    "alt": "Illustrative photograph showing two practitioners working with one massage client",
+    "source_dimensions": [
+      2400,
+      1600
+    ],
+    "source_sha256": "609c9a8eb62cd8923820a361037dad5822965269f6a1172095e54fb274c3fc9e",
+    "output": [
+      {
+        "path": "assets/images/elegant-massage-two-therapists-editorial-desktop.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 47722,
+        "sha256": "e53954172fd72ddc5d4a957badceb3bd6b878e40bbffcfca51e2b62709d67f0c"
+      },
+      {
+        "path": "assets/images/elegant-massage-two-therapists-editorial-mobile.webp",
+        "width": 900,
+        "height": 1200,
+        "bytes": 38174,
+        "sha256": "afa81829a35a0f35cc381690458420c4b79f68beb1effc51de5f5a3bf987749c"
+      }
+    ]
+  }
+]
