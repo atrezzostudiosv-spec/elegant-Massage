@@ -170,3 +170,26 @@ body[data-page="combo"] .scene--detail.scene--portrait{
     background-position:center 42%;
   }
 }
+
+
+/* ATREZZO FASE 4 — Chair Massage cinematic illustration.
+   Activate ONLY when both referenced WebP files are committed to this branch.
+   Not a photograph of the business, its employees, or its premises. */
+body[data-page="chair"] .hero__background{
+  background-image:url('../images/elegant-massage-chair-massage-cinematic-desktop.webp');
+  background-position:55% center;
+  background-repeat:no-repeat;
+  background-size:cover;
+}
+body[data-page="chair"] .scene--detail.scene--portrait{
+  background-image:url('../images/elegant-massage-chair-massage-cinematic-mobile.webp');
+  background-position:55% center;
+  background-repeat:no-repeat;
+  background-size:cover;
+}
+@media(max-width:640px){
+  body[data-page="chair"] .hero__background{
+    background-image:url('../images/elegant-massage-chair-massage-cinematic-mobile.webp');
+    background-position:55% center;
+  }
+}
