@@ -129,3 +129,10 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Revisión manual V4 inicial: el recorte auténtico de sala vacía al comienzo disminuía cohesión; sustituido por detalle de masaje ilustrativo en Intro, con descripción y caption honestos. Se mantiene la fotografía auténtica de recepción en la sección local. Requiere QA posterior.
 
 - Segunda inspección visual de las páginas interiores: About y Body repetían exactamente imágenes entre hero y fotografía de contenido. About conserva hero de recepción y presenta una **foto original diferente de espera**; Body conserva hero y muestra detalle ilustrativo de aceite. Copy introductorio About sustituye texto genérico por información de servicios reales, sin afirmar datos de empleados.
+
+## 2026-10-29 — V4 final responsive review and release of design checkpoint
+- **Final QA PASS** on commit `521d773`, GitHub Actions https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40880877395; GitHub Pages deploy also **SUCCESS**: https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40880878175.
+- **87 QA records, 0 failures**, including 13 pages, four viewports 375/768/1024/1440px, video/Setmore/responsive/no-overflow, 4 photo routes, test form target and full-page interior screenshots at 375 and 1440px.
+- Inspected Home complete layout at 1440/375, Body Massage / About / Contact / service directory 1440; changes verified: less aggressive serif scale, proper editorial pacing, fewer duplicate large photo scenes and unique About/Body imagery.
+- No user visual approval yet: `Understated Wellness Editorial` V4 is delivered for review, not client-published. Remaining visual concerns: real facility photographs are visibly less polished than cinematic scenes, Chair hero replacement not yet uploaded, and not all service screenshots were individually art-approved.
+- Demo remains `noindex`; booking goes to Setmore. Form test recipient still `atrezzostudiosv@gmail.com`, delivery not verified.
