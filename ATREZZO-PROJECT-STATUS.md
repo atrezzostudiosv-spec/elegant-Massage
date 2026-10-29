@@ -145,3 +145,10 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Three-scene CSS/JS use native scroll, sticky on desktop, reversible downward scroll, reduced-motion and mobile normal-flow fallbacks. No wheel interception. Existing V3 zoom logic gated to prevent conflict.
 - Technical/visual acceptance and source provenance: docs/FASE-05-TRES-ESCENAS-SCROLL.md. Await QA and browser screenshots to mark validated.
 - No changes to form destination (atrezzostudiosv@gmail.com test, actual email unverified), Setmore booking, other 12 routes, Home header/video or noindex.
+
+
+## 2026-10-29 — Home 3-scene scroll: VERIFIED / review checkpoint
+- GitHub Actions **SUCCESS** on commit \`08f226d6\`: https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40892163753. GitHub Pages deployment for same commit also **SUCCESS**: https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40892163115.
+- Browser Playwright verified: 13 routes; 375 / 768 / 1024 / 1440px; full-bleed Home photo #01/#02/#03, scroll order 1→2→3, second and third panels descending from top, zoom still increasing through 79%→99.5% of third phase, sticky release to next section only after last zoom, and normal-flow fallback mobile/reduced-motion.
+- Visually inspected desktop screenshots at 16%, 42%, 79%, 100% timeline and mobile Combination at 375/768; single new image fills background with readable caption/CTA. Last scene is NOT a diptych. Source/licensing and responsive WebP hashes documented in \`docs/FASE-04-COMBINATION-SINGLE-IMAGE.json\`.
+- No service details/prices changed. Setmore intact, form still test-targeted at atrezzostudiosv@gmail.com (real receipt not verified), demo stays noindex. Other site-wide pending tasks remain open as before; this Home section only is technically verified, awaiting client visual review.
