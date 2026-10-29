@@ -152,3 +152,10 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Browser Playwright verified: 13 routes; 375 / 768 / 1024 / 1440px; full-bleed Home photo #01/#02/#03, scroll order 1→2→3, second and third panels descending from top, zoom still increasing through 79%→99.5% of third phase, sticky release to next section only after last zoom, and normal-flow fallback mobile/reduced-motion.
 - Visually inspected desktop screenshots at 16%, 42%, 79%, 100% timeline and mobile Combination at 375/768; single new image fills background with readable caption/CTA. Last scene is NOT a diptych. Source/licensing and responsive WebP hashes documented in \`docs/FASE-04-COMBINATION-SINGLE-IMAGE.json\`.
 - No service details/prices changed. Setmore intact, form still test-targeted at atrezzostudiosv@gmail.com (real receipt not verified), demo stays noindex. Other site-wide pending tasks remain open as before; this Home section only is technically verified, awaiting client visual review.
+
+
+## 2026-10-29 — Chair Massage / asset handoff after Home scroll closure
+- Last Home featured-services 3-scene scroll remains **technically VERIFIED** (run 40892163753); no reopening or alteration.
+- Prepared new Atrezzo illustrative Chair Massage original, visually inspected 1600×900 (83,490 bytes) and 900×1200 (67,204 bytes) responsive WebP crops with source checksums. Handoff ZIP delivered through conversation; detail: `docs/FASE-04-CHAIR-HANDOFF-2026-10-29.md`.
+- Ingestion script focal points corrected (especially mobile crop to keep guest/practitioner). Both binary resources **NOT COMMITTED**; current Chair page CSS remains on existing fallback, not misdirected to nonexistent new files.
+- **Phase 4: IN PROGRESS**. Single next action: transfer the 2 WebP binaries, integrate Chair CSS/alt and verify in browser at 375/768/1024/1440 px. Previous live form receipt still UNVERIFIED. Demo remains noindex.
