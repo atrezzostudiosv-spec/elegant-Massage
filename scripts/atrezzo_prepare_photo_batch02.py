@@ -63,7 +63,19 @@ def mobile_couples(im):
 photos={};sources={}
 for name,meta in SRC.items():
     photo,source=download(name,meta)
-    photos[name]=mood(photo)
+    photo=mood(photo)
+    if name=="chair":
+        # Intentionally branded duotone: neutralizes the corporate black/white stock
+        # while retaining the real chair and believable hands/shoulder technique.
+        photo=ImageOps.colorize(ImageOps.grayscale(photo),
+            black="#182b20",mid="#948c7b",white="#ede1ce",midpoint=124)
+        photo=ImageEnhance.Contrast(photo).enhance(1.07)
+    if name=="four":
+        # Soft filmic tint to reduce cold clinical light; no people/objects added.
+        warm=Image.new("RGB",photo.size,(140,104,65))
+        photo=Image.blend(photo,warm,.10)
+        photo=ImageEnhance.Contrast(photo).enhance(1.12)
+    photos[name]=photo
     sources[name]=source
 
 manifest=[]
