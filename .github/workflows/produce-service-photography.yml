@@ -1,0 +1,39 @@
+name: Atrezzo — Integrate licensed editorial photographs
+on:
+  push:
+    paths:
+      - '.github/workflows/produce-service-photography.yml'
+      - 'scripts/atrezzo_prepare_stock_photo_assets.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare exact, source-tracked photo assets
+        run: |
+          python -m pip install --disable-pip-version-check 'Pillow>=11,<13' 'requests>=2.32,<3'
+          python scripts/atrezzo_prepare_stock_photo_assets.py
+      - name: Commit photo files with recorded sources
+        run: |
+          git config user.name "atrezzo-studios-photo-bot"
+          git config user.email "atrezzo-photo-bot@users.noreply.github.com"
+          git add assets/images/elegant-massage-foot-reflexology-editorial-*.webp
+          git add assets/images/elegant-massage-couples-editorial-*.webp
+          git add assets/images/elegant-massage-two-therapists-editorial-*.webp
+          git add docs/FASE-04-RECURSOS-PRODUCIDOS.json
+          if ! git diff --cached --quiet; then
+            git commit -m "assets(elegant): produce 3 licensed responsive massage photo sets"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          else
+            echo "No image changes to commit"
+          fi
