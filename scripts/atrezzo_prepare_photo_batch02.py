@@ -117,3 +117,21 @@ p=Path("docs/FASE-04-LOTE-02-MANIFEST.json")
 p.parent.mkdir(parents=True,exist_ok=True)
 p.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 print(json.dumps({x["scene"]:[o["path"] for o in x["outputs"]] for x in manifest},indent=2))
+
+# Review sheet is built exclusively for QA, not part of website or committed assets.
+from PIL import ImageDraw
+qa=Path("qa-artifacts")
+qa.mkdir(exist_ok=True)
+thumb=(400,290)
+board=Image.new("RGB",(4*thumb[0],2*(thumb[1]+28)),(248,245,239))
+draw=ImageDraw.Draw(board)
+for idx,scene in enumerate(manifest):
+    for j,asset in enumerate(scene["outputs"]):
+        with Image.open(asset["path"]) as im:
+            display=ImageOps.contain(im.convert("RGB"),thumb)
+            x=idx*thumb[0]+(thumb[0]-display.width)//2
+            y=j*(thumb[1]+28)+(thumb[1]-display.height)//2
+            board.paste(display,(x,y))
+            draw.text((idx*thumb[0]+10,j*(thumb[1]+28)+thumb[1]+4),
+                      f"{scene['scene']} | {['desktop','mobile'][j]}",fill=(31,47,36))
+board.save(qa/"elegant-batch02-contact-sheet.jpg",quality=85)
