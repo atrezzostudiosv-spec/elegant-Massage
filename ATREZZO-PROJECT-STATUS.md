@@ -86,3 +86,10 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Exact implementation and constraints \`docs/FASE-04-LOTE-02-INTEGRACION-Y-QA.md\`.
 - Updated visual QA script to require four photo routes at all four widths, correct responsive selection/decoding and Setmore. The run triggered by this commit must be checked before claiming verification.
 - Contact demo continues to use Atrezzo test mailbox only; real submission/delivery remains unverified. Keep noindex.
+
+
+## 2026-10-29 — Phase 4 batch02 browser evidence / critical visual review
+- GitHub Actions run \`40862242303\`: **SUCCESS** on actual integration commit \`acfa902\` (all 13 routes, 375/768/1024/1440 viewport checks, service asset decoding and required desktop/mobile mapping, no horizontal overflow, Setmore).
+- Screenshots of Couples, Four Hands and Combination hero were **visually inspected** at 375 and 1440 px. Couples mobile now shows both guests; Combination shows two clearly separated foot/back scenes and readable CTA; Four Hands depicts two practitioners with one client and keeps text legible, but backdrop remains more clinical than boutique, so art direction remains **IN VALIDATION**.
+- Chair Massage still has no new approved hero; intentionally excluded its corporate-toned candidate. Priority next: produce an authentic-looking illustrative seated massage in a suitable wellness atmosphere, then integrate and verify at four widths.
+- These results close batch02 technical integration, **NOT entire Phase 4**. Keep demo noindex; FormSubmit test mailbox remains Atrezzo, actual inbox delivery unverified.
