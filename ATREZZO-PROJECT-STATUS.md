@@ -101,3 +101,12 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - GitHub \`scripts/atrezzo_ingest_chair_massage.py\` and \`docs/FASE-04-CHAIR-MASSAGE-PRODUCCION.md\` added. **Binary image assets NOT YET COMMITTED**, because connected GitHub editing actions do not accept generated local image file references. Chair CSS/HTML intentionally not switched to nonexistent URLs.
 - Remaining gate: actual binary transfer, CSS integration, and browser visual QA at 375/768/1024/1440. Home still untouched.
 - Contact demo action remains \`https://formsubmit.co/atrezzostudiosv@gmail.com\`, not client address; real email delivery remains unverified. Demo stays noindex.
+
+
+## 2026-10-29 — Auditoría visual y rediseño editorial V3
+- Usuario solicitó aplicar la calidad compositiva de Thaissage/Ranchman, nunca su identidad, colores o arquitectura literal. El alcance reabre Home y sistema visual común de 13 páginas.
+- Diagnóstico y decisiones: docs/FASE-05-AUDITORIA-UX-REDISENO-EDITORIAL.md.
+- Home transformado: hero vídeo conservado; introducción asimétrica; tres composiciones de servicio diferenciadas y tres tratamientos en índice tipográfico; una secuencia corta de 3 capítulos; fotos reales de local; FAQ; CTA final único.
+- Nuevo CSS assets/css/atrezzo-editorial-v3.css y JS assets/js/atrezzo-experience-v3.js en las 13 rutas. Booking móvil persiste enlazando al Setmore existente.
+- Se eliminaron sólo las transiciones genéricas YOUR NEXT STEP de los interiores, nunca contenido de servicios. Reparadas rutas de footer en páginas profundas.
+- Formulario test mantiene atrezzostudiosv@gmail.com; envío real no verificado. Demo continúa noindex. Chair WebP aún por integrar. QA y revisión visual de nuevo diseño pendientes de evidencia.

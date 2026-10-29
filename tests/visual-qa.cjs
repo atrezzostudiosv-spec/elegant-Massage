@@ -127,6 +127,59 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
     }
     await photosCtx.close();
   }
+
+  // Editorial V3 regression: inspect every route at all required responsive widths.
+  for(const width of widths){
+    const ctx=await browser.newContext({viewport:{width,height:width===375?812:900},reducedMotion:'reduce'});
+    const p=await ctx.newPage();
+    for(const route of routes){
+      const response=await p.goto(BASE+route,{waitUntil:'domcontentloaded'});
+      const data=await p.evaluate(()=>({
+        width:innerWidth,body:document.body.scrollWidth,html:document.documentElement.scrollWidth,
+        h1:(()=>{const r=document.querySelector('h1')?.getBoundingClientRect();return r?{left:r.left,right:r.right}:null})(),
+        editorialCss:[...document.styleSheets].some(x=>x.href?.includes('atrezzo-editorial-v3.css')),
+        booking:document.querySelector('.header-cta')?.getAttribute('href'),
+        sticky:(()=>{const e=document.querySelector('.em-mobile-booking');return e?{display:getComputedStyle(e).display,url:e.href}:null})()
+      }));
+      assert(response?.status()===200,route+': HTTP '+response?.status()+' @'+width);
+      assert(data.editorialCss,route+': editorial CSS absent @'+width);
+      assert(data.body<=width+2&&data.html<=width+2,route+': horizontal overflow @'+width+' '+data.body+'/'+data.html);
+      assert(data.h1&&data.h1.left>=-5&&data.h1.right<=width+5,route+': H1 clipped @'+width);
+      assert(data.booking==='https://elegantmassage.setmore.com/',route+': Setmore booking changed');
+      if(width<=720)assert(data.sticky?.display!=='none'&&data.sticky?.url==='https://elegantmassage.setmore.com/',route+': mobile booking bar missing');
+      if(['/', '/massage-services/body-massage/', '/gallery/', '/contact/'].includes(route)){
+        await p.locator('.hero').screenshot({
+          path:path.join(out,'editorial-v3-'+(route==='/'?'home':route.split('/').filter(Boolean).join('-'))+'-'+width+'.png'),
+          animations:'disabled'
+        });
+      }
+      results.push({editorialRoute:route,viewport:width,...data});
+    }
+    await ctx.close();
+  }
+  await page.goto(BASE+'/',{waitUntil:'domcontentloaded'});
+  const story=await page.evaluate(()=>({
+    featured:document.querySelectorAll('.em-treatment-feature').length,
+    secondary:document.querySelectorAll('.em-other-treatment').length,
+    scenes:document.querySelectorAll('.em-ritual .sensory-panel').length,
+    faq:document.querySelectorAll('.em-practical details').length,
+    realPlace:!!document.querySelector('.em-place__photograph'),
+    oldRows:document.querySelectorAll('.service-row').length
+  }));
+  assert(story.featured===3&&story.secondary===3&&story.scenes===3&&story.faq===3&&story.realPlace&&story.oldRows===0,
+    'New editorial structure incomplete: '+JSON.stringify(story));
+  for(const route of [
+    '/massage-services/body-massage/','/massage-services/foot-reflexology/',
+    '/massage-services/combination-massage/','/massage-services/chair-massage/',
+    '/massage-services/couples-massage/','/massage-services/four-hands-massage/',
+    '/massage-services/specialty-techniques/'
+  ]){
+    await page.goto(BASE+route,{waitUntil:'domcontentloaded'});
+    const links=await page.locator('footer a[href]').evaluateAll(xs=>xs.filter(x=>x.getAttribute('href').startsWith('..')).map(x=>new URL(x.getAttribute('href'),location.href).pathname));
+    assert(links.includes('/massage-services/')&&links.includes('/about/')&&links.includes('/contact/'),
+      route+': incorrect relative footer links: '+JSON.stringify(links));
+  }
+  results.push({editorialStory:story});
   await page.goto(BASE+'/contact/',{waitUntil:'domcontentloaded'});
   const form=page.locator('form.contact-form');
   assert(await form.count()===1,'contact form missing');
