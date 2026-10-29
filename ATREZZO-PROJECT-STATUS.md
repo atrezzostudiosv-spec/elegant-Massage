@@ -167,3 +167,13 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - **BLOCKED:** exact 2 WebP binary assets are verified in conversation ZIP but have not been transferred to GitHub, so the feature branch is intentionally not deployed or browser-certified. Paths, sizes and SHA-256 in `docs/FASE-04-CHAIR-INTEGRACION-STAGING.md` on the branch.
 - **MAIN UNCHANGED VISUALLY:** existing chair photo remains as safe fallback. Previously verified Home three-scene scroll and 13 routes remain untouched. Contact receipt unverified; demo noindex.
 - Next action: upload two exact WebP bytes to the feature branch and run Playwright Visual QA against that branch. Merge only after success and visual inspection.
+
+
+## 2026-10-29 — Fase 4 Chair Massage: INTEGRATED / VERIFIED (supersedes staging block)
+- **Binary transfer RESOLVED:** exact 1600×900 and 900×1200 optimized WebP photos delivered to Github and verified with Git object hashes equal to the locally produced originals. The temporary Library transfer files and folder were deleted after transfer.
+- Chair-only HTML accessible illustration label, desktop/mobile CSS hero/portrait mappings and responsive Playwright tests merged via PR #1 into `main`, squash commit `69b52a4`. Home, other service layouts, real gallery photographs, booking and form remain unchanged.
+- **Branch visual QA: PASS**, run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40901362075; **93 QA records, 0 failures**, Chair image decode + correct responsive mappings + no overflow + Setmore at 375/768/1024/1440.
+- **Manual visual inspection completed** of Chair 375/768/1024/1440 hero/detail captures: image demonstrates seated shoulder work, coherent boutique wellness styling, readable text and visible reservation action. Owner aesthetic sign-off not claimed.
+- **Main post-merge QA: PASS**, run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40902383422. **GitHub Pages deploy: SUCCESS**, run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40902382091.
+- Site remains **demo noindex**; this is **NOT** a public-release approval. FormSubmit receipt still untested, current treatment availability/prices/hours still pending owner verification.
+- **Fase 4 overall remains IN VALIDATION** for outstanding separate photographic art review (notably Four Hands clinical backdrop and historical imagery quality). **Next one action:** targeted Four Hands photo art-direction correction; do not reopen verified Chair or Home.
