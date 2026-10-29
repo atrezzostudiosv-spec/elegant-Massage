@@ -159,3 +159,11 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Prepared new Atrezzo illustrative Chair Massage original, visually inspected 1600×900 (83,490 bytes) and 900×1200 (67,204 bytes) responsive WebP crops with source checksums. Handoff ZIP delivered through conversation; detail: `docs/FASE-04-CHAIR-HANDOFF-2026-10-29.md`.
 - Ingestion script focal points corrected (especially mobile crop to keep guest/practitioner). Both binary resources **NOT COMMITTED**; current Chair page CSS remains on existing fallback, not misdirected to nonexistent new files.
 - **Phase 4: IN PROGRESS**. Single next action: transfer the 2 WebP binaries, integrate Chair CSS/alt and verify in browser at 375/768/1024/1440 px. Previous live form receipt still UNVERIFIED. Demo remains noindex.
+
+
+## 2026-10-29 — Chair Massage integration staged, blocked on actual WebP transfer
+- Isolated branch: `feature/chair-cinematic-photo-integration`. Draft PR: https://github.com/atrezzostudiosv-spec/elegant-Massage/pull/1.
+- **CODE STAGED (not merged):** Chair-only hero/portrait desktop/mobile CSS, accurate illustration accessible label, strict 375/768/1024/1440 asset-decoding and Setmore checks.
+- **BLOCKED:** exact 2 WebP binary assets are verified in conversation ZIP but have not been transferred to GitHub, so the feature branch is intentionally not deployed or browser-certified. Paths, sizes and SHA-256 in `docs/FASE-04-CHAIR-INTEGRACION-STAGING.md` on the branch.
+- **MAIN UNCHANGED VISUALLY:** existing chair photo remains as safe fallback. Previously verified Home three-scene scroll and 13 routes remain untouched. Contact receipt unverified; demo noindex.
+- Next action: upload two exact WebP bytes to the feature branch and run Playwright Visual QA against that branch. Merge only after success and visual inspection.
