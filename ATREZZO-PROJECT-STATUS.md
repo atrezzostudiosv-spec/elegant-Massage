@@ -177,3 +177,15 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - **Main post-merge QA: PASS**, run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40902383422. **GitHub Pages deploy: SUCCESS**, run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40902382091.
 - Site remains **demo noindex**; this is **NOT** a public-release approval. FormSubmit receipt still untested, current treatment availability/prices/hours still pending owner verification.
 - **Fase 4 overall remains IN VALIDATION** for outstanding separate photographic art review (notably Four Hands clinical backdrop and historical imagery quality). **Next one action:** targeted Four Hands photo art-direction correction; do not reopen verified Chair or Home.
+
+
+## 2026-10-30 — Home V6 / user-approved strategy, implementation in isolated review branch
+- User **REJECTED Home V5** and approved UX V6 with a mandatory six-category explorer, including **Foot Reflexology** clearly marked as an unconfirmed independent booking.
+- Implementation branch `feature/home-v6-service-explorer` and DRAFT PR #2: https://github.com/atrezzostudiosv-spec/elegant-Massage/pull/2. **MAIN IS UNCHANGED. DO NOT MERGE before user visual approval.**
+- Home-only changes: six decision-led sections; premium photo-and-content changing six-service selector; current booking destination `https://elegantmassage.setmore.com/#services` on Home; explicit price/duration checks on Setmore; original studio photos with illustration labels elsewhere; full SVG action icons in Home; natural photographs without CSS color filters.
+- The original responsive hero film and Body → Foot → Combination 3-scene scroll JS/CSS remain on this branch, including 440svh. Story copy now explains treatment differences, with direct bypass to booking and current prices. No original Home cinema files modified. The UX length of 440svh still requires measurement and art approval.
+- `assets/css/atrezzo-home-v6.css` and `assets/js/atrezzo-home-v6.js` are isolated to the Home; the other 12 HTML and their layouts remain untouched.
+- A feature-branch-only Playwright workflow covers 375/390/430/768/1024/1440, selector keyboard/mouse, image selection, scroll, bypass, no JS/reduced-motion, noindex and 13-route regression, with screenshot artifacts. **QA is scheduled, not yet declared PASS.**
+- Previous verified Chair and cinematic Home behavior are protected. Four Hands photo still uses the old illustrative clinical-setting source pending independent visual approval.
+- Owner confirmation of actual prices, treatment availability, business hours and live form receipt remains pending. Demo stays `noindex`; no launch authorization.
+- **NEXT SINGLE ACTION:** inspect V6 six-viewport browser artifacts, resolve demonstrated defects in the isolated branch, then present screenshots and draft PR for user visual approval.
