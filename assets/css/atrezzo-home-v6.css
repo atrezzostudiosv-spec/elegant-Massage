@@ -42,7 +42,7 @@
 .elegant-home .v6-explorer__heading .v6-intro{margin:0 0 .4rem}
 .elegant-home .v6-explorer__layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(2.5rem,5.3vw,6rem);align-items:start}
 .elegant-home .v6-explorer__choices{border-top:1px solid var(--v6-rule)}
-.elegant-home .v6-choice{width:100%;display:grid;grid-template-columns:2.35rem 1fr 1.35rem;gap:clamp(.6rem,2vw,1.8rem);align-items:center;text-align:left;min-height:87px;padding:1.1rem .5rem 1.1rem 0;border:0;border-bottom:1px solid var(--v6-rule);background:transparent;color:var(--v6-ink);cursor:pointer;transition:color .22s ease,padding .22s ease,background .22s ease}
+.elegant-home .v6-choice{width:100%;text-decoration:none;display:grid;grid-template-columns:2.35rem 1fr 1.35rem;gap:clamp(.6rem,2vw,1.8rem);align-items:center;text-align:left;min-height:87px;padding:1.1rem .5rem 1.1rem 0;border:0;border-bottom:1px solid var(--v6-rule);background:transparent;color:var(--v6-ink);cursor:pointer;transition:color .22s ease,padding .22s ease,background .22s ease}
 .elegant-home .v6-choice__number{font:600 .7rem "DM Sans",sans-serif;letter-spacing:.06em;color:#7f8c81}
 .elegant-home .v6-choice__title{font:400 clamp(1.72rem,2.5vw,2.95rem)/1.07 Newsreader,serif;letter-spacing:-.035em}
 .elegant-home .v6-choice__meta{display:block;margin-top:.25rem;font:600 .56rem/1.5 "DM Sans",sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#677a6e}
@@ -51,7 +51,7 @@
 .elegant-home .v6-choice[aria-selected="true"] .v6-choice__number{color:#1b5739}
 .elegant-home .v6-choice:hover .v6-icon,.elegant-home .v6-choice[aria-selected="true"] .v6-icon{transform:translate(3px,-3px)}
 .elegant-home .v6-explorer__note{font-size:.75rem;color:#66746a;margin:1.45rem 0 0;line-height:1.7}
-.elegant-home .v6-panel{background:#ecede5;min-width:0}
+.elegant-home .v6-panel{background:#ecede5;min-width:0;scroll-margin-top:94px}
 .elegant-home .v6-explorer.is-enhanced .v6-panel:not(.is-active){display:none}
 .elegant-home .v6-panel.is-active{animation:v6-panel-in .38s cubic-bezier(.2,.7,.2,1) both}
 @keyframes v6-panel-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
