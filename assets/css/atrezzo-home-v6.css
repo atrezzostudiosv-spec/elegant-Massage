@@ -1,0 +1,186 @@
+/* ATREZZO — Elegant Massage Home V6 | scoped progressive design layer
+   Preserve V3/V4 on 12 internal routes. All photographic assets remain natural:
+   never apply chromatic filters to images or video.
+*/
+.elegant-home{--v6-ink:#101b16;--v6-forest:#294638;--v6-paper:#f6f1e9;--v6-bronze:#b7966b;--v6-rule:rgba(16,27,22,.19);background:var(--v6-paper)}
+.elegant-home .v6-icon{width:1em;height:1em;display:inline-block;vertical-align:-.11em;flex:none;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round}
+.elegant-home a:focus-visible,.elegant-home button:focus-visible,.elegant-home summary:focus-visible{outline:3px solid #b7966b;outline-offset:4px}
+.elegant-home .v6-label{font:700 .65rem/1.4 "DM Sans",sans-serif;letter-spacing:.155em;text-transform:uppercase}
+.elegant-home .v6-kicker{color:#657267}
+.elegant-home .v6-section-title{font-family:"Newsreader",Georgia,serif;font-weight:400;font-size:clamp(2.95rem,5.1vw,5.75rem);letter-spacing:-.05em;line-height:1.025;margin:.65rem 0 1.3rem;max-width:15ch}
+.elegant-home .v6-section-title em{font-weight:300}
+.elegant-home .v6-intro{font-size:clamp(1rem,1.22vw,1.18rem);line-height:1.65;color:#55655c;max-width:54ch}
+.elegant-home .v6-action{display:inline-flex;align-items:center;justify-content:center;gap:1rem;min-height:48px;padding:.82rem 1.25rem;border:1px solid currentColor;border-radius:999px;text-decoration:none;text-transform:uppercase;font:700 .7rem/1.3 "DM Sans",sans-serif;letter-spacing:.075em;white-space:normal;text-align:center;transition:background .22s ease,color .22s ease,transform .22s ease,border-color .22s ease}
+.elegant-home .v6-action:hover{transform:translateY(-2px)}
+.elegant-home .v6-action--dark{background:var(--v6-forest);border-color:var(--v6-forest);color:#fff}
+.elegant-home .v6-action--dark:hover{background:#3b604a}
+.elegant-home .v6-action--light{background:var(--v6-paper);border-color:var(--v6-paper);color:var(--v6-ink)}
+.elegant-home .v6-action--light:hover{background:#fff}
+.elegant-home .v6-action--line{background:transparent;color:inherit;border-color:currentColor}
+.elegant-home .v6-action--line:hover{background:rgba(0,0,0,.06)}
+.elegant-home .v6-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.85rem}
+.elegant-home .v6-text-link{display:inline-flex;gap:.8rem;align-items:center;text-decoration:none;border-bottom:1px solid currentColor;padding:.55rem 0;font:700 .7rem/1.3 "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.elegant-home .v6-text-link:hover .v6-icon{transform:translate(2px,-2px)}
+.elegant-home .v6-text-link .v6-icon{transition:transform .22s ease}
+/* Header: local booking and pricing entry points, without altering internal-page header */
+.elegant-home .site-header .navigation{gap:clamp(.7rem,1.4vw,1.65rem)}
+.elegant-home .navigation a[href*="setmore.com/#services"]{white-space:nowrap}
+.elegant-home .site-header .header-cta{display:inline-flex;align-items:center;gap:.45rem;min-height:44px}
+.elegant-home .site-header .header-cta .v6-icon{width:.85rem;height:.85rem}
+.elegant-home .hero--home{min-height:100svh;align-items:flex-end;padding-top:clamp(9rem,18svh,13rem);padding-bottom:clamp(5.8rem,11svh,8rem)}
+.elegant-home .hero--home .hero__copy{max-width:790px}
+.elegant-home .hero--home h1{font-size:clamp(4.3rem,7.6vw,8rem);max-width:11ch;line-height:.94;letter-spacing:-.055em}
+.elegant-home .hero--home .lede{max-width:46ch}
+.elegant-home .v6-hero-utilities{display:flex;align-items:center;flex-wrap:wrap;gap:1.7rem;margin-top:1.35rem}
+.elegant-home .v6-hero-utilities a{color:#f6f1e9}
+.elegant-home .hero--home::before{background:linear-gradient(90deg,rgba(0,0,0,.75),rgba(0,0,0,.43) 50%,rgba(0,0,0,.07)),linear-gradient(0deg,rgba(0,0,0,.55),transparent 47%)}
+.elegant-home .hero__footnote{pointer-events:none}
+/* Explorer: a true single interactive editorial composition, not a card collection */
+.elegant-home .v6-explorer{background:#f8f6f0;color:var(--v6-ink);padding:clamp(5.2rem,9vw,9rem) 0 clamp(5rem,9vw,8rem)}
+.elegant-home .v6-explorer__heading{display:grid;grid-template-columns:1fr .86fr;gap:clamp(2rem,7vw,8rem);align-items:end;margin-bottom:clamp(2.7rem,4vw,4.5rem)}
+.elegant-home .v6-explorer__heading h2{margin-bottom:0}
+.elegant-home .v6-explorer__heading .v6-intro{margin:0 0 .4rem}
+.elegant-home .v6-explorer__layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(2.5rem,5.3vw,6rem);align-items:start}
+.elegant-home .v6-explorer__choices{border-top:1px solid var(--v6-rule)}
+.elegant-home .v6-choice{width:100%;display:grid;grid-template-columns:2.35rem 1fr 1.35rem;gap:clamp(.6rem,2vw,1.8rem);align-items:center;text-align:left;min-height:87px;padding:1.1rem .5rem 1.1rem 0;border:0;border-bottom:1px solid var(--v6-rule);background:transparent;color:var(--v6-ink);cursor:pointer;transition:color .22s ease,padding .22s ease,background .22s ease}
+.elegant-home .v6-choice__number{font:600 .7rem "DM Sans",sans-serif;letter-spacing:.06em;color:#7f8c81}
+.elegant-home .v6-choice__title{font:400 clamp(1.72rem,2.5vw,2.95rem)/1.07 Newsreader,serif;letter-spacing:-.035em}
+.elegant-home .v6-choice__meta{display:block;margin-top:.25rem;font:600 .56rem/1.5 "DM Sans",sans-serif;letter-spacing:.11em;text-transform:uppercase;color:#677a6e}
+.elegant-home .v6-choice .v6-icon{transition:transform .2s ease}
+.elegant-home .v6-choice[aria-selected="true"]{color:#1b5739;background:linear-gradient(90deg,rgba(41,70,56,.055),transparent 70%);padding-left:.75rem}
+.elegant-home .v6-choice[aria-selected="true"] .v6-choice__number{color:#1b5739}
+.elegant-home .v6-choice:hover .v6-icon,.elegant-home .v6-choice[aria-selected="true"] .v6-icon{transform:translate(3px,-3px)}
+.elegant-home .v6-explorer__note{font-size:.75rem;color:#66746a;margin:1.45rem 0 0;line-height:1.7}
+.elegant-home .v6-panel{background:#ecede5;min-width:0}
+.elegant-home .v6-explorer.is-enhanced .v6-panel:not(.is-active){display:none}
+.elegant-home .v6-panel.is-active{animation:v6-panel-in .38s cubic-bezier(.2,.7,.2,1) both}
+@keyframes v6-panel-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.elegant-home .v6-panel__photo{min-height:clamp(340px,31vw,510px);background-size:cover;background-position:center;background-repeat:no-repeat;position:relative;overflow:hidden;filter:none!important}
+.elegant-home .v6-panel__photo::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.42),transparent 45%);pointer-events:none}
+.elegant-home .v6-panel__photo-label{position:absolute;z-index:1;bottom:1.2rem;left:1.4rem;color:#fff;font:700 .61rem/1.4 "DM Sans",sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.elegant-home .v6-panel__photo--body{background-image:url('../images/elegant-massage-body-massage-cinematic.webp');background-position:60% center}
+.elegant-home .v6-panel__photo--foot{background-image:url('../images/elegant-massage-foot-reflexology-editorial-desktop.webp');background-position:55% center}
+.elegant-home .v6-panel__photo--combo{background-image:url('../images/elegant-massage-combination-single-desktop.webp');background-position:55% center}
+.elegant-home .v6-panel__photo--chair{background-image:url('../images/elegant-massage-chair-massage-cinematic-desktop.webp');background-position:56% center}
+.elegant-home .v6-panel__photo--couples{background-image:url('../images/elegant-massage-couples-batch02-desktop.webp');background-position:53% center}
+.elegant-home .v6-panel__photo--four{background-image:url('../images/elegant-massage-four-hands-batch02-desktop.webp');background-position:58% center}
+.elegant-home .v6-panel__body{padding:clamp(1.55rem,3vw,3rem)}
+.elegant-home .v6-panel__heading{display:flex;justify-content:space-between;align-items:start;gap:1.4rem;margin-bottom:.8rem}
+.elegant-home .v6-panel__heading h3{font:400 clamp(2.55rem,3.3vw,4.2rem)/1.04 Newsreader,serif;letter-spacing:-.045em;margin:0}
+.elegant-home .v6-panel__tag{font:700 .56rem/1.3 "DM Sans",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#3d6450;border:1px solid #65847366;border-radius:20px;padding:.4rem .5rem;max-width:135px;text-align:center}
+.elegant-home .v6-panel__tag--confirm{color:#5b5c48;border-color:#979784}
+.elegant-home .v6-panel__description{color:#394b40;font-size:.97rem;line-height:1.7;max-width:50ch}
+.elegant-home .v6-panel__disclaimer{font-size:.72rem;color:#606f64;margin-top:1.3rem;line-height:1.6}
+.elegant-home .v6-panel__buttons{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.45rem}
+/* Three cinematographic treatment chapters: keep existing 440svh logic. */
+.elegant-home .v6-cinema-intro{background:#14261c;color:#f6f1e9;padding:clamp(4.3rem,7vw,7rem) 0 clamp(3rem,5.5vw,5.5rem)}
+.elegant-home .v6-cinema-intro__grid{display:grid;grid-template-columns:1fr .83fr;gap:clamp(2rem,6vw,7rem);align-items:end}
+.elegant-home .v6-cinema-intro .v6-section-title{max-width:14ch;margin-bottom:0}
+.elegant-home .v6-cinema-intro p:not(.v6-label){font-size:1rem;line-height:1.75;color:#d6ddd5;max-width:44ch}
+.elegant-home .v6-cinema-escape{display:flex;gap:1.6rem;flex-wrap:wrap;margin-top:1.2rem}
+.elegant-home .v6-cinema-escape a{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.elegant-home .v6-cinema-quick{position:absolute;top:clamp(5rem,10svh,7rem);right:var(--gutter);z-index:15;display:flex;gap:1rem;align-items:center}
+.elegant-home .v6-cinema-quick a{font:700 .58rem/1.3 "DM Sans",sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.68);padding:.65rem .9rem;border-radius:999px;background:rgba(0,0,0,.28);backdrop-filter:blur(6px)}
+.elegant-home .v6-cinema-quick a:hover{background:rgba(0,0,0,.6)}
+.elegant-home .em-cinema .em-treatment-feature__image{filter:none!important}
+.elegant-home .em-cinema .em-treatment-feature h3{font-size:clamp(3.3rem,5.4vw,5.8rem)}
+.elegant-home .em-cinema .em-treatment-feature__copy p{font-size:clamp(1rem,1.3vw,1.14rem);line-height:1.65;max-width:49ch}
+.elegant-home .em-cinema .em-treatment-feature:before{background:linear-gradient(90deg,rgba(0,0,0,.76),rgba(0,0,0,.37) 58%,rgba(0,0,0,.06)),linear-gradient(0deg,rgba(0,0,0,.72),transparent 52%)}
+.elegant-home .em-cinema .em-treatment-feature .em-photo-link{display:inline-flex;align-items:center;gap:.75rem}
+.elegant-home .v6-cinema-quick .v6-icon{width:.85rem;height:.85rem}
+/* Real information, compact and price-forward — no repeated split photo. */
+.elegant-home .v6-before{background:#f1f0e8;color:var(--v6-ink);padding:clamp(5rem,8vw,8rem) 0}
+.elegant-home .v6-before__grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(3rem,7vw,8rem)}
+.elegant-home .v6-before__primary{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:2.7rem}
+.elegant-home .v6-before__primary h2{max-width:11ch}
+.elegant-home .v6-price-link{display:flex;align-items:center;justify-content:space-between;gap:1.2rem;width:100%;max-width:470px;background:var(--v6-forest);color:white;text-decoration:none;padding:1.5rem 1.6rem;border-radius:3px;transition:background .2s,transform .2s}
+.elegant-home .v6-price-link:hover{background:#345c45;transform:translateY(-2px)}
+.elegant-home .v6-price-link strong{display:block;font-size:1rem;line-height:1.45}
+.elegant-home .v6-price-link span{display:block;font-size:.72rem;opacity:.84;margin-top:.4rem;line-height:1.5}
+.elegant-home .v6-techniques{border-top:1px solid var(--v6-rule)}
+.elegant-home .v6-technique{display:grid;grid-template-columns:2.5rem 1fr auto;gap:1rem;align-items:center;border-bottom:1px solid var(--v6-rule);padding:1.1rem 0}
+.elegant-home .v6-technique__number{font-size:.7rem;color:#77877b}
+.elegant-home .v6-technique strong{font:400 clamp(1.5rem,2vw,2.1rem)/1.2 Newsreader,serif}
+.elegant-home .v6-technique small{font-size:.69rem;color:#5c6d60;line-height:1.5}
+.elegant-home .v6-technique__status{font:700 .55rem/1.5 "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#607568;text-align:right;max-width:110px}
+.elegant-home .v6-techniques__footer{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:1.4rem}
+.elegant-home .v6-techniques__footer p{font-size:.76rem;color:#657168;margin:0}
+/* Documentary authenticity: original business photos only. */
+.elegant-home .v6-location{background:#142b20;color:#f6f1e9;display:grid;grid-template-columns:1.1fr .9fr;min-height:clamp(620px,68svh,820px)}
+.elegant-home .v6-location__photos{display:grid;grid-template-columns:1fr .64fr;gap:0;min-height:580px;overflow:hidden}
+.elegant-home .v6-location__photos img{width:100%;height:100%;min-height:0;object-fit:cover;filter:none!important}
+.elegant-home .v6-location__photos img:first-child{object-position:48% center}
+.elegant-home .v6-location__photos img:last-child{object-position:49% center}
+.elegant-home .v6-location__content{display:flex;flex-direction:column;justify-content:center;padding:clamp(4rem,6vw,7rem) clamp(2.2rem,5vw,6rem)}
+.elegant-home .v6-location__content .v6-section-title{font-size:clamp(2.9rem,4.4vw,5.3rem)}
+.elegant-home .v6-location__address{font-size:1.02rem;line-height:1.75;max-width:35ch;color:#e9eee6}
+.elegant-home .v6-location__note{color:#b4c3b8;font-size:.73rem;line-height:1.5;margin-top:1.5rem}
+/* Action-oriented finish, brief, no second philosophy section */
+.elegant-home .v6-final{position:relative;isolation:isolate;background:#111e16;color:#f6f1e9;padding:clamp(5rem,9svh,8rem) 0}
+.elegant-home .v6-final::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(0,0,0,.89),rgba(0,0,0,.64) 58%,rgba(0,0,0,.28)),url('../images/elegant-massage-massage-moment-cinematic.webp') center/cover no-repeat}
+.elegant-home .v6-final h2{font:400 clamp(3.4rem,5.4vw,6.4rem)/1.02 Newsreader,serif;max-width:14ch;letter-spacing:-.04em;margin:0 0 1rem}
+.elegant-home .v6-final p{font-size:1.02rem;line-height:1.6;max-width:48ch;color:#e5e8e1}
+.elegant-home .v6-final .v6-actions{margin-top:2rem}
+.elegant-home .em-mobile-booking{gap:.6rem}
+.elegant-home .em-mobile-booking .v6-icon{font-size:1.3rem;color:#cfb68d}
+@media(max-width:1150px){
+ .elegant-home .v6-explorer__layout{gap:2.3rem}
+ .elegant-home .v6-choice{min-height:82px}
+ .elegant-home .v6-location{grid-template-columns:1fr .95fr}
+ .elegant-home .v6-location__photos{min-height:530px}
+}
+@media(max-width:870px){
+ .elegant-home .v6-explorer__heading{grid-template-columns:1fr;gap:1rem}
+ .elegant-home .v6-explorer__layout{grid-template-columns:minmax(0,1fr);gap:2.2rem}
+ .elegant-home .v6-explorer__choices{display:grid;grid-template-columns:1fr 1fr;gap:0 1.6rem}
+ .elegant-home .v6-choice{min-height:82px}
+ .elegant-home .v6-panel__photo{min-height:400px}
+ .elegant-home .v6-cinema-intro__grid{grid-template-columns:1fr}
+ .elegant-home .v6-before__grid{grid-template-columns:1fr;gap:3.3rem}
+ .elegant-home .v6-before__primary{gap:1.5rem}
+ .elegant-home .v6-location{grid-template-columns:1fr}
+ .elegant-home .v6-location__photos{height:400px;min-height:0}
+}
+@media(max-width:640px){
+ .elegant-home .hero--home{padding-top:9rem;padding-bottom:5.8rem}
+ .elegant-home .hero--home h1{font-size:clamp(3.55rem,12vw,4.6rem)}
+ .elegant-home .v6-hero-utilities{gap:1.15rem}
+ .elegant-home .v6-explorer{padding:4.3rem 0 4.5rem}
+ .elegant-home .v6-section-title{font-size:clamp(2.85rem,10vw,4.3rem)}
+ .elegant-home .v6-explorer__choices{grid-template-columns:1fr;gap:0}
+ .elegant-home .v6-choice{grid-template-columns:1.8rem 1fr 1.3rem;min-height:68px;padding:.8rem 0}
+ .elegant-home .v6-choice__title{font-size:clamp(1.55rem,7vw,2.15rem)}
+ .elegant-home .v6-choice__meta{font-size:.54rem}
+ .elegant-home .v6-panel__photo{min-height:320px}
+ .elegant-home .v6-panel__photo--foot{background-image:url('../images/elegant-massage-foot-reflexology-editorial-mobile.webp')}
+ .elegant-home .v6-panel__photo--combo{background-image:url('../images/elegant-massage-combination-single-mobile.webp')}
+ .elegant-home .v6-panel__photo--chair{background-image:url('../images/elegant-massage-chair-massage-cinematic-mobile.webp')}
+ .elegant-home .v6-panel__photo--couples{background-image:url('../images/elegant-massage-couples-batch02-mobile.webp')}
+ .elegant-home .v6-panel__photo--four{background-image:url('../images/elegant-massage-four-hands-batch02-mobile.webp')}
+ .elegant-home .v6-panel__body{padding:1.5rem}
+ .elegant-home .v6-panel__heading{display:block}
+ .elegant-home .v6-panel__tag{display:inline-block;margin-top:.7rem}
+ .elegant-home .v6-panel__buttons .v6-action{width:100%}
+ .elegant-home .v6-cinema-intro{padding:3.7rem 0 3rem}
+ .elegant-home .v6-cinema-quick{top:1.2rem;right:var(--gutter);gap:.5rem}
+ .elegant-home .v6-cinema-quick a{font-size:.53rem;padding:.55rem .65rem}
+ .elegant-home .em-cinema .em-treatment-feature h3{font-size:clamp(2.9rem,9.9vw,4rem)}
+ .elegant-home .v6-before{padding:4.4rem 0}
+ .elegant-home .v6-technique{grid-template-columns:1.6rem 1fr;gap:.8rem}
+ .elegant-home .v6-technique__status{grid-column:2;text-align:left;max-width:none}
+ .elegant-home .v6-location__photos{height:320px;grid-template-columns:1.2fr .8fr}
+ .elegant-home .v6-location__content{padding:3.9rem var(--gutter)}
+ .elegant-home .v6-final{padding:5.2rem 0 6.5rem}
+ .elegant-home .v6-final h2{font-size:clamp(3.3rem,10vw,4.9rem)}
+ .elegant-home .v6-final .v6-actions .v6-action{width:100%}
+}
+@media(max-width:400px){
+ .elegant-home .v6-choice__title{font-size:1.67rem}
+ .elegant-home .v6-panel__photo{min-height:290px}
+ .elegant-home .v6-panel__body{padding:1.3rem}
+}
+@media(prefers-reduced-motion:reduce){
+ .elegant-home .v6-panel.is-active{animation:none}
+ .elegant-home .v6-choice,.elegant-home .v6-action,.elegant-home .v6-text-link .v6-icon{transition:none}
+ .elegant-home .v6-action:hover{transform:none}
+}
