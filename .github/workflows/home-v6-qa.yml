@@ -1,0 +1,33 @@
+name: Atrezzo Home V6 — Branch Visual QA
+on:
+  push:
+    branches: [feature/home-v6-service-explorer]
+  workflow_dispatch:
+jobs:
+  home-v6:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Playwright / Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Serve branch and run actual browser QA
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/elegant-home-v6-http.log 2>&1 &
+          sleep 2
+          node tests/home-v6-qa.cjs
+      - name: Archive six-viewport visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elegant-home-v6-visual-evidence
+          path: qa-v6/
+          if-no-files-found: warn
+          retention-days: 10
