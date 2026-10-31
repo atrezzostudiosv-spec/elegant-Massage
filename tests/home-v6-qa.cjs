@@ -1,0 +1,163 @@
+const {chromium}=require('playwright');
+const fs=require('fs'),path=require('path');
+const BASE='http://127.0.0.1:8765',OUT='qa-v6',STORE='https://elegantmassage.setmore.com/#services';
+fs.mkdirSync(OUT,{recursive:true});
+const widths=[375,390,430,768,1024,1440],errors=[],report=[];
+const check=(ok,msg)=>{if(!ok)errors.push(msg)};
+(async()=>{
+const b=await chromium.launch({headless:true,args:['--autoplay-policy=no-user-gesture-required']});
+try{
+for(const width of widths){
+ const height=width<=430?812:900,ctx=await b.newContext({viewport:{width,height},reducedMotion:'no-preference'});
+ const p=await ctx.newPage(),pageErrors=[];
+ p.on('pageerror',e=>pageErrors.push(e.message));
+ const response=await p.goto(BASE+'/',{waitUntil:'domcontentloaded'});
+ await p.locator('.v6-explorer.is-enhanced').waitFor({timeout:12000});
+ const data=await p.evaluate(()=>{
+  const css=x=>getComputedStyle(document.querySelector(x));
+  const root=document.querySelector('#treatments-cinema');
+  const bounds=document.querySelector('main h1').getBoundingClientRect();
+  return {
+   width:innerWidth,body:document.body.scrollWidth,html:document.documentElement.scrollWidth,
+   h1:document.querySelectorAll('main h1').length,sections:document.querySelectorAll('main section').length,
+   panels:document.querySelectorAll('[data-v6-panel]').length,tabs:document.querySelectorAll('[data-v6-choice]').length,
+   visiblePanels:[...document.querySelectorAll('[data-v6-panel]')].filter(x=>!x.hidden).length,
+   h1Visible:bounds.width>0&&bounds.left>=-4&&bounds.right<=innerWidth+4,
+   robots:document.querySelector('meta[name=robots]')?.content,
+   book:document.querySelector('.header-cta')?.getAttribute('href'),
+   allBook:[...document.querySelectorAll('a[href*="setmore"]')].every(x=>x.href==='https://elegantmassage.setmore.com/#services'),
+   photoFilter:css('.v6-panel__photo').filter,cinemaFilter:css('.em-cinema .em-treatment-feature__image').filter,
+   localFilter:css('.v6-location__photos img').filter,immersive:root.classList.contains('is-immersive'),
+   cinemaCost:root.offsetHeight/innerHeight,skip:!!document.querySelector('.v6-cinema-quick a[href="#current-services"]'),
+   directRoutes:document.querySelectorAll('[data-v6-panel] a[href*="massage-services"]').length,
+   originalPhotos:document.querySelectorAll('.v6-location__photos img[src*="flower-mound"]').length
+  };
+ });
+ check(response.status()===200,width+' status failure');
+ check(data.width===width&&data.body<=width+2&&data.html<=width+2,width+' horizontal overflow');
+ check(data.h1===1&&data.sections===6,width+' architecture failure');
+ check(data.tabs===6&&data.panels===6&&data.visiblePanels===1&&data.directRoutes===6,width+' six-service explorer failure');
+ check(data.h1Visible&&data.robots?.includes('noindex')&&data.book===STORE&&data.allBook,width+' metadata/hero/booking failure');
+ check(data.photoFilter==='none'&&data.cinemaFilter==='none'&&data.localFilter==='none',width+' image filter remains');
+ check(data.skip&&data.originalPhotos===2,width+' cinema skip/original location photo missing');
+ check(width>=1024?data.immersive:!data.immersive,width+' cinema breakpoint failure');
+ // Hero must remain massage-led and retain a clear booking action.
+ const heroVisual=await p.evaluate(()=>({
+  picture:getComputedStyle(document.querySelector('.hero--home .hero__background')).backgroundImage,
+  filmDisplay:getComputedStyle(document.querySelector('#hero-film')).display,
+  ctaHeight:document.querySelector('.header-cta').getBoundingClientRect().height,
+  lowerBar:!!document.querySelector('.em-mobile-booking')
+ }));
+ if(width<=640){
+  check(heroVisual.picture.includes('elegant-massage-massage-touch-detail.webp'),width+' mobile massage photo not active');
+  check(heroVisual.filmDisplay==='none',width+' floral hero video still visible');
+  check(!heroVisual.lowerBar,width+' competing bottom booking bar still present');
+ }
+ check(heroVisual.ctaHeight>=36,width+' header booking CTA unusually small');
+ await p.locator('.hero--home').screenshot({path:path.join(OUT,'home-v6-'+width+'-hero.png'),animations:'disabled'});
+ if(width<=870){
+  await p.locator('button.toggle').click();
+  check(await p.locator('.navigation').isVisible(),width+' navigation not opened');
+  await p.keyboard.press('Escape');
+  check(!(await p.locator('.navigation').isVisible()),width+' navigation Escape failure');
+ }
+ const tabs=p.locator('[data-v6-choice]');
+ await tabs.first().focus();await p.keyboard.press('ArrowDown');
+ check(await tabs.nth(1).getAttribute(width<=640?'aria-expanded':'aria-selected')==='true',width+' keyboard selector failure');
+ const foot=p.locator('#v6-panel-foot');
+ check(await foot.isVisible()&&(await foot.locator('a[href^="tel:"]').count())===1,width+' foot availability/call failure');
+ await p.locator('#v6-choice-four').click();
+ check(await p.locator('#v6-choice-four').getAttribute(width<=640?'aria-expanded':'aria-selected')==='true',width+' active click failure');
+ check(await p.locator('#v6-panel-body').isHidden(),width+' inactive panel remains visible');
+// Mobile editorial accordion places each expanded photo immediately under its own choice.
+ if(width<=640){
+   const accordion=await p.locator('#v6-choice-four').evaluate(tab=>({
+     nextId:tab.nextElementSibling?.id,
+     regionRole:tab.nextElementSibling?.getAttribute('role'),
+     tabsRole:tab.getAttribute('role'),
+     footHidden:document.querySelector('#v6-panel-foot').hidden
+   }));
+   check(accordion.nextId==='v6-panel-four'&&accordion.regionRole==='region'&&accordion.tabsRole==='button'&&accordion.footHidden,
+     width+' mobile accordion placement/semantics broken '+JSON.stringify(accordion));
+ }
+
+ const photo=await p.locator('#v6-panel-four .v6-panel__photo').evaluate(x=>getComputedStyle(x).backgroundImage);
+ check(photo.includes('four-hands-massage-atrezzo.webp'),width+' photographic Four Hands source');
+ await p.locator('#v6-choice-body').click();
+ await p.locator('.v6-explorer').screenshot({path:path.join(OUT,'home-v6-'+width+'-explorer.png'),animations:'disabled'});
+ if(width<=430){
+  for(const id of ['foot','combo','four']){
+   await p.locator('#v6-choice-'+id).click();
+   await p.locator('#v6-panel-'+id).screenshot({path:path.join(OUT,'home-v6-'+width+'-'+id+'-expanded.png'),animations:'disabled'});
+  }
+  await p.locator('#v6-choice-body').click();
+ }
+ await p.screenshot({path:path.join(OUT,'home-v6-'+width+'-full.png'),fullPage:true,animations:'disabled'});
+ if(width>=1024){
+  const start=await p.locator('#treatments-cinema').evaluate(root=>{const stage=root.querySelector('.em-cinema__stage');return {top:scrollY+root.getBoundingClientRect().top,travel:root.offsetHeight-stage.offsetHeight}});
+  const samples=[];
+  for(const f of [.16,.42,.79,.995]){
+   await p.evaluate(y=>scrollTo({top:y,behavior:'instant'}),start.top+start.travel*f);
+   await p.waitForTimeout(160);
+   const s=await p.evaluate(()=>{const scenes=[...document.querySelectorAll('.em-cinema__stage > .em-treatment-feature')];return {active:scenes.findIndex(x=>x.classList.contains('is-current')),zoom:parseFloat(scenes[2].style.getPropertyValue('--em-zoom'))}});
+   samples.push(s);
+   if(width===1440)await p.locator('.em-cinema__stage').screenshot({path:path.join(OUT,'cinema-v6-'+Math.round(f*100)+'.png'),animations:'disabled'});
+  }
+  check(samples[0].active===0&&samples[1].active===1&&samples[2].active===2,width+' cinema sequence broken');
+  check(samples[3].zoom>samples[2].zoom+.05,width+' cinema final zoom broken');
+  data.samples=samples;
+  // Controlled UX comparison: keep the original 440svh live, temporarily test 360svh
+  // with unchanged scene JS. Require full order, visible last zoom and native exit.
+  const candidate=await p.locator('#treatments-cinema').evaluate(root=>{root.style.height='360svh';const stage=root.querySelector('.em-cinema__stage');return {height:root.offsetHeight,stage:stage.offsetHeight,top:scrollY+root.getBoundingClientRect().top,travel:root.offsetHeight-stage.offsetHeight}});
+  const candidateSamples=[];
+  for(const frac of [.16,.42,.79,.995]){
+   await p.evaluate(y=>scrollTo({top:y,behavior:'instant'}),candidate.top+candidate.travel*frac);
+   await p.waitForTimeout(160);
+   candidateSamples.push(await p.evaluate(()=>{const ps=[...document.querySelectorAll('.em-cinema__stage > .em-treatment-feature')];return {active:ps.findIndex(x=>x.classList.contains('is-current')),zoom:parseFloat(ps[2].style.getPropertyValue('--em-zoom'))}}));
+  }
+  const optimizedOk=candidateSamples[0].active===0&&candidateSamples[1].active===1&&candidateSamples[2].active===2&&candidateSamples[3].zoom>candidateSamples[2].zoom+.05;
+  data.cinemaComparison={baselineScreens:data.cinemaCost,candidateScreens:candidate.height/height,optimizedOk,candidateSamples};
+  check(optimizedOk,width+' 360svh alternative fails cinematic regression');
+  const exitPosition=candidate.top+candidate.height+24;
+  await p.evaluate(y=>scrollTo({top:y,behavior:'instant'}),exitPosition);
+  await p.waitForTimeout(90);
+  const exited=await p.locator('#current-services').evaluate(x=>x.getBoundingClientRect().top);
+  check(exited<height,width+' cinematic sequence traps native scroll after final scene');
+  await p.locator('#treatments-cinema').evaluate(root=>root.style.removeProperty('height'));
+ }
+ await p.goto(BASE+'/',{waitUntil:'domcontentloaded'});
+ await p.locator('a[href="#current-services"]').first().click();
+ // Native smooth scrolling is asynchronous. Wait for actual destination rather than sampling after an arbitrary 300ms.
+ const skipReached=await p.waitForFunction(()=>{
+   const target=document.getElementById('current-services');
+   const rect=target?.getBoundingClientRect();
+   const padding=parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0;
+   const margin=parseFloat(getComputedStyle(target).scrollMarginTop)||0;
+   return location.hash==='#current-services'&&!!rect&&Math.abs(rect.top-(padding+margin))<24;
+  },{timeout:5500}).then(()=>true).catch(()=>false);
+ const skipped=await p.evaluate(()=>({hash:location.hash,top:document.querySelector('#current-services').getBoundingClientRect().top,scrollY}));
+ check(skipReached,width+' cannot skip cinematic story '+JSON.stringify(skipped));
+ check(pageErrors.length===0,width+' JS error '+pageErrors.join('|'));
+ report.push(data);await ctx.close();
+}
+const reduced=await b.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});
+const rp=await reduced.newPage();await rp.goto(BASE+'/',{waitUntil:'domcontentloaded'});
+const rstate=await rp.evaluate(()=>({immersive:document.querySelector('.em-cinema').classList.contains('is-immersive'),video:document.querySelector('#hero-film').hidden}));
+check(!rstate.immersive&&rstate.video,'reduced-motion fallback failed');await reduced.close();
+const nojs=await b.newContext({viewport:{width:375,height:812},javaScriptEnabled:false});
+const np=await nojs.newPage();await np.goto(BASE+'/',{waitUntil:'domcontentloaded'});
+const nojsState=await np.evaluate(()=>({visible:[...document.querySelectorAll('[data-v6-panel]')].filter(x=>getComputedStyle(x).display!=='none').length,links:document.querySelectorAll('[data-v6-panel] a[href]').length}));
+check(nojsState.visible===6&&nojsState.links===12,'no-JS explorer fallback broken');await nojs.close();
+for(const route of ['/','/massage-services/','/massage-services/body-massage/','/massage-services/foot-reflexology/','/massage-services/combination-massage/','/massage-services/chair-massage/','/massage-services/couples-massage/','/massage-services/four-hands-massage/','/massage-services/specialty-techniques/','/massage-menu/','/about/','/gallery/','/contact/']){
+ const ctx=await b.newContext({viewport:{width:375,height:812},reducedMotion:'reduce'});
+ const p=await ctx.newPage(),res=await p.goto(BASE+route,{waitUntil:'domcontentloaded'});
+ const info=await p.evaluate(()=>({h1:document.querySelectorAll('main h1').length,robots:document.querySelector('meta[name=robots]')?.content,overflow:document.documentElement.scrollWidth>innerWidth+2,book:document.querySelector('.header-cta')?.href}));
+ check(res?.status()===200&&info.h1===1&&info.robots?.includes('noindex')&&!info.overflow&&info.book?.startsWith('https://elegantmassage.setmore.com/'),'route regression '+route);
+ await ctx.close();
+}
+report.push({reduced:rstate,nojs:nojsState,routes:13});
+}finally{await b.close()}
+fs.writeFileSync(path.join(OUT,'report.json'),JSON.stringify({passed:errors.length===0,errors,report},null,2));
+console.log(JSON.stringify({passed:errors.length===0,errors,viewports:report.filter(x=>x.width).map(x=>({width:x.width,scrollCost:x.cinemaCost,sections:x.sections,panels:x.panels}))},null,2));
+if(errors.length)process.exitCode=1;
+})().catch(e=>{console.error(e);process.exitCode=1});
