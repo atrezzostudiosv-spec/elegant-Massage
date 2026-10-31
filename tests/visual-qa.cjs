@@ -208,7 +208,10 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
         path:path.join(out,'cinema-combination-mobile-'+width+'.png'),animations:'disabled'});
     }else{
       assert(initial.immersive&&initial.sticky==='sticky','cinema: desktop native sticky not activated '+width);
-      assert(initial.rootHeight>=initial.stageHeight*4,'cinema: timeline too short to finish third zoom '+width);
+      // Home V6.1 deliberately shortens 440svh to 360svh after comparing full
+      // 01→02→03 order, final zoom and native exit at desktop widths.
+      assert(initial.rootHeight>=initial.stageHeight*3.55&&initial.rootHeight<=initial.stageHeight*3.65,
+        'cinema: approved V6.1 360svh timeline not applied '+width);
       const samples=[];
       for(const progress of [.16,.42,.79,.995]){
         const start=await p.locator('#treatments-cinema').evaluate(root=>{
