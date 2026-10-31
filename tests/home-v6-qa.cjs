@@ -76,9 +76,10 @@ for(const width of widths){
  }
  await p.goto(BASE+'/',{waitUntil:'domcontentloaded'});
  await p.locator('a[href="#current-services"]').first().click();
- await p.waitForTimeout(300);
- const skipped=await p.evaluate(()=>({hash:location.hash,top:document.querySelector('#current-services').getBoundingClientRect().top}));
- check(skipped.hash==='#current-services'&&skipped.top<height,width+' cannot skip cinematic story');
+ // Native smooth scrolling is asynchronous. Wait for actual destination rather than sampling after an arbitrary 300ms.
+ const skipReached=await p.waitForFunction(()=>{const target=document.getElementById('current-services');const rect=target?.getBoundingClientRect();return location.hash==='#current-services'&&!!rect&&rect.top>=-20&&rect.top<130;},{timeout:5500}).then(()=>true).catch(()=>false);
+ const skipped=await p.evaluate(()=>({hash:location.hash,top:document.querySelector('#current-services').getBoundingClientRect().top,scrollY}));
+ check(skipReached,width+' cannot skip cinematic story '+JSON.stringify(skipped));
  check(pageErrors.length===0,width+' JS error '+pageErrors.join('|'));
  report.push(data);await ctx.close();
 }
