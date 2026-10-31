@@ -281,3 +281,17 @@ html:has(.elegant-home){scroll-behavior:auto}
 @media(prefers-reduced-motion:reduce){
  .elegant-home .v6-panel.is-active{animation:none!important}
 }
+
+
+/* Verified candidate: at 1024 and 1440 px the unchanged JS advances scenes
+   01 > 02 > 03, completes final zoom to 1.1119 and retains native scrolling.
+   360svh saves 0.8 screens (18.18%) over 440svh; never affects mobile or reduced motion. */
+@media(min-width:1024px) and (min-height:650px) and (prefers-reduced-motion:no-preference){
+ .elegant-home .em-cinema.is-immersive{height:360svh}
+}
+/* Home's persistent header already contains Book: remove the V3 lower-bar gutter. */
+@media(max-width:720px){
+ body.elegant-home{padding-bottom:0!important}
+ .elegant-home .em-mobile-booking,
+ .elegant-home.v6-show-mobile-booking .em-mobile-booking{display:none!important}
+}
