@@ -105,27 +105,9 @@
   pauseMobileFilm();
   mobile.addEventListener?.('change',pauseMobileFilm);
 
-  // One conversion affordance at a time: hide the fixed mobile booking bar
-  // while the visible Hero or final booking section already offers the CTA.
-  const booking=doc.querySelector('.em-mobile-booking');
-  const hero=doc.querySelector('.hero--home');
-  const final=doc.querySelector('.v6-final');
-  if(booking){
-    booking.innerHTML='Book an Appointment <svg class="v6-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 19 19 5M7 5h12v12"/></svg>';
-    let heroVisible=true,finalVisible=false;
-    const update=()=>doc.body.classList.toggle('v6-show-mobile-booking',
-      !heroVisible&&!finalVisible&&mobile.matches);
-    if('IntersectionObserver' in window&&hero&&final){
-      new IntersectionObserver(entries=>{
-        heroVisible=entries[0].isIntersecting;update();
-      },{threshold:0}).observe(hero);
-      new IntersectionObserver(entries=>{
-        finalVisible=entries[0].isIntersecting;update();
-      },{threshold:0}).observe(final);
-    }else{
-      // No observer: do not add a redundant fixed conversion surface.
-      doc.body.classList.remove('v6-show-mobile-booking');
-    }
-    mobile.addEventListener?.('change',update);
-  }
+  // Home already keeps a booking action in the fixed header and Hero.
+  // Remove V3's redundant fixed lower booking bar on Home ONLY.
+  // Internal pages retain their existing booking behavior.
+  const redundantBar=doc.querySelector('.em-mobile-booking');
+  if(redundantBar)redundantBar.remove();
 })();
