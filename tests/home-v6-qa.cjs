@@ -49,16 +49,35 @@ for(const width of widths){
  }
  const tabs=p.locator('[data-v6-choice]');
  await tabs.first().focus();await p.keyboard.press('ArrowDown');
- check(await tabs.nth(1).getAttribute('aria-selected')==='true',width+' tab keyboard failure');
+ check(await tabs.nth(1).getAttribute(width<=640?'aria-expanded':'aria-selected')==='true',width+' keyboard selector failure');
  const foot=p.locator('#v6-panel-foot');
  check(await foot.isVisible()&&(await foot.locator('a[href^="tel:"]').count())===1,width+' foot availability/call failure');
  await p.locator('#v6-choice-four').click();
- check(await p.locator('#v6-choice-four').getAttribute('aria-selected')==='true',width+' active click failure');
+ check(await p.locator('#v6-choice-four').getAttribute(width<=640?'aria-expanded':'aria-selected')==='true',width+' active click failure');
  check(await p.locator('#v6-panel-body').isHidden(),width+' inactive panel remains visible');
+// Mobile editorial accordion places each expanded photo immediately under its own choice.
+ if(width<=640){
+   const accordion=await p.locator('#v6-choice-four').evaluate(tab=>({
+     nextId:tab.nextElementSibling?.id,
+     regionRole:tab.nextElementSibling?.getAttribute('role'),
+     tabsRole:tab.getAttribute('role'),
+     footHidden:document.querySelector('#v6-panel-foot').hidden
+   }));
+   check(accordion.nextId==='v6-panel-four'&&accordion.regionRole==='region'&&accordion.tabsRole==='button'&&accordion.footHidden,
+     width+' mobile accordion placement/semantics broken '+JSON.stringify(accordion));
+ }
+
  const photo=await p.locator('#v6-panel-four .v6-panel__photo').evaluate(x=>getComputedStyle(x).backgroundImage);
- check(photo.includes('four-hands-batch02-'+(width<=640?'mobile':'desktop')+'.webp'),width+' responsive photo mapping');
+ check(photo.includes('four-hands-massage-atrezzo.webp'),width+' photographic Four Hands source');
  await p.locator('#v6-choice-body').click();
  await p.locator('.v6-explorer').screenshot({path:path.join(OUT,'home-v6-'+width+'-explorer.png'),animations:'disabled'});
+ if(width<=430){
+  for(const id of ['foot','combo','four']){
+   await p.locator('#v6-choice-'+id).click();
+   await p.locator('#v6-panel-'+id).screenshot({path:path.join(OUT,'home-v6-'+width+'-'+id+'-expanded.png'),animations:'disabled'});
+  }
+  await p.locator('#v6-choice-body').click();
+ }
  await p.screenshot({path:path.join(OUT,'home-v6-'+width+'-full.png'),fullPage:true,animations:'disabled'});
  if(width>=1024){
   const start=await p.locator('#treatments-cinema').evaluate(root=>{const stage=root.querySelector('.em-cinema__stage');return {top:scrollY+root.getBoundingClientRect().top,travel:root.offsetHeight-stage.offsetHeight}});
@@ -73,6 +92,19 @@ for(const width of widths){
   check(samples[0].active===0&&samples[1].active===1&&samples[2].active===2,width+' cinema sequence broken');
   check(samples[3].zoom>samples[2].zoom+.05,width+' cinema final zoom broken');
   data.samples=samples;
+  // Controlled UX comparison: keep the original 440svh live, temporarily test 360svh
+  // with unchanged scene JS. Require full order, visible last zoom and native exit.
+  const candidate=await p.locator('#treatments-cinema').evaluate(root=>{root.style.height='360svh';const stage=root.querySelector('.em-cinema__stage');return {height:root.offsetHeight,stage:stage.offsetHeight,top:scrollY+root.getBoundingClientRect().top,travel:root.offsetHeight-stage.offsetHeight}});
+  const candidateSamples=[];
+  for(const frac of [.16,.42,.79,.995]){
+   await p.evaluate(y=>scrollTo({top:y,behavior:'instant'}),candidate.top+candidate.travel*frac);
+   await p.waitForTimeout(160);
+   candidateSamples.push(await p.evaluate(()=>{const ps=[...document.querySelectorAll('.em-cinema__stage > .em-treatment-feature')];return {active:ps.findIndex(x=>x.classList.contains('is-current')),zoom:parseFloat(ps[2].style.getPropertyValue('--em-zoom'))}}));
+  }
+  const optimizedOk=candidateSamples[0].active===0&&candidateSamples[1].active===1&&candidateSamples[2].active===2&&candidateSamples[3].zoom>candidateSamples[2].zoom+.05;
+  data.cinemaComparison={baselineScreens:data.cinemaCost,candidateScreens:candidate.height/height,optimizedOk,candidateSamples};
+  check(optimizedOk,width+' 360svh alternative fails cinematic regression');
+  await p.locator('#treatments-cinema').evaluate(root=>root.style.removeProperty('height'));
  }
  await p.goto(BASE+'/',{waitUntil:'domcontentloaded'});
  await p.locator('a[href="#current-services"]').first().click();
