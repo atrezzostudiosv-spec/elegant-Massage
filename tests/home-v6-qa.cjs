@@ -41,6 +41,20 @@ for(const width of widths){
  check(data.photoFilter==='none'&&data.cinemaFilter==='none'&&data.localFilter==='none',width+' image filter remains');
  check(data.skip&&data.originalPhotos===2,width+' cinema skip/original location photo missing');
  check(width>=1024?data.immersive:!data.immersive,width+' cinema breakpoint failure');
+ // Hero must remain massage-led and retain a clear booking action.
+ const heroVisual=await p.evaluate(()=>({
+  picture:getComputedStyle(document.querySelector('.hero--home .hero__background')).backgroundImage,
+  filmDisplay:getComputedStyle(document.querySelector('#hero-film')).display,
+  ctaHeight:document.querySelector('.header-cta').getBoundingClientRect().height,
+  lowerBar:!!document.querySelector('.em-mobile-booking')
+ }));
+ if(width<=640){
+  check(heroVisual.picture.includes('elegant-massage-massage-touch-detail.webp'),width+' mobile massage photo not active');
+  check(heroVisual.filmDisplay==='none',width+' floral hero video still visible');
+  check(!heroVisual.lowerBar,width+' competing bottom booking bar still present');
+ }
+ check(heroVisual.ctaHeight>=36,width+' header booking CTA unusually small');
+ await p.locator('.hero--home').screenshot({path:path.join(OUT,'home-v6-'+width+'-hero.png'),animations:'disabled'});
  if(width<=870){
   await p.locator('button.toggle').click();
   check(await p.locator('.navigation').isVisible(),width+' navigation not opened');
@@ -104,6 +118,11 @@ for(const width of widths){
   const optimizedOk=candidateSamples[0].active===0&&candidateSamples[1].active===1&&candidateSamples[2].active===2&&candidateSamples[3].zoom>candidateSamples[2].zoom+.05;
   data.cinemaComparison={baselineScreens:data.cinemaCost,candidateScreens:candidate.height/height,optimizedOk,candidateSamples};
   check(optimizedOk,width+' 360svh alternative fails cinematic regression');
+  const exitPosition=candidate.top+candidate.height+24;
+  await p.evaluate(y=>scrollTo({top:y,behavior:'instant'}),exitPosition);
+  await p.waitForTimeout(90);
+  const exited=await p.locator('#current-services').evaluate(x=>x.getBoundingClientRect().top);
+  check(exited<height,width+' cinematic sequence traps native scroll after final scene');
   await p.locator('#treatments-cinema').evaluate(root=>root.style.removeProperty('height'));
  }
  await p.goto(BASE+'/',{waitUntil:'domcontentloaded'});
