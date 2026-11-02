@@ -177,3 +177,16 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - **Main post-merge QA: PASS**, run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40902383422. **GitHub Pages deploy: SUCCESS**, run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40902382091.
 - Site remains **demo noindex**; this is **NOT** a public-release approval. FormSubmit receipt still untested, current treatment availability/prices/hours still pending owner verification.
 - **Fase 4 overall remains IN VALIDATION** for outstanding separate photographic art review (notably Four Hands clinical backdrop and historical imagery quality). **Next one action:** targeted Four Hands photo art-direction correction; do not reopen verified Chair or Home.
+
+
+## 2026-11-02 — Touch, Considered / Home execution (branch only)
+- Fases 1, 2, 3 CLOSED by user. Fase 4 artistic specification CLOSED by user; user expressly authorized Home implementation under smoked-glass header, Codrops-inspired cinematic intro, and five seamless massage chapters.
+- ACTIVE WORKSTREAM: HOME DEVELOPMENT — IN VALIDATION, not approved for main merge.
+- Branch: `feature/home-touch-considered-2026`; draft PR #3. Main branch and currently published GitHub Pages untouched.
+- Home implemented: video/depth introduction, five editorial photo chapters (Body, Foot & Combo, Couples, Chair & Thai, Four Hands), instant skip/jump, static Setmore-sourced selected-price table, three authentic facility photos, verified Flower Mound contact/directions, Ink footer.
+- Visual system: Paper #F5F1E9, Ink #24262A, Garnet #783B48; Instrument Serif + DM Sans; smoked-glass sticky navigation. No V5/V6 styles imported.
+- Reuses source-provenance images already in repository. Treatment imagery is illustrative; photos of business premises identified as historical real images.
+- All Book CTA destinations: `https://elegantmassage.setmore.com/#services`. No custom booking backend; Home Google Maps link is directions only, interactive iframe reserved for Contact.
+- Local Chromium QA (inlined test assets used as QA-only stand-ins) passed layout assertions at 375/390/430/768/1024/1440: no horizontal overflow, menu opens/closes, direct selector navigation works, chapter count 5, no JS exceptions, noindex retained.
+- GitHub Actions `Elegant Massage — Touch Considered Home QA` runs against REAL branch images/video and generates review screenshots/downloadable snapshot. Its outcome must be inspected before claiming full browser/photo validation.
+- Remaining before approval: review actual screenshots and full image quality on branch, contrast of loaded images, data-saver fallback, live launch not authorized. Existing 13 internal routes intentionally intact until subsequent 10-page migration phase. Demo retains noindex.
