@@ -6,7 +6,7 @@ on:
 jobs:
   qa:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
@@ -14,20 +14,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install browser test dependency
+      - name: Install Playwright Chromium
         run: |
           npm install --no-save playwright@1.56.1
           npx playwright install --with-deps chromium
-      - name: Serve static demo and inspect in browser
+      - name: Serve current main, test Home and retained internal routes
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/elegant-http.log 2>&1 &
           sleep 2
-          node tests/visual-qa.cjs
-      - name: Upload visual evidence
+          node tests/codrops-original-motion-qa.cjs
+          node tests/current-architecture-qa.cjs
+      - name: Upload screenshots and browser evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: elegant-massage-responsive-qa
+          name: elegant-massage-current-main-qa
           path: qa-artifacts/
           if-no-files-found: warn
           retention-days: 10
