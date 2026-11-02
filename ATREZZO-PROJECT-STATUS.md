@@ -177,3 +177,27 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - **Main post-merge QA: PASS**, run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40902383422. **GitHub Pages deploy: SUCCESS**, run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/40902382091.
 - Site remains **demo noindex**; this is **NOT** a public-release approval. FormSubmit receipt still untested, current treatment availability/prices/hours still pending owner verification.
 - **Fase 4 overall remains IN VALIDATION** for outstanding separate photographic art review (notably Four Hands clinical backdrop and historical imagery quality). **Next one action:** targeted Four Hands photo art-direction correction; do not reopen verified Chair or Home.
+
+
+## 2026-11-02 — Touch, Considered / Home execution (branch only)
+- Fases 1, 2, 3 CLOSED by user. Fase 4 artistic specification CLOSED by user; user expressly authorized Home implementation under smoked-glass header, Codrops-inspired cinematic intro, and five seamless massage chapters.
+- ACTIVE WORKSTREAM: HOME DEVELOPMENT — IN VALIDATION, not approved for main merge.
+- Branch: `feature/home-touch-considered-2026`; draft PR #3. Main branch and currently published GitHub Pages untouched.
+- Home implemented: video/depth introduction, five editorial photo chapters (Body, Foot & Combo, Couples, Chair & Thai, Four Hands), instant skip/jump, static Setmore-sourced selected-price table, three authentic facility photos, verified Flower Mound contact/directions, Ink footer.
+- Visual system: Paper #F5F1E9, Ink #24262A, Garnet #783B48; Instrument Serif + DM Sans; smoked-glass sticky navigation. No V5/V6 styles imported.
+- Reuses source-provenance images already in repository. Treatment imagery is illustrative; photos of business premises identified as historical real images.
+- All Book CTA destinations: `https://elegantmassage.setmore.com/#services`. No custom booking backend; Home Google Maps link is directions only, interactive iframe reserved for Contact.
+- Local Chromium QA (inlined test assets used as QA-only stand-ins) passed layout assertions at 375/390/430/768/1024/1440: no horizontal overflow, menu opens/closes, direct selector navigation works, chapter count 5, no JS exceptions, noindex retained.
+- GitHub Actions `Elegant Massage — Touch Considered Home QA` runs against REAL branch images/video and generates review screenshots/downloadable snapshot. Its outcome must be inspected before claiming full browser/photo validation.
+- Remaining before approval: review actual screenshots and full image quality on branch, contrast of loaded images, data-saver fallback, live launch not authorized. Existing 13 internal routes intentionally intact until subsequent 10-page migration phase. Demo retains noindex.
+
+
+## 2026-11-02 — Original Codrops motion integration (separate draft branch)
+- Source files received: `ATREZZO_DOS_MOVIMIENTOS_ORIGINALES_COMPLETOS(1).zip`, including `INSTRUCCIONES_PARA_OTRO_CHAT.md`, integration guides, original MIT sources and four SVG variants. Reference screen recording inspected.
+- Stage: HOME DEVELOPMENT / IN VALIDATION. The earlier Home feature remains in `feature/home-touch-considered-2026`; this isolated branch `feature/home-codrops-original-motion` is the fidelity correction.
+- Sticky Grid adapted directly from Theo Plawinski original timeline: 12 assets in 3 columns, 425vh pinned block, .06 stagger, scale 2.05, ±40% lateral movements, intro yPercent -100.
+- SVG horizontal blinds chosen from Hiroki's default `index.html`/`script.js`: 30 pairs of rects per chapter, five distinct SVG masks, GSAP timing and scrub 2.5 retained. Text/CTA and native semantic chapters preserved.
+- Only Home modified; approved smoked-glass header, five functions, Setmore URL, noindex, real-photo authenticity and internal pages preserved. Original project demo images not imported. Vendor libraries and licenses packaged locally; a single Lenis instance on capable desktop only.
+- Reduced motion, mobile/tablet: static native vertical flow; desktop: source GSAP scroll-driven choreography. Draft PR #4, not merged. Main and published demo untouched.
+- GitHub Actions run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/41468340663 SUCCESS. Six viewport checks (375/390/430/768/1024/1440); 5 masks/300 SVG rectangles on desktop; 12 grid images, no horizontal overflow, menu, Setmore, reduced motion, no JS page errors.
+- Still pending: artistic approval by user of actual scroll on desktop and touch device; test real physical device and Safari/Firefox; full performance and interactive contrast review. No public production deployment claim.
