@@ -34,3 +34,19 @@ jobs:
           path: qa-artifacts/touch-home/
           retention-days: 14
           if-no-files-found: warn
+
+  preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package browsable branch snapshot
+        run: |
+          zip -qr elegant-massage-home-review.zip index.html assets about contact gallery massage-menu massage-services robots.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: elegant-home-review-site
+          path: elegant-massage-home-review.zip
+          retention-days: 14
