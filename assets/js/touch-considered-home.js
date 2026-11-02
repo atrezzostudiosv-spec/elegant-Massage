@@ -34,7 +34,7 @@
   if (jump) jump.addEventListener('change', () => {
     const target = document.getElementById(jump.value);
     if (!target) return;
-    target.scrollIntoView({behavior: reduced.matches ? 'instant' : 'smooth',block:'start'});
+    target.scrollIntoView({behavior: 'instant',block:'start'});
     history.replaceState(null,'','#'+target.id);
   });
   // Honor data saving and explicit reduced-motion preferences, even if the browser allows autoplay.
