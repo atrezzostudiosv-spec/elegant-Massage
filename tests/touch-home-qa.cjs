@@ -16,6 +16,7 @@ fs.mkdirSync(folder,{recursive:true});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
   await page.waitForTimeout(400);
+  console.log(`Inspecting ${width}px`);
   const info=await page.evaluate(()=>({
    overflow:document.documentElement.scrollWidth>innerWidth,
    index:document.querySelector('meta[name="robots"]')?.content,
@@ -45,7 +46,7 @@ fs.mkdirSync(folder,{recursive:true});
    await page.keyboard.press('Escape');
    assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'false');
   }
-  await page.screenshot({path:path.join(folder,`header-${width}.png`),animations:'disabled'});
+  await page.screenshot({path:path.join(folder,`header-${width}.png`),animations:'disabled',timeout:15000});
   await page.locator('#chapter-selector').selectOption('four-hands');
   await page.waitForTimeout(1000);
   assert.equal(new URL(page.url()).hash,'#four-hands');
@@ -62,6 +63,13 @@ fs.mkdirSync(folder,{recursive:true});
     })));
   });
   assert.ok(images.every(x=>x.ok),`${width}px image failed: ${JSON.stringify(images.filter(x=>!x.ok))}`);
+  if (width === 390 || width === 1440) {
+    for (const id of ['body-massage','couples-massage','time-and-price','the-real-elegant-massage','visit-us']) {
+      await page.locator('#'+id).evaluate(el=>el.scrollIntoView({behavior:'instant',block:'start'}));
+      await page.waitForTimeout(120);
+      await page.screenshot({path:path.join(folder,`${id}-${width}.png`),animations:'disabled',timeout:15000});
+    }
+  }
   assert.deepEqual(errors,[],`${width}px JS errors`);
   records.push({width,...info,decodedImages:images.length,jsErrors:errors.length});
   await page.close();
