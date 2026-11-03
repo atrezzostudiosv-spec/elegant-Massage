@@ -64,9 +64,9 @@
      const mobile=innerWidth<=700, tablet=innerWidth<1024;
      // Limit the final separation so the grid continues framing the title
      // instead of leaving a blank white viewport at the end of the animation.
-     const scale=mobile?1.3:(tablet?1.55:1.72);
-     const sideways=mobile?14:(tablet?19:24);
-     const vertical=mobile?12:(tablet?16:20);
+     const scale=mobile?1.44:(tablet?1.67:1.95);
+     const sideways=mobile?18:(tablet?24:30);
+     const vertical=mobile?14:(tablet?20:25);
      const t=gsap.timeline({defaults:{duration:1,ease:'power3.inOut'}});
      t.to(this.grid,{scale});
      t.to(columns[0],{xPercent:-sideways},'<');
@@ -76,10 +76,17 @@
    }
    // All typography now follows the scrubbed timeline, eliminating delayed callback jumps.
    animateGridOnScroll(){
-     const t=gsap.timeline({scrollTrigger:{trigger:this.block,start:'top 55%',end:'bottom bottom',scrub:.34,invalidateOnRefresh:true}});
-     t.add(this.gridRevealTimeline()).add(this.gridZoomTimeline(),'-=.6');
-     t.to(this.title,{yPercent:0,duration:.4,ease:'power2.inOut'},'-=.42');
-     t.to(this.description,{opacity:1,pointerEvents:'auto',duration:.3,ease:'power1.out'},'<');
+     // Reveal while the section enters the viewport; let the twelve photos
+     // settle before the source-inspired zoom. The final hold avoids a rushed exit.
+     const t=gsap.timeline({scrollTrigger:{
+       trigger:this.block,start:'top 85%',end:'bottom bottom',scrub:.52,invalidateOnRefresh:true
+     }});
+     t.add(this.gridRevealTimeline(),0);
+     t.to({},{duration:.30});
+     t.add(this.gridZoomTimeline(),'>');
+     t.to(this.title,{yPercent:0,duration:.55,ease:'power2.inOut'},'<+=.12');
+     t.to(this.description,{opacity:1,pointerEvents:'auto',duration:.55,ease:'power2.out'},'<+=.20');
+     t.to({},{duration:.40});
      gridTL.push(t);
    }
  }
@@ -103,15 +110,30 @@
     gsap.set(b.top,{attr:{y:b.y-b.h,height:b.h+.01}});
     gsap.set(b.bottom,{attr:{y:b.y,height:b.h+.01}});
   });
-  maskMaster=gsap.timeline({scrollTrigger:{trigger:track,start:'top top',end:'bottom bottom',scrub:.65,anticipatePin:1,invalidateOnRefresh:true}});
+  // Five chapters: an initial reading hold, deliberate SVG transitions,
+  // and a stable reading interval after each reveal. No wheel interception.
+  maskMaster=gsap.timeline({scrollTrigger:{
+    trigger:track,start:'top top',end:'bottom bottom',scrub:.85,
+    anticipatePin:1,invalidateOnRefresh:true
+  }});
+  maskMaster.addLabel('chapter-0-ready',0);
+  maskMaster.to({},{duration:2.25});
   blindSets.slice(1).forEach((blinds,k)=>{
     const i=k+1;
-    maskMaster.addLabel(`chapter-${i}`);
-    maskMaster.add(openBlinds(blinds),'+=.1');
-    maskMaster.add(textOut(content[i-1]),'<');
-    maskMaster.add(textIn(content[i]),'-=.35');
-    // A short photographic hold gives each treatment time to register.
-    maskMaster.to({},{duration:.5});
+    maskMaster.addLabel(`chapter-${i}-transition`);
+    const transition=gsap.timeline();
+    transition.to(content[i-1],{
+      clipPath:'inset(0% 0% 100% 0%)',y:-25,opacity:0,
+      duration:.52,ease:'power2.inOut'
+    },0);
+    transition.add(openBlinds(blinds),.18);
+    transition.to(content[i],{
+      clipPath:'inset(0% 0% 0% 0%)',y:0,opacity:1,
+      duration:.90,ease:'power2.out'
+    },1.08);
+    maskMaster.add(transition);
+    maskMaster.addLabel(`chapter-${i}-ready`);
+    maskMaster.to({},{duration:2.25});
   });
   if(progressST){progressST.kill();progressST=null;}
   progressST=ScrollTrigger.create({trigger:track,start:'top top',end:'bottom bottom',onUpdate:self=>{
@@ -120,7 +142,7 @@
     const position=maskMaster.time();
     let current=0;
     for(let i=1;i<scenes.length;i++){
-      if(position >= (maskMaster.labels[`chapter-${i}`]||0)+.8)current=i;
+      if(position >= (maskMaster.labels[`chapter-${i}-ready`]||Infinity)-.05)current=i;
     }
     setActiveChapter(current);
   }});
@@ -148,10 +170,9 @@
  }
  const originalJump=(index)=>{
    if(!maskActive()||!maskMaster?.scrollTrigger){scenes[index]?.scrollIntoView({behavior:'instant',block:'start'});return;}
-   // Exact original timeline label provides a direct jump to the selected
-   // treatment while preserving the same blinds choreography.
-   const label=index===0?0:(maskMaster.labels[`chapter-${index}`]||0);
-   const p=index===0?0:clamp((label+1.25)/maskMaster.duration());
+   // Direct jump lands inside the stable, legible part of the chosen chapter.
+   const label=index===0?0:(maskMaster.labels[`chapter-${index}-ready`]||0);
+   const p=index===0?0:clamp((label+.30)/maskMaster.duration());
    const st=maskMaster.scrollTrigger;
    window.scrollTo({top:st.start+(st.end-st.start)*p,behavior:'instant'});
  };
