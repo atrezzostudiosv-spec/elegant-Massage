@@ -18,6 +18,30 @@ const widths=[375,390,430,768,1024,1440];
    noindex:document.querySelector('meta[name="robots"]')?.content?.includes('noindex'),active:document.documentElement.classList.contains('at-original-active'),
    blindRects:document.querySelectorAll('.at-mask-layer mask g rect').length,
   }));
+  // Accessibility and scroll-control regression after the November 3 fix.
+  assert.equal(await page.locator('.at-grid__button').count(),0,'Remove redundant Discover Your Massage grid CTA');
+  assert.equal(await page.locator('script[src*="lenis.min.js"]').count(),0,'No Lenis scroll override');
+  if(width>=1024){
+   const motion=await page.evaluate(()=>({
+    gridHeight:document.querySelector('.at-grid').getBoundingClientRect().height/innerHeight,
+    chapterHeight:document.querySelector('#cinema-track').getBoundingClientRect().height/innerHeight,
+    firstBlinds:[...document.querySelectorAll('#at-mask-0 g rect')].filter(x=>parseFloat(x.getAttribute('height'))>.001).length,
+    scrollBehavior:getComputedStyle(document.documentElement).scrollBehavior,
+    firstContentOpacity:getComputedStyle(document.querySelector('.chapter--body .chapter__content')).opacity
+   }));
+   assert(motion.gridHeight<=2.45&&motion.gridHeight>=2.1,'Grid must not trap users for > 2.5 screens: '+motion.gridHeight);
+   assert(motion.chapterHeight<=4&&motion.chapterHeight>=3.4,'Treatment scroll must stay manageable: '+motion.chapterHeight);
+   assert.equal(motion.firstBlinds,60,'First photographic chapter visible immediately, no black screen');
+   assert.equal(motion.scrollBehavior,'auto','Native scroll should be immediate and controllable');
+   assert.equal(motion.firstContentOpacity,'1','First treatment headline must be visible on entry');
+   if(width===1440){
+     const before=await page.evaluate(()=>scrollY);
+     await page.mouse.wheel(0,540);await page.waitForTimeout(320);
+     const moved=await page.evaluate(()=>scrollY-before);
+     assert(moved>=250&&moved<=900,'One native wheel gesture must advance predictably: '+moved);
+     await page.evaluate(()=>scrollTo(0,0));
+   }
+  }
   assert.equal(state.grid,12,'12 authentic Sticky Grid items');
   assert.equal(state.chapters,5,'Five massage chapters');
   assert.equal(state.masks,5,'Unique SVG masks');
