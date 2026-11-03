@@ -220,3 +220,6 @@ body:not(.touch-home) .gallery-photo img {background-color:var(--agate-lime)}
 body:not(.touch-home) .site-footer .footer-grid h3 {color:var(--agate-white)}
 body:not(.touch-home) .em-other-treatments .em-link,
 body:not(.touch-home) .em-place .em-link {color:var(--agate-aqua)}
+/* Visual stacking fix: when returning to scrollY=0, the incoming Sticky Grid
+   must not bleed over the introductory film before its section begins. */
+.touch-home .intro {z-index:3}
