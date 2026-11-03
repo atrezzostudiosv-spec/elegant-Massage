@@ -150,10 +150,14 @@ body:not(.touch-home) .site-footer {background:var(--agate-ocean);color:var(--ag
 body:not(.touch-home) .facts-ribbon {background:var(--agate-sage);color:var(--agate-ocean)}
 body:not(.touch-home) .facts-ribbon__grid .eyebrow {color:var(--agate-ocean)}
 body:not(.touch-home) .hero {background-color:var(--agate-ocean)}
+/* INTERNAL HERO SYSTEM: neutral-black photographic veil, never ocean-blue.
+   One legible composition across Services, treatments, Menu, About, Gallery, Contact. */
 body:not(.touch-home) .hero::before,
 body:not(.touch-home) .hero:not(.hero--home)::before {
-  background:linear-gradient(90deg,rgba(15,38,60,.85),rgba(20,51,70,.45) 60%,rgba(20,48,66,.12)),
-             linear-gradient(0deg,rgba(13,36,56,.56),transparent 58%);
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.55) 47%,rgba(0,0,0,.17) 100%),
+    linear-gradient(0deg,rgba(0,0,0,.64),transparent 52%),
+    linear-gradient(180deg,rgba(0,0,0,.24),transparent 32%);
 }
 body:not(.touch-home) .hero .lede {color:var(--agate-white)}
 body:not(.touch-home) .site-header,
@@ -235,3 +239,60 @@ body:not(.touch-home) :is(h1,h2,h3,.brand,.footer-brand,.site-footer h3){font-fa
 .touch-home .at-grid__title{letter-spacing:-.055em;line-height:1.05}
 .touch-home .wordmark span{font-size:clamp(1.45rem,2vw,1.85rem);font-style:italic}
 @media(max-width:700px){.touch-home .intro h1{font-size:clamp(3.05rem,11.2vw,4.8rem)}}
+
+/* Internal pages only — unified reading rhythm from hero to real content.
+   No sticky/pinned scroll, no page-snap and no animations added to approved Home. */
+body[data-page] .hero:not(.hero--home) .hero__background{
+  transform:scale(var(--at-subpage-hero-scale,1.015));
+  transform-origin:50% 52%;
+  will-change:transform;
+}
+body[data-page] .hero:not(.hero--home) .hero__copy{
+  max-width:min(920px,100%);
+}
+body[data-page] .content-layout aside{
+  scroll-margin-top:115px;
+}
+body[data-page] :is(.section,.closing,.service-row,.price-item){
+  scroll-margin-top:clamp(90px,12vh,118px);
+}
+body[data-page] .em-scene-enter{
+  opacity:.88;
+  transform:translate3d(0,17px,0) scale(.992);
+  transition:opacity .9s cubic-bezier(.22,1,.36,1),
+             transform .95s cubic-bezier(.22,1,.36,1);
+}
+body[data-page] .em-scene-enter.em-scene-visible{
+  opacity:1;
+  transform:translate3d(0,0,0) scale(1);
+}
+body[data-page="services"] a.service-row{
+  transition:background .25s ease,padding-left .3s ease;
+}
+body[data-page="services"] a.service-row:hover,
+body[data-page="services"] a.service-row:focus-visible{
+  background:rgba(221,235,200,.27);
+}
+@media (max-width:870px){
+  body[data-page] .content-layout aside{
+    position:static;
+  }
+}
+@media (max-width:700px){
+  body:not(.touch-home) .hero:not(.hero--home)::before{
+    background:
+      linear-gradient(0deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.65) 45%,rgba(0,0,0,.34) 100%),
+      linear-gradient(90deg,rgba(0,0,0,.26),transparent 85%);
+  }
+  body[data-page] .hero:not(.hero--home) .hero__background{
+    transform:scale(var(--at-subpage-hero-scale,1.01));
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  body[data-page] .hero:not(.hero--home) .hero__background{
+    transform:none!important;will-change:auto;
+  }
+  body[data-page] .em-scene-enter{
+    transition:none!important;transform:none!important;opacity:1!important;
+  }
+}
