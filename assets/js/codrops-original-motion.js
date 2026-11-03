@@ -15,11 +15,11 @@
  const jump=qs('#chapter-selector');
  const grid=qs('.at-grid'),track=qs('#cinema-track');
  const gridMedia=matchMedia('(min-height:540px) and (prefers-reduced-motion:no-preference)');
- const maskMedia=matchMedia('(min-width:1024px) and (min-height:650px) and (prefers-reduced-motion:no-preference)');
+ const maskMedia=matchMedia('(min-height:650px) and (prefers-reduced-motion:no-preference)');
  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
  const gridActive=()=>gridMedia.matches && !!window.gsap && !!window.ScrollTrigger;
  const maskActive=()=>gridActive() && maskMedia.matches;
- let gridTL=[],maskMaster=null,progressST=null,resizeTimer=null;
+ let gridTL=[],maskMaster=null,progressST=null,resizeTimer=null,initialHashHandled=false;
  const scenes=qsa('.chapter',track);
  const ensureVideo=()=>{
    if(!introFilm)return;
@@ -125,54 +125,36 @@
  const BLIND_COUNT=30;let blindSets=[];
  function createBlinds(g,vbHeight){g.innerHTML='';const h=vbHeight/BLIND_COUNT,blinds=[];let currentY=0;for(let i=0;i<BLIND_COUNT;i++){const centerY=vbHeight-(currentY+h/2);const top=document.createElementNS(ns,'rect'),bottom=document.createElementNS(ns,'rect');for(const rect of [top,bottom]){rect.setAttribute('x',0);rect.setAttribute('width',100);rect.setAttribute('height',0);rect.setAttribute('fill','white');rect.setAttribute('shape-rendering','crispEdges');rect.setAttribute('y',centerY);g.appendChild(rect);}blinds.push({top,bottom,y:centerY,h:h/2});currentY+=h;}return blinds;}
  function openBlinds(blinds){return gsap.timeline().to(blinds.flatMap(b=>[b.top,b.bottom]),{attr:{y:i=>{const b=blinds[Math.floor(i/2)];return i%2===0?b.y-b.h:b.y;},height:i=>blinds[Math.floor(i/2)].h+.01},ease:'power3.out',stagger:{each:.02,from:'start'}});}
- function textIn(el){return gsap.to(el,{clipPath:'inset(0% 0% 0% 0%)',y:0,opacity:1,duration:1.5,ease:'expo.out'});}
- function textOut(el){return gsap.to(el,{clipPath:'inset(0% 0% 100% 0%)',y:-30,opacity:0,duration:1.2,ease:'power2.inOut'});}
+ function textIn(el){return gsap.to(el,{clipPath:'inset(0% 0% 0% 0%)',y:0,duration:1.5,ease:'expo.out'});}
+ function textOut(el){return gsap.to(el,{clipPath:'inset(0% 0% 100% 0%)',y:-30,duration:1.2,ease:'power2.inOut'});}
  function buildMask(){
+  if(maskMaster){maskMaster.scrollTrigger?.kill();maskMaster.kill();maskMaster=null;}
+  if(progressST){progressST.kill();progressST=null;}
   const h=innerHeight,w=innerWidth,vbHeight=h/w*100;blindSets=[];
   scenes.forEach((ch,i)=>{let svg=qs('svg.at-mask-layer',ch);svg.setAttribute('viewBox',`0 0 100 ${vbHeight}`);const maskRect=qs('mask rect',svg);maskRect?.setAttribute('width',100);maskRect?.setAttribute('height',vbHeight);const im=qs('image',svg);im?.setAttribute('width',100);im?.setAttribute('height',vbHeight);blindSets.push(createBlinds(qs('mask g',svg),vbHeight));});
-  if(maskMaster){maskMaster.scrollTrigger?.kill();maskMaster.kill();maskMaster=null;}
   const content=scenes.map(ch=>qs('.chapter__content',ch));
-  gsap.set(content,{clipPath:'inset(100% 0 0 0)',y:40,opacity:0});
-  gsap.set(content[0],{clipPath:'inset(0% 0 0 0)',y:0,opacity:1});
-  // The first photograph and its text are present when the section enters.
-  // Subsequent photographs retain the original 30 horizontal SVG blinds.
-  blindSets[0].forEach(b=>{
-    gsap.set(b.top,{attr:{y:b.y-b.h,height:b.h+.01}});
-    gsap.set(b.bottom,{attr:{y:b.y,height:b.h+.01}});
-  });
-  // Five chapters: an initial reading hold, deliberate SVG transitions,
-  // and a stable reading interval after each reveal. No wheel interception.
+  gsap.killTweensOf(content);
+  gsap.set(content,{clipPath:'inset(100% 0 0 0)',y:40,opacity:1});
+  // Source sequence repeated for five services: reveal, text in, 0.8 hold,
+  // text out. The first mask also opens from black, as in the delivered demo.
   maskMaster=gsap.timeline({scrollTrigger:{
-    trigger:track,start:'top top',end:'bottom bottom',scrub:.85,
+    trigger:track,start:'top top',end:'bottom bottom',scrub:2.5,
     anticipatePin:1,invalidateOnRefresh:true
   }});
-  maskMaster.addLabel('chapter-0-ready',0);
-  maskMaster.to({},{duration:2.25});
-  blindSets.slice(1).forEach((blinds,k)=>{
-    const i=k+1;
+  blindSets.forEach((blinds,i)=>{
     maskMaster.addLabel(`chapter-${i}-transition`);
-    const transition=gsap.timeline();
-    transition.to(content[i-1],{
-      clipPath:'inset(0% 0% 100% 0%)',y:-25,opacity:0,
-      duration:.52,ease:'power2.inOut'
-    },0);
-    transition.add(openBlinds(blinds),.18);
-    transition.to(content[i],{
-      clipPath:'inset(0% 0% 0% 0%)',y:0,opacity:1,
-      duration:.90,ease:'power2.out'
-    },1.08);
-    maskMaster.add(transition);
+    maskMaster.add(openBlinds(blinds));
+    maskMaster.add(textIn(content[i]),'-=0.3');
     maskMaster.addLabel(`chapter-${i}-ready`);
-    maskMaster.to({},{duration:2.25});
+    maskMaster.add(textOut(content[i]),'+=0.8');
   });
-  if(progressST){progressST.kill();progressST=null;}
-  // The chapter state must follow the *rendered* scrubbed timeline, not
-  // the raw wheel position (the latter can run ahead during fast scroll jumps).
+  // Follow the rendered scrubbed playhead so links are exposed for the
+  // chapter whose text has finished entering.
   maskMaster.eventCallback('onUpdate',()=>{
     const position=maskMaster.time();
     let current=0;
     for(let i=1;i<scenes.length;i++){
-      if(position >= (maskMaster.labels[`chapter-${i}-ready`]??Infinity)-.05)current=i;
+      if(position >= (maskMaster.labels[`chapter-${i}-ready`]??Infinity)-.55)current=i;
     }
     setActiveChapter(current);
   });
@@ -198,17 +180,27 @@
    root.classList.add('at-grid-active');
    // Same GSAP grid on desktop, tablet and phone; no wheel/touch interception.
    new StickyGridScroll();
-   // SVG blind chapters stay desktop-only; smaller screens keep readable normal flow.
+   // SVG blinds also run on portrait phones; short screens keep normal flow.
    if(maskActive()){root.classList.add('at-original-active');buildMask();}
-   requestAnimationFrame(()=>ScrollTrigger.refresh());
+   requestAnimationFrame(()=>{
+     ScrollTrigger.refresh();
+     if(!initialHashHandled){
+       initialHashHandled=true;
+       const index=scenes.findIndex(scene=>'#'+scene.id===location.hash);
+       if(index>=0)originalJump(index);
+     }
+   });
  }
  const originalJump=(index)=>{
    if(!maskActive()||!maskMaster?.scrollTrigger){scenes[index]?.scrollIntoView({behavior:'instant',block:'start'});return;}
-   // Direct jump lands inside the stable, legible part of the chosen chapter.
-   const label=index===0?0:(maskMaster.labels[`chapter-${index}-ready`]||0);
-   const p=index===0?0:clamp((label+.30)/maskMaster.duration());
+   // The original text timeline holds for 0.8; enter shortly after it is legible.
+   const label=maskMaster.labels[`chapter-${index}-ready`]||0;
+   const p=clamp((label+.24)/maskMaster.duration());
    const st=maskMaster.scrollTrigger;
    window.scrollTo({top:st.start+(st.end-st.start)*p,behavior:'instant'});
+   ScrollTrigger.update();
+   maskMaster.progress(p);
+   setActiveChapter(index);
  };
  jump?.addEventListener('change',()=>{const i=scenes.findIndex(x=>x.id===jump.value);if(i>=0){originalJump(i);history.replaceState(null,'','#'+scenes[i].id);}});
  // For direct hash URLs and keyboard users, do not trap navigation in a sticky stage.
@@ -217,8 +209,8 @@
  maskMedia.addEventListener?.('change',activate);
  window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{
    if(gridActive()){
-     if(maskActive()&&maskMaster)buildMask();
-     ScrollTrigger.refresh();
+     if(maskActive()&&maskMaster){buildMask();ScrollTrigger.refresh();maskMaster.progress(maskMaster.scrollTrigger.progress);}
+     else ScrollTrigger.refresh();
    }
  },220);},{passive:true});
  // The original 'preload all images' is adapted to finite browser preload; if a

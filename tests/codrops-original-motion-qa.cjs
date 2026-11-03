@@ -39,13 +39,13 @@ const widths=[375,390,430,768,1024,1440];
     chapterHeight:document.querySelector('#cinema-track').getBoundingClientRect().height/innerHeight,
     firstBlinds:[...document.querySelectorAll('#at-mask-0 g rect')].filter(x=>parseFloat(x.getAttribute('height'))>.001).length,
     scrollBehavior:getComputedStyle(document.documentElement).scrollBehavior,
-    firstContentOpacity:getComputedStyle(document.querySelector('.chapter--body .chapter__content')).opacity
+    firstContentClip:getComputedStyle(document.querySelector('.chapter--body .chapter__content')).clipPath
    }));
    assert(Math.abs(motion.gridHeight-4.25)<.01,'Approved source Sticky Grid needs 425vh travel: '+motion.gridHeight);
-   assert(motion.chapterHeight>=7.10&&motion.chapterHeight<=7.36,'Five treatment reading intervals need approximately 725svh: '+motion.chapterHeight);
-   assert.equal(motion.firstBlinds,60,'First photographic chapter visible immediately, no black screen');
+   assert(Math.abs(motion.chapterHeight-7.666667)<.01,'Five source-paced chapters need approximately 766.67svh: '+motion.chapterHeight);
+   assert.equal(motion.firstBlinds,0,'The source opens its first photographic mask from black');
    assert.equal(motion.scrollBehavior,'auto','Native scroll should be immediate and controllable');
-   assert.equal(motion.firstContentOpacity,'1','First treatment headline must be visible on entry');
+   assert(motion.firstContentClip.startsWith('inset(100%'),'The source first headline enters after its blind reveal: '+motion.firstContentClip);
    if(width===1440){
      const before=await page.evaluate(()=>scrollY);
      await page.mouse.wheel(0,540);await page.waitForTimeout(320);
@@ -71,15 +71,20 @@ const widths=[375,390,430,768,1024,1440];
   assert(state.booking,'Booking link destination must be Setmore');assert(state.noindex,'must stay noindex');
   if(width>=1024){assert.equal(state.active,true,'desktop must run original timelines');assert.equal(state.blindRects,300,'5*30 blinds * 2 rects');}
   else {
-   assert.equal(state.active,false,'mobile and tablet treatment chapters must use normal flow');
+   assert.equal(state.active,true,'portrait mobile and tablet must use the approved SVG masks');
    assert.equal(state.gridActive,true,'tablet/phone should run real Sticky Grid timeline');
+   assert.equal(state.blindRects,300,'five chapters need 30 horizontal blinds each on mobile and tablet');
    const motion=await page.evaluate(()=>({
      gridHeight:document.querySelector('.at-grid').getBoundingClientRect().height/innerHeight,
      sticky:getComputedStyle(document.querySelector('.at-grid__wrapper')).position,
      visibleImages:[...document.querySelectorAll('.at-grid__item')].filter(el=>getComputedStyle(el).display!=='none').length,
      photoGridTransform:getComputedStyle(document.querySelector('.at-grid__images')).transform,
+     chapterHeight:document.querySelector('#cinema-track').getBoundingClientRect().height/innerHeight,
+     stageSticky:getComputedStyle(document.querySelector('.at-mask-stage')).position,
    }));
    assert(Math.abs(motion.gridHeight-4.25)<.01,'Approved source Sticky Grid needs 425vh travel at every width: '+motion.gridHeight);
+   assert(Math.abs(motion.chapterHeight-7.666667)<.01,'Five source-paced masks need approximately 766.67svh: '+motion.chapterHeight);
+   assert.equal(motion.stageSticky,'sticky','mobile and tablet masks need a sticky viewport');
    assert.equal(motion.sticky,'sticky','responsive photographic gallery must be sticky');
    assert.equal(motion.visibleImages,12,'show all 12 photographic tiles on mobile and tablet');
    const mid=await page.evaluate(()=>{const g=document.querySelector('.at-grid');return scrollY+g.getBoundingClientRect().top+(g.offsetHeight-innerHeight)*.76});
@@ -144,35 +149,48 @@ const widths=[375,390,430,768,1024,1440];
    await page.screenshot({path:`qa-artifacts/codrops-motion/${width}-mask.png`});
   }
   if(width===1440){
-    // Reading states: every chapter must be reachable in order through native scroll.
+    // Midpoint of each source-timed hold: every chapter must be readable in order.
     const stage=await page.locator('#cinema-track').evaluate(el=>({top:el.offsetTop,height:el.offsetHeight}));
     await page.evaluate(()=>window.scrollTo(0,0));
     await page.waitForTimeout(1300);
     const observed=[];
-    for(let k=0;k<=20;k++){
-      const fraction=k/20;
+    for(const fraction of [.13,.33,.53,.73,.93]){
       await page.evaluate(y=>window.scrollTo(0,y),stage.top+(stage.height-900)*fraction);
-      await page.waitForTimeout(950);
+      await page.waitForTimeout(2900);
       const current=await page.evaluate(()=>{
         const chapters=[...document.querySelectorAll('.chapter')];
         const active=chapters.find(ch=>ch.getAttribute('aria-hidden')==='false');
         const content=active?.querySelector('.chapter__content');
-        return {id:active?.id,opacity:content?parseFloat(getComputedStyle(content).opacity):0};
+        return {id:active?.id,clip:content?getComputedStyle(content).clipPath:'',book:!!active?.querySelector('.chapter__book[href^="https://elegantmassage.setmore.com/"]')};
       });
-      observed.push({fraction,id:current.id,opacity:current.opacity});
+      observed.push({fraction,...current});
+      assert(current.clip.startsWith('inset(0%'),fraction+': headline and actions must be revealed: '+JSON.stringify(current));
+      assert(current.book,fraction+': booking action must be present');
     }
     console.log('CHAPTER-READABILITY '+JSON.stringify(observed));
-    const ids=[...new Set(observed.map(x=>x.id))];
-    assert.deepEqual(ids,['body-massage','foot-combo','couples-massage','chair-thai','four-hands'],'Five chapter reveals must be ordered: '+JSON.stringify(observed));
-    for(const id of ids){
-      const stable=observed.filter(x=>x.id===id&&x.opacity>.90);
-      assert(stable.length>=2,id+' needs two readable scroll samples; '+JSON.stringify(observed));
-    }
-    console.log('CHAPTER-READABILITY '+JSON.stringify(observed));
+    assert.deepEqual(observed.map(x=>x.id),['body-massage','foot-combo','couples-massage','chair-thai','four-hands'],'Five chapter reveals must be ordered: '+JSON.stringify(observed));
     await page.evaluate(()=>window.scrollTo(0,0));
     await page.waitForTimeout(250);
   }
-  if(width===1440){await page.locator('#chapter-selector').selectOption('chair-thai');await page.waitForTimeout(1200);const pos=await page.evaluate(()=>({scroll:scrollY,top:document.getElementById('cinema-track').offsetTop}));assert(pos.scroll>=pos.top-100,'selector should jump directly into cinema stage');}
+  if(width===1440 || width===390){
+    await page.locator('#chapter-selector').selectOption('chair-thai');
+    await page.waitForTimeout(2900);
+    const pos=await page.evaluate(()=>{
+      const active=document.querySelector('.chapter[aria-hidden="false"]');
+      const shade=active?.querySelector('.chapter__shade');
+      return {scroll:scrollY,top:document.getElementById('cinema-track').offsetTop,
+        active:active?.id,clip:getComputedStyle(active.querySelector('.chapter__content')).clipPath,
+        backdrop:getComputedStyle(active).backgroundColor,
+        shadeHeight:shade?.getBoundingClientRect().height,viewportHeight:innerHeight};
+    });
+    assert(pos.scroll>=pos.top-100&&pos.active==='chair-thai'&&pos.clip.startsWith('inset(0%'),
+      'selector should jump to a readable Chair chapter: '+JSON.stringify(pos));
+    if(width===390){
+      assert.equal(pos.backdrop,'rgba(0, 0, 0, 0)','mobile chapters cannot cover previous SVG images');
+      assert(Math.abs(pos.shadeHeight-pos.viewportHeight)<1,'mobile shade must cover full viewport: '+JSON.stringify(pos));
+      await page.screenshot({path:'qa-artifacts/codrops-motion/390-chair-readable.png'});
+    }
+  }
   assert(!errors.length,`JS errors at ${width}: ${errors.join(' | ')}`);
   report.push({width,...state,errors});await page.close();
  }
@@ -182,5 +200,5 @@ const widths=[375,390,430,768,1024,1440];
  assert.equal(await reduced.evaluate(()=>document.documentElement.classList.contains('at-grid-active')),false,'reduced motion must disable Sticky Grid as well');
  await reduced.close();await browser.close();
  fs.writeFileSync('qa-artifacts/codrops-motion/results.json',JSON.stringify(report,null,2));
- console.log('Original Codrops integration PASS: 6 sizes, responsive GSAP photo grid, desktop SVG blinds, native scroll, menu, booking, reduced motion, noindex.');
+ console.log('Original Codrops integration PASS: 6 sizes, responsive GSAP photo grid, five SVG masked chapters, native scroll, menu, booking, reduced motion, noindex.');
 })().catch(e=>{console.error(e);process.exit(1)});
