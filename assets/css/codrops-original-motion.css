@@ -14,7 +14,7 @@
 .at-grid__images{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2.5vw,40px)}
 .at-grid__item{aspect-ratio:1;overflow:hidden;background:var(--stone)}
 .at-grid__image{width:100%;height:100%;object-fit:cover;display:block}
-/* Original three-column reveal and 2.05 zoom, tuned to 230svh for user-controlled travel. */
+/* Source three-column reveal; separation remains within the viewport to avoid empty frames. */
 @media(min-width:1024px) and (min-height:650px) and (prefers-reduced-motion:no-preference){
  .at-grid-active .at-grid{height:230vh;height:230svh}
  .at-grid-active .at-grid__wrapper{position:sticky;top:0;height:100vh;min-height:0;padding:0 var(--gutter)}
@@ -30,7 +30,7 @@
 .at-mask-layer{display:none}
 .at-mask-progress{display:none}
 @media(min-width:1024px) and (min-height:650px) and (prefers-reduced-motion:no-preference){
- .at-original-active .cinema-track{height:375vh;height:375svh;position:relative;isolation:auto;overflow:visible}
+ .at-original-active .cinema-track{height:475vh;height:475svh;position:relative;isolation:auto;overflow:visible}
  .at-original-active .at-mask-stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#171719;isolation:isolate}
  .at-original-active .chapter{position:absolute;inset:0;width:100%;height:100%;min-height:0;overflow:hidden;display:flex;align-items:flex-end;isolation:auto;clip-path:none!important;pointer-events:none}
  .at-original-active .chapter__image{display:none}
