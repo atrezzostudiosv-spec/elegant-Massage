@@ -19,6 +19,12 @@ const widths=[375,390,430,768,1024,1440];
    active:document.documentElement.classList.contains('at-original-active'),
    gridActive:document.documentElement.classList.contains('at-grid-active'),
    blindRects:document.querySelectorAll('.at-mask-layer mask g rect').length,
+   imageGrades:[...document.querySelectorAll('.chapter')].map(ch=>{
+     const image=ch.querySelector('.at-mask-layer image');
+     const grades=[...ch.querySelectorAll('.at-image-grade')];
+     return grades.length===3&&grades.every(grade=>grade.getAttribute('mask')===image.getAttribute('mask'));
+   }),
+   shadesHidden:[...document.querySelectorAll('.chapter__shade')].every(shade=>getComputedStyle(shade).display==='none'),
    bodyGradient:getComputedStyle(document.querySelector('.chapter--body .chapter__shade')).backgroundImage,
    chairGradient:getComputedStyle(document.querySelector('.chapter--chair .chapter__shade')).backgroundImage,
    heroGradient:getComputedStyle(document.querySelector('.intro__scrim')).backgroundImage,
@@ -67,6 +73,8 @@ const widths=[375,390,430,768,1024,1440];
   assert(state.bodyGradient.includes('rgba(0, 0, 0,') && !state.bodyGradient.includes('rgba(12, 34, 52'),width+': treatments must use neutral-black overlay');
   assert(state.chairGradient.includes('rgba(0, 0, 0,') && !state.chairGradient.includes('rgba(11, 31, 49'),width+': chair treatment must use neutral-black overlay');
   assert.equal(state.masks,5,'Unique SVG masks');
+  assert(state.imageGrades.every(Boolean),'the grade and photograph must open through the same horizontal blinds');
+  assert(state.shadesHidden,'remove the independent grade that appears abruptly with the text');
   assert(state.scrollWidth<=state.innerWidth+1,`Horizontal overflow ${width}: ${state.scrollWidth}`);
   assert(state.booking,'Booking link destination must be Setmore');assert(state.noindex,'must stay noindex');
   if(width>=1024){assert.equal(state.active,true,'desktop must run original timelines');assert.equal(state.blindRects,300,'5*30 blinds * 2 rects');}
