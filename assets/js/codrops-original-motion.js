@@ -45,7 +45,20 @@
    groupItemsByColumn(){this.numColumns=3;this.columns=Array.from({length:3},()=>[]);this.items.forEach((e,i)=>this.columns[i%3].push(e));}
    addParallaxOnScroll(){gridTL.push(gsap.from(this.wrapper,{yPercent:-100,ease:'none',scrollTrigger:{trigger:this.block,start:'top bottom',end:'top top',scrub:.24}}));}
    animateTitleOnScroll(){gridTL.push(gsap.from(this.title,{opacity:0,duration:.7,ease:'power1.out',scrollTrigger:{trigger:this.block,start:'top 57%',toggleActions:'play none none reset'}}));}
-   gridRevealTimeline(columns=this.columns){const t=gsap.timeline();const wh=innerHeight;const dy=wh-(wh-this.grid.offsetHeight)/2;columns.forEach((col,i)=>{const top=i%2===0;t.from(col,{y:dy*(top?-1:1),stagger:{each:.06,from:top?'end':'start'},ease:'power1.inOut'},'grid-reveal');});return t;}
+   gridRevealTimeline(columns=this.columns){
+     const t=gsap.timeline();
+     const wh=innerHeight,dy=wh-(wh-this.grid.offsetHeight)/2;
+     columns.forEach((col,i)=>{
+       const top=i%2===0;
+       // Explicit end state prevents mobile GSAP transforms from retaining the
+       // initial offscreen y when the following responsive zoom interpolates.
+       t.fromTo(col,{y:dy*(top?-1:1)},{
+         y:0,duration:.85,stagger:{each:.06,from:top?'end':'start'},
+         ease:'power1.inOut',immediateRender:false
+       },'grid-reveal');
+     });
+     return t;
+   }
    gridZoomTimeline(columns=this.columns){
      // Same Codrops choreography; responsive amplitude prevents cramped crops on phones.
      const mobile=innerWidth<=700, tablet=innerWidth<1024;
