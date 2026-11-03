@@ -37,7 +37,7 @@ const widths=[375,390,430,768,1024,1440];
    if(width===1440){
      const before=await page.evaluate(()=>scrollY);
      await page.mouse.wheel(0,540);await page.waitForTimeout(320);
-     const moved=await page.evaluate(()=>scrollY-before);
+     const moved=await page.evaluate(start=>scrollY-start,before);
      assert(moved>=250&&moved<=900,'One native wheel gesture must advance predictably: '+moved);
      await page.evaluate(()=>scrollTo(0,0));
    }
