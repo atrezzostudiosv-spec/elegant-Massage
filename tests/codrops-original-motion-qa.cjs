@@ -19,6 +19,8 @@ const widths=[375,390,430,768,1024,1440];
    active:document.documentElement.classList.contains('at-original-active'),
    gridActive:document.documentElement.classList.contains('at-grid-active'),
    blindRects:document.querySelectorAll('.at-mask-layer mask g rect').length,
+   bodyGradient:getComputedStyle(document.querySelector('.chapter--body .chapter__shade')).backgroundImage,
+   chairGradient:getComputedStyle(document.querySelector('.chapter--chair .chapter__shade')).backgroundImage,
    themePresent:!!document.querySelector('link[href$="atrezzo-agate-palette.css"]'),
    bodyColor:getComputedStyle(document.body).backgroundColor,
    headerBook:(()=>{let e=document.querySelector('.glass-header__book');return {background:getComputedStyle(e).backgroundColor,text:getComputedStyle(e).color};})(),
@@ -37,7 +39,7 @@ const widths=[375,390,430,768,1024,1440];
     firstContentOpacity:getComputedStyle(document.querySelector('.chapter--body .chapter__content')).opacity
    }));
    assert(motion.gridHeight<=2.45&&motion.gridHeight>=2.1,'Grid must not trap users for > 2.5 screens: '+motion.gridHeight);
-   assert(motion.chapterHeight<=4&&motion.chapterHeight>=3.4,'Treatment scroll must stay manageable: '+motion.chapterHeight);
+   assert(motion.chapterHeight>=4.6&&motion.chapterHeight<=4.85,'Treatment transition track should be approximately 475svh: '+motion.chapterHeight);
    assert.equal(motion.firstBlinds,60,'First photographic chapter visible immediately, no black screen');
    assert.equal(motion.scrollBehavior,'auto','Native scroll should be immediate and controllable');
    assert.equal(motion.firstContentOpacity,'1','First treatment headline must be visible on entry');
@@ -56,6 +58,8 @@ const widths=[375,390,430,768,1024,1440];
   assert.equal(state.footerColor,'rgb(37, 68, 96)',width+': ocean footer');
   assert.equal(state.grid,12,'12 authentic Sticky Grid items');
   assert.equal(state.chapters,5,'Five massage chapters');
+  assert(state.bodyGradient.includes('rgba(0, 0, 0,') && !state.bodyGradient.includes('rgba(12, 34, 52'),width+': treatments must use neutral-black overlay');
+  assert(state.chairGradient.includes('rgba(0, 0, 0,') && !state.chairGradient.includes('rgba(11, 31, 49'),width+': chair treatment must use neutral-black overlay');
   assert.equal(state.masks,5,'Unique SVG masks');
   assert(state.scrollWidth<=state.innerWidth+1,`Horizontal overflow ${width}: ${state.scrollWidth}`);
   assert(state.booking,'Booking link destination must be Setmore');assert(state.noindex,'must stay noindex');
@@ -97,6 +101,31 @@ const widths=[375,390,430,768,1024,1440];
      return {inIntro:document.querySelector('.intro').contains(el),className:String(el?.className||'')};
    });
    assert(layer.inIntro,width+': returning to the top must show the intro, not Sticky Grid on top: '+JSON.stringify(layer));
+  }
+  // User-reported regression: the zoom should never throw every photograph offscreen.
+  if([390,768,1440].includes(width)){
+   const samples=[];
+   for(const fraction of [.48,.76,.94]){
+     const y=await page.evaluate(p=>{
+       const g=document.querySelector('.at-grid');
+       return scrollY+g.getBoundingClientRect().top+(g.offsetHeight-innerHeight)*p;
+     },fraction);
+     await page.evaluate(pos=>window.scrollTo(0,pos),y);
+     await page.waitForTimeout(520);
+     const sample=await page.evaluate(()=>{
+       const visible=[...document.querySelectorAll('.at-grid__image')].filter(im=>{
+         const r=im.getBoundingClientRect();
+         return im.naturalWidth>0 && r.bottom>0 && r.top<innerHeight && r.left<innerWidth && r.right>0;
+       }).length;
+       return {visible,scrollY};
+     });
+     assert(sample.visible>0,`${width}px grid becomes blank at ${Math.round(fraction*100)}%: ${JSON.stringify(sample)}`);
+     samples.push({fraction,...sample});
+     if(fraction===.94)await page.screenshot({path:`qa-artifacts/codrops-motion/${width}-grid-final.png`,animations:'disabled'});
+   }
+   console.log('GRID-CONTINUITY '+width+' '+JSON.stringify(samples));
+   await page.evaluate(()=>window.scrollTo(0,0));
+   await page.waitForTimeout(350);
   }
   await page.locator('#menu-toggle').isVisible().then(async visible=>{
    if(visible){await page.locator('#menu-toggle').click();assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'true');await page.keyboard.press('Escape');assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'false');}
