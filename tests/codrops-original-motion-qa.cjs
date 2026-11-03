@@ -91,7 +91,12 @@ const widths=[375,390,430,768,1024,1440];
    if(width<=768)console.log('MID-GRID-DIAG '+width+' '+JSON.stringify(diagnostic));
    assert(diagnostic.visibleCount>0,width+': photographs must be visibly loaded at mid-scroll');
    await page.screenshot({path:`qa-artifacts/codrops-motion/${width}-grid-mid.png`,animations:'disabled'});
-   await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(240);
+   await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(380);
+   const layer=await page.evaluate(()=>{
+     const el=document.elementFromPoint(innerWidth/2,innerHeight*.55);
+     return {inIntro:document.querySelector('.intro').contains(el),className:String(el?.className||'')};
+   });
+   assert(layer.inIntro,width+': returning to the top must show the intro, not Sticky Grid on top: '+JSON.stringify(layer));
   }
   await page.locator('#menu-toggle').isVisible().then(async visible=>{
    if(visible){await page.locator('#menu-toggle').click();assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'true');await page.keyboard.press('Escape');assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'false');}
