@@ -105,3 +105,15 @@ html{scroll-behavior:auto}
    pointer-events:none
  }
 }
+
+/* Tablet editorial legibility: a narrow Paper veil behind the headline, while
+   the surrounding photography remains fully visible and animated. */
+@media (min-width:701px) and (max-width:1023px) and (min-height:540px) and (prefers-reduced-motion:no-preference){
+ .at-grid-active .at-grid__content::before{
+   content:"";position:absolute;z-index:-1;inset:27% -12px;
+   background:linear-gradient(180deg,
+      rgba(245,241,233,0) 0%,rgba(245,241,233,.93) 36%,
+      rgba(245,241,233,.96) 56%,rgba(245,241,233,0) 100%);
+   pointer-events:none;
+ }
+}
