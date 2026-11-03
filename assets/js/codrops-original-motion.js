@@ -1,6 +1,6 @@
 /* Original Codrops animation choreography adapted to Elegant Massage's existing
  * sections. Theo Plawinski: Sticky Grid Scroll (MIT) + Hiroki: SVG Mask
- * Transitions (MIT). GSAP ScrollTrigger / Lenis governed by their own licenses.
+ * Transitions (MIT). GSAP and ScrollTrigger follow their bundled licenses.
  * Source methods, stagger, easing, lengths and SVG rect geometry retained.
  * No demo CSS reset or third-party demo photographs imported.
  */
@@ -14,9 +14,11 @@
  const intro=qs('#introduction'),introFilm=qs('#intro-film');
  const jump=qs('#chapter-selector');
  const grid=qs('.at-grid'),track=qs('#cinema-track');
- const media=matchMedia('(min-width:1024px) and (min-height:650px) and (prefers-reduced-motion:no-preference)');
+ const gridMedia=matchMedia('(min-height:540px) and (prefers-reduced-motion:no-preference)');
+ const maskMedia=matchMedia('(min-width:1024px) and (min-height:650px) and (prefers-reduced-motion:no-preference)');
  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
- const active=()=>media.matches && !!window.gsap && !!window.ScrollTrigger;
+ const gridActive=()=>gridMedia.matches && !!window.gsap && !!window.ScrollTrigger;
+ const maskActive=()=>gridActive() && maskMedia.matches;
  let gridTL=[],maskMaster=null,progressST=null,resizeTimer=null;
  const scenes=qsa('.chapter',track);
  const ensureVideo=()=>{
@@ -41,13 +43,23 @@
    getElements(){this.block=grid;this.wrapper=qs('.at-grid__wrapper',grid);this.content=qs('.at-grid__content',grid);this.title=qs('.at-grid__title',grid);this.description=qs('.at-grid__description',grid);this.grid=qs('.at-grid__images',grid);this.items=qsa('.at-grid__item',grid);}
    initContent(){gsap.set(this.description,{opacity:0,pointerEvents:'none'});const dy=(this.content.offsetHeight-this.title.offsetHeight)/2;this.titleOffsetY=dy/this.content.offsetHeight*100;gsap.set(this.title,{yPercent:this.titleOffsetY});}
    groupItemsByColumn(){this.numColumns=3;this.columns=Array.from({length:3},()=>[]);this.items.forEach((e,i)=>this.columns[i%3].push(e));}
-   addParallaxOnScroll(){gridTL.push(gsap.from(this.wrapper,{yPercent:-100,ease:'none',scrollTrigger:{trigger:this.block,start:'top bottom',end:'top top',scrub:true}}));}
+   addParallaxOnScroll(){gridTL.push(gsap.from(this.wrapper,{yPercent:-100,ease:'none',scrollTrigger:{trigger:this.block,start:'top bottom',end:'top top',scrub:.24}}));}
    animateTitleOnScroll(){gridTL.push(gsap.from(this.title,{opacity:0,duration:.7,ease:'power1.out',scrollTrigger:{trigger:this.block,start:'top 57%',toggleActions:'play none none reset'}}));}
    gridRevealTimeline(columns=this.columns){const t=gsap.timeline();const wh=innerHeight;const dy=wh-(wh-this.grid.offsetHeight)/2;columns.forEach((col,i)=>{const top=i%2===0;t.from(col,{y:dy*(top?-1:1),stagger:{each:.06,from:top?'end':'start'},ease:'power1.inOut'},'grid-reveal');});return t;}
-   gridZoomTimeline(columns=this.columns){const t=gsap.timeline({defaults:{duration:1,ease:'power3.inOut'}});t.to(this.grid,{scale:2.05});t.to(columns[0],{xPercent:-40},'<');t.to(columns[2],{xPercent:40},'<');t.to(columns[1],{yPercent:i=>(i<Math.floor(columns[1].length/2)?-1:1)*40,duration:.5,ease:'power1.inOut'},'-=.5');return t;}
+   gridZoomTimeline(columns=this.columns){
+     // Same Codrops choreography; responsive amplitude prevents cramped crops on phones.
+     const mobile=innerWidth<=700, tablet=innerWidth<1024;
+     const scale=mobile?1.4:(tablet?1.7:2.05), sideways=mobile?23:(tablet?32:40), vertical=mobile?26:(tablet?33:40);
+     const t=gsap.timeline({defaults:{duration:1,ease:'power3.inOut'}});
+     t.to(this.grid,{scale});
+     t.to(columns[0],{xPercent:-sideways},'<');
+     t.to(columns[2],{xPercent:sideways},'<');
+     t.to(columns[1],{yPercent:i=>(i<Math.floor(columns[1].length/2)?-1:1)*vertical,duration:.5,ease:'power1.inOut'},'-=.5');
+     return t;
+   }
    // All typography now follows the scrubbed timeline, eliminating delayed callback jumps.
    animateGridOnScroll(){
-     const t=gsap.timeline({scrollTrigger:{trigger:this.block,start:'top 25%',end:'bottom bottom',scrub:true}});
+     const t=gsap.timeline({scrollTrigger:{trigger:this.block,start:'top top',end:'bottom bottom',scrub:.30,invalidateOnRefresh:true}});
      t.add(this.gridRevealTimeline()).add(this.gridZoomTimeline(),'-=.6');
      t.to(this.title,{yPercent:0,duration:.4,ease:'power2.inOut'},'-=.42');
      t.to(this.description,{opacity:1,pointerEvents:'auto',duration:.3,ease:'power1.out'},'<');
@@ -104,16 +116,20 @@
    // Native wheel/trackpad movement: no Lenis instance or GSAP ticker proxy.
    gsap.killTweensOf(qsa('.at-grid__wrapper,.at-grid__title,.at-grid__description,.at-grid__button,.at-grid__item,.at-grid__images,.chapter__content'));
    gsap.set(qsa('.at-grid__wrapper,.at-grid__title,.at-grid__description,.at-grid__button,.at-grid__item,.at-grid__images,.chapter__content'),{clearProps:'all'});
-   root.classList.remove('at-original-active');scenes.forEach(ch=>{ch.inert=false;ch.removeAttribute('aria-hidden');ch.style.pointerEvents='';const shade=qs('.chapter__shade',ch);if(shade)shade.style.opacity='';});
+   root.classList.remove('at-original-active','at-grid-active');scenes.forEach(ch=>{ch.inert=false;ch.removeAttribute('aria-hidden');ch.style.pointerEvents='';const shade=qs('.chapter__shade',ch);if(shade)shade.style.opacity='';});
  }
- function activate(){destroy();if(!active())return;root.classList.add('at-original-active');
+ function activate(){
+   destroy();if(!gridActive())return;
    gsap.registerPlugin(ScrollTrigger);
-   // Run source GSAP animations against the native scroll position.
-   // Removed Lenis because smoothing + long sticky tracks caused lag and jumps.
-   new StickyGridScroll();buildMask();requestAnimationFrame(()=>ScrollTrigger.refresh());
+   root.classList.add('at-grid-active');
+   // Same GSAP grid on desktop, tablet and phone; no wheel/touch interception.
+   new StickyGridScroll();
+   // SVG blind chapters stay desktop-only; smaller screens keep readable normal flow.
+   if(maskActive()){root.classList.add('at-original-active');buildMask();}
+   requestAnimationFrame(()=>ScrollTrigger.refresh());
  }
  const originalJump=(index)=>{
-   if(!active()||!maskMaster?.scrollTrigger){scenes[index]?.scrollIntoView({behavior:'instant',block:'start'});return;}
+   if(!maskActive()||!maskMaster?.scrollTrigger){scenes[index]?.scrollIntoView({behavior:'instant',block:'start'});return;}
    // Exact original timeline label provides a direct jump to the selected
    // treatment while preserving the same blinds choreography.
    const label=index===0?0:(maskMaster.labels[`chapter-${index}`]||0);
@@ -124,11 +140,18 @@
  jump?.addEventListener('change',()=>{const i=scenes.findIndex(x=>x.id===jump.value);if(i>=0){originalJump(i);history.replaceState(null,'','#'+scenes[i].id);}});
  // For direct hash URLs and keyboard users, do not trap navigation in a sticky stage.
  document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);const i=scenes.findIndex(x=>x.id===id);if(i>=0){e.preventDefault();originalJump(i);history.replaceState(null,'','#'+id);}});
- media.addEventListener?.('change',activate);window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(active()&&maskMaster){buildMask();ScrollTrigger.refresh();}},220);},{passive:true});
+ gridMedia.addEventListener?.('change',activate);
+ maskMedia.addEventListener?.('change',activate);
+ window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{
+   if(gridActive()){
+     if(maskActive()&&maskMaster)buildMask();
+     ScrollTrigger.refresh();
+   }
+ },220);},{passive:true});
  // The original 'preload all images' is adapted to finite browser preload; if a
  // request fails, animation still initializes and the fallback remains usable.
  const ready=qsa('.at-grid__image').map(im=>im.complete?Promise.resolve():new Promise(resolve=>{im.addEventListener('load',resolve,{once:true});im.addEventListener('error',resolve,{once:true});}));
  Promise.race([Promise.all(ready),new Promise(r=>setTimeout(r,1800))]).then(activate);
- window.addEventListener('pageshow',()=>{if(active()&&!maskMaster)activate();});
+ window.addEventListener('pageshow',()=>{if(gridActive()&&!gridTL.length)activate();});
  window.addEventListener('pagehide',destroy);
 })();
