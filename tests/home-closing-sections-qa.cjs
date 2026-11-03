@@ -55,7 +55,7 @@ const widths=[375,390,430,768,1024,1440];
       assert(snap.menu&&snap.real&&snap.visit,'All 3 approved Home sections must exist');
       assert(snap.menuH2.includes('Your time.')&&snap.menuH2.includes('Your choice.'),'Menu title');
       assert.equal(snap.menuLink,'./massage-menu/');
-      assert(snap.menuImage.loaded&&snap.realImage.loaded,'Both existing photographic files must load');
+      assert(snap.menuImage&&snap.realImage,'Both photographic nodes must exist');
       assert(!snap.usesOtherScene,'Menu photo must be unique versus Sticky Grid and slides');
       assert.equal(snap.galleryLink,'./gallery/');assert.equal(snap.aboutLink,'./about/');
       assert(snap.mapSrc?.startsWith('https://www.google.com/maps?'),'Real Google Maps embed URL');
@@ -72,6 +72,13 @@ const widths=[375,390,430,768,1024,1440];
       for(const [id,name] of [['.menu-pause','menu'],['.real-place--cinematic','real'],['.visit--mapped','visit']]){
         await page.locator(id).scrollIntoViewIfNeeded();
         await page.waitForTimeout(850);
+        if(name==='menu'||name==='real'){
+          const imgSel=name==='menu'?'.menu-pause__photo img':'.real-place__scene img';
+          await page.waitForFunction(sel=>{
+            const im=document.querySelector(sel);
+            return !!im&&im.complete&&im.naturalWidth>0;
+          },imgSel,{timeout:10000});
+        }
         const rect=await page.locator(id).evaluate(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height};});
         assert(rect.width<=width+2&&rect.height>300,`${width} ${name} invalid dimensions: ${JSON.stringify(rect)}`);
         if(width===375||width===390||width===768||width===1440)
