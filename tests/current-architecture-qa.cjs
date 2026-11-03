@@ -46,7 +46,15 @@ const routes = [
           serviceRows:document.querySelectorAll('.service-row').length,
           snap:getComputedStyle(document.documentElement).scrollSnapType,
           reducedHeroTransform:getComputedStyle(document.querySelector('.hero__background')).transform,
-          stickySidebar:(()=>{const x=document.querySelector('.content-layout aside');return x?getComputedStyle(x).position:null})()
+          stickySidebar:(()=>{const x=document.querySelector('.content-layout aside');return x?getComputedStyle(x).position:null})(),
+          mobileHeader:(()=>{
+            const bounds=sel=>{const el=document.querySelector(sel);if(!el)return null;const r=el.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width};};
+            return {
+              brand:bounds('.site-header .brand'),
+              book:bounds('.site-header .header-cta'),
+              toggle:bounds('.site-header .toggle')
+            };
+          })()
         }));
         assert.equal(response.status(),200,`${route}: HTTP ${response.status()}`);
         assert(result.themePresent,`${route}: missing new palette stylesheet`);
@@ -63,6 +71,13 @@ const routes = [
         if(route==='/massage-services/')assert.equal(result.serviceRows,5,'Service index must show 5 confirmed modalities');
         assert.equal(result.snap,'none',`${route}: native scrolling; no scroll-snap trap`);
         assert.equal(result.reducedHeroTransform,'none',`${route}: no photo motion under reduced-motion setting`);
+        if(width<=430){
+          const {brand,book,toggle}=result.mobileHeader;
+          assert(brand&&book&&toggle,`${route}: missing mobile navigation controls`);
+          assert(brand.left>=0&&toggle.right<=width-6,`${route}: clipped mobile menu toggle ${JSON.stringify(result.mobileHeader)}`);
+          assert(brand.right+3<=book.left&&book.right+3<=toggle.left,
+            `${route}: internal mobile header controls overlap ${JSON.stringify(result.mobileHeader)}`);
+        }
         if(result.stickySidebar){
           assert.equal(result.stickySidebar,width>=871?'sticky':'static',
             `${route} @${width}: guide must be sticky only with room to read`);
@@ -83,6 +98,24 @@ const routes = [
         await page.screenshot({path:path.join('qa-artifacts/current-architecture',`contact-${width}.png`),fullPage:true,animations:'disabled'});
       }
       await context.close();
+    }
+    // Mobile navigation remains keyboard accessible after icon-only toggle.
+    for(const width of [375,390,430]){
+      const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});
+      await page.goto(origin+'/massage-services/',{waitUntil:'domcontentloaded'});
+      const toggle=page.locator('.site-header .toggle');
+      const header=await page.evaluate(()=>{
+        const r=sel=>{const el=document.querySelector(sel).getBoundingClientRect();return {left:el.left,right:el.right,width:el.width};};
+        return {brand:r('.site-header .brand'),book:r('.site-header .header-cta'),toggle:r('.site-header .toggle')};
+      });
+      assert(header.toggle.right<=width-6&&header.brand.right+3<=header.book.left&&header.book.right+3<=header.toggle.left,
+        width+': header controls clipped/overlapping: '+JSON.stringify(header));
+      await toggle.click();
+      assert.equal(await toggle.getAttribute('aria-expanded'),'true','Menu button opens navigation');
+      assert(await page.locator('.navigation').isVisible(),'Dropdown navigation visible');
+      await page.keyboard.press('Escape');
+      assert.equal(await toggle.getAttribute('aria-expanded'),'false','Escape closes mobile navigation');
+      await page.close();
     }
     // Verify the editorial photographic scroll is actually responsive, while
     // native scrolling and the text layout remain independent of the animation.
