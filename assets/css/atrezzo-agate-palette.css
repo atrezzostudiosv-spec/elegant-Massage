@@ -98,13 +98,14 @@ summary:focus-visible, input:focus-visible, textarea:focus-visible {
 .touch-home .chapter-jump>span {color:var(--agate-ocean)}
 .touch-home .chapter__index,
 .touch-home .chapter__duration span {color:var(--agate-mint)}
+/* Natural photographic colour: true neutral-black shading, never ocean-blue. */
 .touch-home .chapter__shade {
-  background:linear-gradient(90deg,rgba(12,34,52,.86),rgba(17,45,63,.40) 62%,rgba(14,36,50,.12)),
-             linear-gradient(0deg,rgba(12,30,47,.66),transparent 70%);
+  background:linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.42) 62%,rgba(0,0,0,.09)),
+             linear-gradient(0deg,rgba(0,0,0,.68),transparent 70%);
 }
 .touch-home .chapter--chair .chapter__shade {
-  background:linear-gradient(90deg,rgba(11,31,49,.88),rgba(16,42,59,.40) 62%,rgba(10,32,50,.10)),
-             linear-gradient(0deg,rgba(10,27,42,.62),transparent 70%);
+  background:linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.44) 62%,rgba(0,0,0,.09)),
+             linear-gradient(0deg,rgba(0,0,0,.68),transparent 70%);
 }
 .touch-home .real-place {background:var(--agate-lime)}
 .touch-home .real-place__photo {background:var(--agate-sage)}
