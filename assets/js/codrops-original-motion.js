@@ -17,7 +17,7 @@
  const media=matchMedia('(min-width:1024px) and (min-height:650px) and (prefers-reduced-motion:no-preference)');
  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
  const active=()=>media.matches && !!window.gsap && !!window.ScrollTrigger;
- let lenis=null,ticker=null,gridTL=[],maskMaster=null,progressST=null,resizeTimer=null;
+ let gridTL=[],maskMaster=null,progressST=null,resizeTimer=null;
  const scenes=qsa('.chapter',track);
  const ensureVideo=()=>{
    if(!introFilm)return;
@@ -38,15 +38,21 @@
  // From original StickyGridScroll (full sequence preserved):
  class StickyGridScroll {
    constructor(){this.getElements();this.initContent();this.groupItemsByColumn();this.addParallaxOnScroll();this.animateTitleOnScroll();this.animateGridOnScroll();}
-   getElements(){this.block=grid;this.wrapper=qs('.at-grid__wrapper',grid);this.content=qs('.at-grid__content',grid);this.title=qs('.at-grid__title',grid);this.description=qs('.at-grid__description',grid);this.button=qs('.at-grid__button',grid);this.grid=qs('.at-grid__images',grid);this.items=qsa('.at-grid__item',grid);}
-   initContent(){gsap.set([this.description,this.button],{opacity:0,pointerEvents:'none'});const dy=(this.content.offsetHeight-this.title.offsetHeight)/2;this.titleOffsetY=dy/this.content.offsetHeight*100;gsap.set(this.title,{yPercent:this.titleOffsetY});}
+   getElements(){this.block=grid;this.wrapper=qs('.at-grid__wrapper',grid);this.content=qs('.at-grid__content',grid);this.title=qs('.at-grid__title',grid);this.description=qs('.at-grid__description',grid);this.grid=qs('.at-grid__images',grid);this.items=qsa('.at-grid__item',grid);}
+   initContent(){gsap.set(this.description,{opacity:0,pointerEvents:'none'});const dy=(this.content.offsetHeight-this.title.offsetHeight)/2;this.titleOffsetY=dy/this.content.offsetHeight*100;gsap.set(this.title,{yPercent:this.titleOffsetY});}
    groupItemsByColumn(){this.numColumns=3;this.columns=Array.from({length:3},()=>[]);this.items.forEach((e,i)=>this.columns[i%3].push(e));}
    addParallaxOnScroll(){gridTL.push(gsap.from(this.wrapper,{yPercent:-100,ease:'none',scrollTrigger:{trigger:this.block,start:'top bottom',end:'top top',scrub:true}}));}
    animateTitleOnScroll(){gridTL.push(gsap.from(this.title,{opacity:0,duration:.7,ease:'power1.out',scrollTrigger:{trigger:this.block,start:'top 57%',toggleActions:'play none none reset'}}));}
    gridRevealTimeline(columns=this.columns){const t=gsap.timeline();const wh=innerHeight;const dy=wh-(wh-this.grid.offsetHeight)/2;columns.forEach((col,i)=>{const top=i%2===0;t.from(col,{y:dy*(top?-1:1),stagger:{each:.06,from:top?'end':'start'},ease:'power1.inOut'},'grid-reveal');});return t;}
    gridZoomTimeline(columns=this.columns){const t=gsap.timeline({defaults:{duration:1,ease:'power3.inOut'}});t.to(this.grid,{scale:2.05});t.to(columns[0],{xPercent:-40},'<');t.to(columns[2],{xPercent:40},'<');t.to(columns[1],{yPercent:i=>(i<Math.floor(columns[1].length/2)?-1:1)*40,duration:.5,ease:'power1.inOut'},'-=.5');return t;}
-   toggleContent(visible=true){if(!this.title||!this.description||!this.button)return;const t=gsap.timeline({defaults:{overwrite:true}});t.to(this.title,{yPercent:visible?0:this.titleOffsetY,duration:.7,ease:'power2.inOut'}).to([this.description,this.button],{opacity:visible?1:0,duration:.4,ease:visible?'power1.inOut':'power1.out',pointerEvents:visible?'all':'none'},visible?'-=90%':'<');gridTL.push(t);}
-   animateGridOnScroll(){const t=gsap.timeline({scrollTrigger:{trigger:this.block,start:'top 25%',end:'bottom bottom',scrub:true}});t.add(this.gridRevealTimeline()).add(this.gridZoomTimeline(),'-=.6').add(()=>this.toggleContent(t.scrollTrigger.direction===1),' -=.32'.trim());gridTL.push(t);}
+   // All typography now follows the scrubbed timeline, eliminating delayed callback jumps.
+   animateGridOnScroll(){
+     const t=gsap.timeline({scrollTrigger:{trigger:this.block,start:'top 25%',end:'bottom bottom',scrub:true}});
+     t.add(this.gridRevealTimeline()).add(this.gridZoomTimeline(),'-=.6');
+     t.to(this.title,{yPercent:0,duration:.4,ease:'power2.inOut'},'-=.42');
+     t.to(this.description,{opacity:1,pointerEvents:'auto',duration:.3,ease:'power1.out'},'<');
+     gridTL.push(t);
+   }
  }
  // From original Hiroki horizontal blinds JS: same BLIND_COUNT=30,
  // rect attributes, stagger .02, easing power3.out, scrub 2.5.
@@ -61,40 +67,57 @@
   if(maskMaster){maskMaster.scrollTrigger?.kill();maskMaster.kill();maskMaster=null;}
   const content=scenes.map(ch=>qs('.chapter__content',ch));
   gsap.set(content,{clipPath:'inset(100% 0 0 0)',y:40,opacity:0});
-  maskMaster=gsap.timeline({scrollTrigger:{trigger:track,start:'top top',end:'bottom bottom',scrub:2.5,anticipatePin:1,invalidateOnRefresh:true}});
-  blindSets.forEach((blinds,i)=>{
+  gsap.set(content[0],{clipPath:'inset(0% 0 0 0)',y:0,opacity:1});
+  // The first photograph and its text are present when the section enters.
+  // Subsequent photographs retain the original 30 horizontal SVG blinds.
+  blindSets[0].forEach(b=>{
+    gsap.set(b.top,{attr:{y:b.y-b.h,height:b.h+.01}});
+    gsap.set(b.bottom,{attr:{y:b.y,height:b.h+.01}});
+  });
+  maskMaster=gsap.timeline({scrollTrigger:{trigger:track,start:'top top',end:'bottom bottom',scrub:.45,anticipatePin:1,invalidateOnRefresh:true}});
+  blindSets.slice(1).forEach((blinds,k)=>{
+    const i=k+1;
     maskMaster.addLabel(`chapter-${i}`);
-    maskMaster.add(openBlinds(blinds));
-    if(content[i]){
-      maskMaster.add(textIn(content[i]),'-=.3');
-      if(i<content.length-1)maskMaster.add(textOut(content[i]),'+=.8');
-    }
+    maskMaster.add(openBlinds(blinds),'+=.1');
+    maskMaster.add(textOut(content[i-1]),'<');
+    maskMaster.add(textIn(content[i]),'-=.35');
+    maskMaster.to({},{duration:.35});
   });
   if(progressST){progressST.kill();progressST=null;}
-  progressST=ScrollTrigger.create({trigger:track,start:'top top',end:'bottom bottom',scrub:.3,onUpdate:self=>{const fills=qsa('.at-mask-progress__fill',track);fills.forEach((fill,i)=>{fill.style.width=`${clamp((self.progress-i/fills.length)*fills.length)*100}%`;});const p=self.progress;const i=clamp(Math.floor(p*scenes.length),0,scenes.length-1);setActiveChapter(i);}});
+  progressST=ScrollTrigger.create({trigger:track,start:'top top',end:'bottom bottom',onUpdate:self=>{
+    const fills=qsa('.at-mask-progress__fill',track);
+    fills.forEach((fill,i)=>{fill.style.width=`${clamp((self.progress-i/fills.length)*fills.length)*100}%`;});
+    const position=maskMaster.time();
+    let current=0;
+    for(let i=1;i<scenes.length;i++){
+      if(position >= (maskMaster.labels[`chapter-${i}`]||0)+.8)current=i;
+    }
+    setActiveChapter(current);
+  }});
+  setActiveChapter(0);
  }
  function setActiveChapter(i){scenes.forEach((ch,j)=>{const current=j===i;ch.inert=!current;ch.setAttribute('aria-hidden',String(!current));ch.style.pointerEvents=current?'auto':'none';const shade=qs('.chapter__shade',ch);if(shade)shade.style.opacity=current?'1':'0';});if(jump&&document.activeElement!==jump)jump.value=scenes[i]?.id||'';}
  function destroy(){
    maskMaster?.scrollTrigger?.kill();maskMaster?.kill();maskMaster=null;
    progressST?.kill();progressST=null;
    gridTL.forEach(t=>{t.scrollTrigger?.kill();t.kill();});gridTL=[];
-   lenis?.destroy();lenis=null;if(ticker){gsap.ticker.remove(ticker);ticker=null;}
+   // Native wheel/trackpad movement: no Lenis instance or GSAP ticker proxy.
    gsap.killTweensOf(qsa('.at-grid__wrapper,.at-grid__title,.at-grid__description,.at-grid__button,.at-grid__item,.at-grid__images,.chapter__content'));
    gsap.set(qsa('.at-grid__wrapper,.at-grid__title,.at-grid__description,.at-grid__button,.at-grid__item,.at-grid__images,.chapter__content'),{clearProps:'all'});
    root.classList.remove('at-original-active');scenes.forEach(ch=>{ch.inert=false;ch.removeAttribute('aria-hidden');ch.style.pointerEvents='';const shade=qs('.chapter__shade',ch);if(shade)shade.style.opacity='';});
  }
  function activate(){destroy();if(!active())return;root.classList.add('at-original-active');
    gsap.registerPlugin(ScrollTrigger);
-   // Single Lenis instance. Never smooth touch; no custom wheel interception.
-   if(typeof window.Lenis==='function'&&!navigator.connection?.saveData){lenis=new Lenis({lerp:.08,wheelMultiplier:1.4,smoothTouch:false});lenis.on('scroll',ScrollTrigger.update);ticker=time=>lenis.raf(time*1000);gsap.ticker.add(ticker);gsap.ticker.lagSmoothing(0);}
+   // Run source GSAP animations against the native scroll position.
+   // Removed Lenis because smoothing + long sticky tracks caused lag and jumps.
    new StickyGridScroll();buildMask();requestAnimationFrame(()=>ScrollTrigger.refresh());
  }
  const originalJump=(index)=>{
    if(!active()||!maskMaster?.scrollTrigger){scenes[index]?.scrollIntoView({behavior:'instant',block:'start'});return;}
    // Exact original timeline label provides a direct jump to the selected
    // treatment while preserving the same blinds choreography.
-   const label=maskMaster.labels[`chapter-${index}`]||0;
-   const extra=.85;const p=clamp((label+extra)/maskMaster.duration());
+   const label=index===0?0:(maskMaster.labels[`chapter-${index}`]||0);
+   const p=index===0?0:clamp((label+1.25)/maskMaster.duration());
    const st=maskMaster.scrollTrigger;
    window.scrollTo({top:st.start+(st.end-st.start)*p,behavior:'instant'});
  };
