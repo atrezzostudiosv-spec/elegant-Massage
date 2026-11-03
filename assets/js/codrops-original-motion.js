@@ -175,14 +175,7 @@
   });
   // Follow the rendered scrubbed playhead so links are exposed for the
   // chapter whose text has finished entering.
-  maskMaster.eventCallback('onUpdate',()=>{
-    const position=maskMaster.time();
-    let current=0;
-    for(let i=1;i<scenes.length;i++){
-      if(position >= (maskMaster.labels[`chapter-${i}-ready`]??Infinity)-1.15)current=i;
-    }
-    setActiveChapter(current);
-  });
+  maskMaster.eventCallback('onUpdate',syncActiveChapter);
   progressST=ScrollTrigger.create({trigger:track,start:'top top',end:'bottom bottom',onUpdate:self=>{
     const fills=qsa('.at-mask-progress__fill',track);
     fills.forEach((fill,i)=>{fill.style.width=`${clamp((self.progress-i/fills.length)*fills.length)*100}%`;});
@@ -190,6 +183,14 @@
   setActiveChapter(0);
  }
  function setActiveChapter(i){scenes.forEach((ch,j)=>{const current=j===i;ch.inert=!current;ch.setAttribute('aria-hidden',String(!current));ch.style.pointerEvents=current?'auto':'none';});if(jump&&document.activeElement!==jump)jump.value=scenes[i]?.id||'';}
+ function syncActiveChapter(){
+  if(!maskMaster)return;
+  const position=maskMaster.time();let current=0;
+  for(let i=1;i<scenes.length;i++){
+   if(position >= (maskMaster.labels[`chapter-${i}-ready`]??Infinity)-1.15)current=i;
+  }
+  setActiveChapter(current);
+ }
  function destroy(){
    maskMaster?.scrollTrigger?.kill();maskMaster?.kill();maskMaster=null;
    progressST?.kill();progressST=null;
@@ -209,6 +210,7 @@
    if(maskActive()){root.classList.add('at-original-active');buildMask();}
    requestAnimationFrame(()=>{
      ScrollTrigger.refresh();
+     if(maskMaster){maskMaster.progress(maskMaster.scrollTrigger.progress);syncActiveChapter();}
      if(!initialHashHandled){
        initialHashHandled=true;
        const index=scenes.findIndex(scene=>'#'+scene.id===location.hash);
@@ -232,13 +234,14 @@
    setActiveChapter(index);
  };
  jump?.addEventListener('change',()=>{const i=scenes.findIndex(x=>x.id===jump.value);if(i>=0){originalJump(i);history.replaceState(null,'','#'+scenes[i].id);}});
+ window.addEventListener('hashchange',()=>{const i=scenes.findIndex(x=>'#'+x.id===location.hash);if(i>=0)originalJump(i);});
  // For direct hash URLs and keyboard users, do not trap navigation in a sticky stage.
  document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);const i=scenes.findIndex(x=>x.id===id);if(i>=0){e.preventDefault();originalJump(i);history.replaceState(null,'','#'+id);}});
  gridMedia.addEventListener?.('change',activate);
  maskMedia.addEventListener?.('change',activate);
  window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{
    if(gridActive()){
-     if(maskActive()&&maskMaster){buildMask();ScrollTrigger.refresh();maskMaster.progress(maskMaster.scrollTrigger.progress);}
+     if(maskActive()&&maskMaster){buildMask();ScrollTrigger.refresh();maskMaster.progress(maskMaster.scrollTrigger.progress);syncActiveChapter();}
      else ScrollTrigger.refresh();
    }
  },220);},{passive:true});
