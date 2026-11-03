@@ -201,3 +201,13 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Reduced motion, mobile/tablet: static native vertical flow; desktop: source GSAP scroll-driven choreography. Draft PR #4, not merged. Main and published demo untouched.
 - GitHub Actions run https://github.com/atrezzostudiosv-spec/elegant-Massage/actions/runs/41468340663 SUCCESS. Six viewport checks (375/390/430/768/1024/1440); 5 masks/300 SVG rectangles on desktop; 12 grid images, no horizontal overflow, menu, Setmore, reduced motion, no JS page errors.
 - Still pending: artistic approval by user of actual scroll on desktop and touch device; test real physical device and Safari/Firefox; full performance and interactive contrast review. No public production deployment claim.
+
+
+## 2026-11-03 — Home sections 04-06: IMPLEMENTED / IN VALIDATION
+- Authorized scope: ONLY Home sections 04, 05 and 06. Hero, 12-photo Sticky Grid and five masked massage slides remain FROZEN. Their HTML, JS, CSS motion and image assets were not modified.
+- Section 04: replaced old three-price Time & Price table with predominantly white photo-led Massage Menu pause (Your time. Your choice.), native-scroll photo zoom and /massage-menu/ CTA. Existing illustrative image elegant-massage-massage-moment-cinematic.webp is provisional because the separately prepared bright-background master has not been provided in the repository. The photo is not used in the Sticky Grid or slides.
+- Section 05: authentic original storefront photo elegant-massage-flower-mound-storefront-exterior.webp, full-bleed neutral-black graded background, About/Gallery actions and restrained scroll photo movement. Historic photo date/current-appearance qualifier visible.
+- Section 06: redesigned contact/address/booking hierarchy with lazy-loaded Google Maps embed for 2911 Cross Timbers Rd, Suite 105, Flower Mound, TX 75028, plus a direct Google Maps fallback. External map rendering subject to Google's availability.
+- New isolated implementation assets: assets/css/home-closings-2026.css and assets/js/home-closings-2026.js. New scoped Playwright QA at tests/home-closing-sections-qa.cjs in the existing main workflow.
+- Screenshots reviewed at 1440, 768 and 375 px. Tests cover 375, 390, 430, 768, 1024 and 1440 px, booking link, photo decode, map, noindex, original sections unchanged and reduced motion.
+- Status: implemented, owner aesthetic acceptance pending. Final submitted menu-background master remains pending transfer; current photo is a clearly disclosed temporary image. Demo continues noindex and 13 internal routes remain untouched.
