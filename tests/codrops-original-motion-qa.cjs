@@ -15,7 +15,9 @@ const widths=[375,390,430,768,1024,1440];
    innerWidth,scrollWidth:document.documentElement.scrollWidth,grid:document.querySelectorAll('.at-grid__item').length,
    chapters:document.querySelectorAll('.chapter').length,masks:document.querySelectorAll('svg.at-mask-layer mask').length,
    booking:[...document.querySelectorAll('a')].filter(a=>a.textContent.toLowerCase().includes('book')).every(a=>a.href.startsWith('https://elegantmassage.setmore.com/#services')),
-   noindex:document.querySelector('meta[name="robots"]')?.content?.includes('noindex'),active:document.documentElement.classList.contains('at-original-active'),
+   noindex:document.querySelector('meta[name="robots"]')?.content?.includes('noindex'),
+   active:document.documentElement.classList.contains('at-original-active'),
+   gridActive:document.documentElement.classList.contains('at-grid-active'),
    blindRects:document.querySelectorAll('.at-mask-layer mask g rect').length,
   }));
   // Accessibility and scroll-control regression after the November 3 fix.
@@ -48,7 +50,24 @@ const widths=[375,390,430,768,1024,1440];
   assert(state.scrollWidth<=state.innerWidth+1,`Horizontal overflow ${width}: ${state.scrollWidth}`);
   assert(state.booking,'Booking link destination must be Setmore');assert(state.noindex,'must stay noindex');
   if(width>=1024){assert.equal(state.active,true,'desktop must run original timelines');assert.equal(state.blindRects,300,'5*30 blinds * 2 rects');}
-  else assert.equal(state.active,false,'mobile should use normal-flow fallback');
+  else {
+   assert.equal(state.active,false,'mobile and tablet treatment chapters must use normal flow');
+   assert.equal(state.gridActive,true,'tablet/phone should run real Sticky Grid timeline');
+   const motion=await page.evaluate(()=>({
+     gridHeight:document.querySelector('.at-grid').getBoundingClientRect().height/innerHeight,
+     sticky:getComputedStyle(document.querySelector('.at-grid__wrapper')).position,
+     visibleImages:[...document.querySelectorAll('.at-grid__item')].filter(el=>getComputedStyle(el).display!=='none').length,
+     photoGridTransform:getComputedStyle(document.querySelector('.at-grid__images')).transform,
+   }));
+   assert(motion.gridHeight>=1.6&&motion.gridHeight<=2.1,'responsive grid travel limited: '+motion.gridHeight);
+   assert.equal(motion.sticky,'sticky','responsive photographic gallery must be sticky');
+   assert.equal(motion.visibleImages,12,'show all 12 photographic tiles on mobile and tablet');
+   const mid=await page.evaluate(()=>{const g=document.querySelector('.at-grid');return scrollY+g.getBoundingClientRect().top+(g.offsetHeight-innerHeight)*.76});
+   await page.evaluate(y=>scrollTo(0,y),mid);await page.waitForTimeout(700);
+   const after=await page.evaluate(()=>getComputedStyle(document.querySelector('.at-grid__images')).transform);
+   assert(after!=='none'&&!after.includes('matrix(1, 0, 0, 1, 0, 0)'),width+': expected grid motion while scrolling');
+   await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(240);
+  }
   await page.locator('#menu-toggle').isVisible().then(async visible=>{
    if(visible){await page.locator('#menu-toggle').click();assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'true');await page.keyboard.press('Escape');assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'false');}
   });
@@ -66,7 +85,8 @@ const widths=[375,390,430,768,1024,1440];
  const reduced=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
  await reduced.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});await reduced.waitForTimeout(700);
  assert.equal(await reduced.evaluate(()=>document.documentElement.classList.contains('at-original-active')),false,'reduced motion must disable cinematic choreography');
+ assert.equal(await reduced.evaluate(()=>document.documentElement.classList.contains('at-grid-active')),false,'reduced motion must disable Sticky Grid as well');
  await reduced.close();await browser.close();
  fs.writeFileSync('qa-artifacts/codrops-motion/results.json',JSON.stringify(report,null,2));
- console.log('Original Codrops integration PASS: 6 sizes, real GSAP/SVG rects, menu, booking, reduced motion, noindex.');
+ console.log('Original Codrops integration PASS: 6 sizes, responsive GSAP photo grid, desktop SVG blinds, native scroll, menu, booking, reduced motion, noindex.');
 })().catch(e=>{console.error(e);process.exit(1)});
