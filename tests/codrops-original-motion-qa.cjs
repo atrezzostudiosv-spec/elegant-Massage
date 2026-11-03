@@ -66,6 +66,7 @@ const widths=[375,390,430,768,1024,1440];
    await page.evaluate(y=>scrollTo(0,y),mid);await page.waitForTimeout(700);
    const after=await page.evaluate(()=>getComputedStyle(document.querySelector('.at-grid__images')).transform);
    assert(after!=='none'&&!after.includes('matrix(1, 0, 0, 1, 0, 0)'),width+': expected grid motion while scrolling');
+   await page.screenshot({path:`qa-artifacts/codrops-motion/${width}-grid-mid.png`,animations:'disabled'});
    await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(240);
   }
   await page.locator('#menu-toggle').isVisible().then(async visible=>{
