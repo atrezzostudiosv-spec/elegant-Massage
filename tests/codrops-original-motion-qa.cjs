@@ -41,7 +41,7 @@ const widths=[375,390,430,768,1024,1440];
     scrollBehavior:getComputedStyle(document.documentElement).scrollBehavior,
     firstContentOpacity:getComputedStyle(document.querySelector('.chapter--body .chapter__content')).opacity
    }));
-   assert(motion.gridHeight<=2.86&&motion.gridHeight>=2.64,'Grid must fit source-style controlled 275svh travel: '+motion.gridHeight);
+   assert(Math.abs(motion.gridHeight-4.25)<.01,'Approved source Sticky Grid needs 425vh travel: '+motion.gridHeight);
    assert(motion.chapterHeight>=7.10&&motion.chapterHeight<=7.36,'Five treatment reading intervals need approximately 725svh: '+motion.chapterHeight);
    assert.equal(motion.firstBlinds,60,'First photographic chapter visible immediately, no black screen');
    assert.equal(motion.scrollBehavior,'auto','Native scroll should be immediate and controllable');
@@ -79,7 +79,7 @@ const widths=[375,390,430,768,1024,1440];
      visibleImages:[...document.querySelectorAll('.at-grid__item')].filter(el=>getComputedStyle(el).display!=='none').length,
      photoGridTransform:getComputedStyle(document.querySelector('.at-grid__images')).transform,
    }));
-   assert(motion.gridHeight>=1.85&&motion.gridHeight<=(width>700?2.28:2.05),'Responsive grid must remain controlled: '+motion.gridHeight);
+   assert(Math.abs(motion.gridHeight-4.25)<.01,'Approved source Sticky Grid needs 425vh travel at every width: '+motion.gridHeight);
    assert.equal(motion.sticky,'sticky','responsive photographic gallery must be sticky');
    assert.equal(motion.visibleImages,12,'show all 12 photographic tiles on mobile and tablet');
    const mid=await page.evaluate(()=>{const g=document.querySelector('.at-grid');return scrollY+g.getBoundingClientRect().top+(g.offsetHeight-innerHeight)*.76});

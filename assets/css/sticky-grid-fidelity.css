@@ -12,6 +12,7 @@
   font-weight: 400;
   font-display: swap;
 }
+.touch-home .at-grid .content__button { display: none; }
 /* Sticky Grid Scroll, Theo Plawinski (MIT): geometry scoped to Home.
    One source rem equals 100vw / 1440; the site's root font stays untouched. */
 @media (min-height: 540px) and (prefers-reduced-motion: no-preference) {
@@ -71,7 +72,7 @@
     letter-spacing: normal;
     text-transform: uppercase;
   }
-  .at-grid-active .touch-home .at-grid__button {
+  .at-grid-active .touch-home .content__button {
     display: block;
     margin-top: calc(32 * var(--grid-unit));
     padding: 0;

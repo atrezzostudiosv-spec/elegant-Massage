@@ -46,7 +46,7 @@
      this.content=qs('.at-grid__content',grid);
      this.title=qs('.at-grid__title',grid);
      this.description=qs('.at-grid__description',grid);
-     this.button=qs('.at-grid__button',grid);
+     this.button=qs('.content__button',grid);
      this.grid=qs('.at-grid__images',grid);
      this.items=qsa('.at-grid__item',grid);
    }
@@ -188,8 +188,8 @@
    progressST?.kill();progressST=null;
    gridTL.forEach(t=>{t.scrollTrigger?.kill();t.kill();});gridTL=[];
    // Native wheel/trackpad movement: no Lenis instance or GSAP ticker proxy.
-   gsap.killTweensOf(qsa('.at-grid__wrapper,.at-grid__title,.at-grid__description,.at-grid__button,.at-grid__item,.at-grid__images,.chapter__content'));
-   gsap.set(qsa('.at-grid__wrapper,.at-grid__title,.at-grid__description,.at-grid__button,.at-grid__item,.at-grid__images,.chapter__content'),{clearProps:'all'});
+   gsap.killTweensOf(qsa('.at-grid__wrapper,.at-grid__title,.at-grid__description,.content__button,.at-grid__item,.at-grid__images,.chapter__content'));
+   gsap.set(qsa('.at-grid__wrapper,.at-grid__title,.at-grid__description,.content__button,.at-grid__item,.at-grid__images,.chapter__content'),{clearProps:'all'});
    root.classList.remove('at-original-active','at-grid-active');scenes.forEach(ch=>{ch.inert=false;ch.removeAttribute('aria-hidden');ch.style.pointerEvents='';const shade=qs('.chapter__shade',ch);if(shade)shade.style.opacity='';});
  }
  function activate(){
