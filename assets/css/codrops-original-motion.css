@@ -1,7 +1,7 @@
 /* Elegant Massage / Codrops exact motion integration, scoped to Home only.
  * Sources MIT: Theo Plawinski Sticky Grid Scroll; Hiroki SVG Mask Transitions.
- * Original choreography preserved on desktop, with business-specific media and
- * native mobile/reduced-motion accessible fallback. */
+ * Original choreography preserved at all viewport widths with proportional motion.
+ * Reduced-motion and short-landscape layouts keep an accessible static fallback. */
 .intro{height:100svh;min-height:0}
 .intro__sticky{height:100svh;min-height:0}
 .at-grid{position:relative;z-index:2;background:var(--paper);color:var(--ink)}
@@ -16,14 +16,14 @@
 .at-grid__image{width:100%;height:100%;object-fit:cover;display:block}
 /* Original three-column reveal and 2.05 zoom, tuned to 230svh for user-controlled travel. */
 @media(min-width:1024px) and (min-height:650px) and (prefers-reduced-motion:no-preference){
- .at-original-active .at-grid{height:230vh;height:230svh}
- .at-original-active .at-grid__wrapper{position:sticky;top:0;height:100vh;min-height:0;padding:0 var(--gutter)}
- .at-original-active .at-grid__content{height:100vh;min-height:0;width:100%;max-width:none;gap:0}
- .at-original-active .at-grid__description{margin-top:24px}
- .at-original-active .at-grid__button{margin-top:32px}
- .at-original-active .at-grid__gallery{position:absolute;left:50%;top:50%;transform:translate3d(-50%,-50%,0);width:min(51vw,736px);max-width:none;margin:0;pointer-events:none}
- .at-original-active .at-grid__images{gap:clamp(16px,2.3vw,40px);will-change:transform}
- .at-original-active .at-grid__item{will-change:transform}
+ .at-grid-active .at-grid{height:230vh;height:230svh}
+ .at-grid-active .at-grid__wrapper{position:sticky;top:0;height:100vh;min-height:0;padding:0 var(--gutter)}
+ .at-grid-active .at-grid__content{height:100vh;min-height:0;width:100%;max-width:none;gap:0}
+ .at-grid-active .at-grid__description{margin-top:24px}
+ .at-grid-active .at-grid__button{margin-top:32px}
+ .at-grid-active .at-grid__gallery{position:absolute;left:50%;top:50%;transform:translate3d(-50%,-50%,0);width:min(51vw,736px);max-width:none;margin:0;pointer-events:none}
+ .at-grid-active .at-grid__images{gap:clamp(16px,2.3vw,40px);will-change:transform}
+ .at-grid-active .at-grid__item{will-change:transform}
 }
 /* Original SVG masked image layers, five service panels. */
 .at-mask-stage{position:relative}
@@ -62,3 +62,46 @@
 }
 /* Keep the wheel and keyboard journey native; no smooth-scroll double interpolation. */
 html{scroll-behavior:auto}
+
+/* Active source Sticky Grid across desktop, tablet and mobile. Only the visual
+   timeline eases; wheel, trackpad, touch and keyboard remain entirely native. */
+@media (min-height:540px) and (prefers-reduced-motion:no-preference) and (max-width:1023px) {
+ .at-grid-active .at-grid{height:195vh;height:195svh}
+ .at-grid-active .at-grid__wrapper{
+   position:sticky;top:0;width:100%;height:100vh;height:100svh;min-height:0;
+   display:grid;place-items:center;overflow:hidden;padding:0 var(--gutter)
+ }
+ .at-grid-active .at-grid__content{
+   height:100vh;height:100svh;min-height:0;width:100%;max-width:none;gap:0;
+   position:relative;z-index:3;pointer-events:none
+ }
+ .at-grid-active .at-grid__description{margin-top:18px}
+ .at-grid-active .at-grid__gallery{
+   position:absolute;left:50%;top:50%;transform:translate3d(-50%,-50%,0);
+   width:min(72vw,650px);max-width:none;margin:0;pointer-events:none
+ }
+ .at-grid-active .at-grid__images{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,1.45vw,18px);will-change:transform}
+ .at-grid-active .at-grid__item{will-change:transform}
+ .at-grid-active .at-grid__item:nth-child(n+7){display:block}
+ .at-grid-active .at-grid__title{font-size:clamp(4.6rem,9vw,7rem)}
+}
+@media (min-height:540px) and (prefers-reduced-motion:no-preference) and (max-width:700px){
+ .at-grid-active .at-grid{height:175vh;height:175svh}
+ .at-grid-active .at-grid__wrapper{padding:0 12px}
+ .at-grid-active .at-grid__content{padding:0 12px}
+ .at-grid-active .at-grid__gallery{width:min(94vw,450px)}
+ .at-grid-active .at-grid__images{gap:clamp(6px,1.8vw,9px)}
+ .at-grid-active .at-grid__title{
+   max-width:100%;font-size:clamp(3.65rem,12vw,5.5rem);
+   line-height:.98;letter-spacing:-.055em
+ }
+ .at-grid-active .at-grid__description{font-size:.74rem;max-width:min(280px,85vw)}
+ /* Keep the title legible as the twelve pictures approach the centre. */
+ .at-grid-active .at-grid__content::before{
+   content:"";position:absolute;z-index:-1;inset:20% -12px;
+   background:radial-gradient(ellipse 70% 50% at 50% 50%,
+     rgba(245,241,233,.94) 0%,rgba(245,241,233,.87) 52%,
+     rgba(245,241,233,0) 100%);
+   pointer-events:none
+ }
+}
