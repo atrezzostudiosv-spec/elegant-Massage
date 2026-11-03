@@ -146,6 +146,8 @@ const widths=[375,390,430,768,1024,1440];
   if(width===1440){
     // Reading states: every chapter must be reachable in order through native scroll.
     const stage=await page.locator('#cinema-track').evaluate(el=>({top:el.offsetTop,height:el.offsetHeight}));
+    await page.evaluate(()=>window.scrollTo(0,0));
+    await page.waitForTimeout(1300);
     const observed=[];
     for(let k=0;k<=20;k++){
       const fraction=k/20;
@@ -159,8 +161,9 @@ const widths=[375,390,430,768,1024,1440];
       });
       observed.push({fraction,id:current.id,opacity:current.opacity});
     }
+    console.log('CHAPTER-READABILITY '+JSON.stringify(observed));
     const ids=[...new Set(observed.map(x=>x.id))];
-    assert.deepEqual(ids,['body-massage','foot-combo','couples-massage','chair-thai','four-hands'],'Five chapter reveals must be ordered: '+JSON.stringify(ids));
+    assert.deepEqual(ids,['body-massage','foot-combo','couples-massage','chair-thai','four-hands'],'Five chapter reveals must be ordered: '+JSON.stringify(observed));
     for(const id of ids){
       const stable=observed.filter(x=>x.id===id&&x.opacity>.90);
       assert(stable.length>=2,id+' needs two readable scroll samples; '+JSON.stringify(observed));
