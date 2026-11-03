@@ -66,6 +66,20 @@ const widths=[375,390,430,768,1024,1440];
    await page.evaluate(y=>scrollTo(0,y),mid);await page.waitForTimeout(700);
    const after=await page.evaluate(()=>getComputedStyle(document.querySelector('.at-grid__images')).transform);
    assert(after!=='none'&&!after.includes('matrix(1, 0, 0, 1, 0, 0)'),width+': expected grid motion while scrolling');
+   const diagnostic=await page.evaluate(()=>{
+      const gallery=document.querySelector('.at-grid__gallery');
+      const grid=document.querySelector('.at-grid__images');
+      const rectInfo=el=>{const r=el.getBoundingClientRect();return {top:Math.round(r.top),bottom:Math.round(r.bottom),left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),height:Math.round(r.height)};};
+      const photos=[...document.querySelectorAll('.at-grid__image')];
+      return {
+        scrollY, gallery:rectInfo(gallery), galleryStyle:{display:getComputedStyle(gallery).display,opacity:getComputedStyle(gallery).opacity,visibility:getComputedStyle(gallery).visibility},
+        grid:rectInfo(grid),
+        photos:photos.slice(0,6).map(el=>({complete:el.complete,naturalWidth:el.naturalWidth,rect:rectInfo(el),src:el.currentSrc.split('/').pop()})),
+        visibleCount:photos.filter(el=>{const r=el.getBoundingClientRect();return el.naturalWidth>0 && r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth}).length
+      };
+   });
+   if(width===390||width===768)console.log('MID-GRID-DIAG '+width+' '+JSON.stringify(diagnostic));
+   assert(diagnostic.visibleCount>0,width+': photographs must be visibly loaded at mid-scroll');
    await page.screenshot({path:`qa-artifacts/codrops-motion/${width}-grid-mid.png`,animations:'disabled'});
    await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(240);
   }
