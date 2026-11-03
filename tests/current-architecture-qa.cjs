@@ -35,9 +35,19 @@ const routes = [
           description:document.querySelector('meta[name="description"]')?.content,
           robots:document.querySelector('meta[name="robots"]')?.content,
           booking:[...document.querySelectorAll('a[href]')].filter(a=>a.href.includes('elegantmassage.setmore.com')).length,
-          headingRect:(()=>{let x=document.querySelector('h1')?.getBoundingClientRect();return x?{left:x.left,right:x.right}:null})()
+          headingRect:(()=>{let x=document.querySelector('h1')?.getBoundingClientRect();return x?{left:x.left,right:x.right}:null})(),
+          themePresent:!!document.querySelector('link[href$="atrezzo-agate-palette.css"]'),
+          themeBg:getComputedStyle(document.body).backgroundColor,
+          themeOcean:getComputedStyle(document.documentElement).getPropertyValue('--agate-ocean').trim(),
+          headerCTA:(()=>{const x=document.querySelector('.site-header .header-cta');return x?{background:getComputedStyle(x).backgroundColor,color:getComputedStyle(x).color}:null})(),
+          footerBg:(()=>{const x=document.querySelector('.site-footer');return x?getComputedStyle(x).backgroundColor:null})()
         }));
         assert.equal(response.status(),200,`${route}: HTTP ${response.status()}`);
+        assert(result.themePresent,`${route}: missing new palette stylesheet`);
+        assert.equal(result.themeBg,'rgb(255, 255, 255)',`${route}: internal paper must be white`);
+        assert.equal(result.themeOcean,'#254460',`${route}: wrong primary palette`);
+        assert.deepEqual(result.headerCTA,{background:'rgb(83, 203, 217)',color:'rgb(37, 68, 96)'},`${route}: Book Now aqua/ocean contrast`);
+        assert.equal(result.footerBg,'rgb(37, 68, 96)',`${route}: footer must be ocean blue`);
         assert.equal(result.h1,1,`${route}: H1 count`);
         assert.equal(result.main,1,`${route}: main count`);
         assert(result.description,`${route}: missing description`);
