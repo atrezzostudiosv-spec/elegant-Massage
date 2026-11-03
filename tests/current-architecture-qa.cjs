@@ -40,7 +40,13 @@ const routes = [
           themeBg:getComputedStyle(document.body).backgroundColor,
           themeOcean:getComputedStyle(document.documentElement).getPropertyValue('--agate-ocean').trim(),
           headerCTA:(()=>{const x=document.querySelector('.site-header .header-cta');return x?{background:getComputedStyle(x).backgroundColor,color:getComputedStyle(x).color}:null})(),
-          footerBg:(()=>{const x=document.querySelector('.site-footer');return x?getComputedStyle(x).backgroundColor:null})()
+          footerBg:(()=>{const x=document.querySelector('.site-footer');return x?getComputedStyle(x).backgroundColor:null})(),
+          heroOverlay:getComputedStyle(document.querySelector('.hero'),'::before').backgroundImage,
+          navTopics:[...document.querySelectorAll('.navigation .dropdown a')].map(a=>a.textContent.trim()),
+          serviceRows:document.querySelectorAll('.service-row').length,
+          snap:getComputedStyle(document.documentElement).scrollSnapType,
+          reducedHeroTransform:getComputedStyle(document.querySelector('.hero__background')).transform,
+          stickySidebar:(()=>{const x=document.querySelector('.content-layout aside');return x?getComputedStyle(x).position:null})()
         }));
         assert.equal(response.status(),200,`${route}: HTTP ${response.status()}`);
         assert(result.themePresent,`${route}: missing new palette stylesheet`);
@@ -48,6 +54,19 @@ const routes = [
         assert.equal(result.themeOcean,'#254460',`${route}: wrong primary palette`);
         assert.deepEqual(result.headerCTA,{background:'rgb(83, 203, 217)',color:'rgb(37, 68, 96)'},`${route}: Book Now aqua/ocean contrast`);
         assert.equal(result.footerBg,'rgb(37, 68, 96)',`${route}: footer must be ocean blue`);
+        assert(result.heroOverlay.includes('rgba(0, 0, 0,') && !result.heroOverlay.includes('rgba(15, 38, 60'),
+          `${route} @${width}: photograph must have neutral black gradient, not ocean-blue: ${result.heroOverlay}`);
+        assert.deepEqual(result.navTopics,[
+          'All Massage Services','Body Massage','Combo Specials (Foot & Back)',
+          'Couples Massage','Chair & Thai Massage','Four Hands Massage'
+        ],`${route}: navigation must promote only the 5 confirmed appointment types`);
+        if(route==='/massage-services/')assert.equal(result.serviceRows,5,'Service index must show 5 confirmed modalities');
+        assert.equal(result.snap,'none',`${route}: native scrolling; no scroll-snap trap`);
+        assert.equal(result.reducedHeroTransform,'none',`${route}: no photo motion under reduced-motion setting`);
+        if(result.stickySidebar){
+          assert.equal(result.stickySidebar,width>=871?'sticky':'static',
+            `${route} @${width}: guide must be sticky only with room to read`);
+        }
         assert.equal(result.h1,1,`${route}: H1 count`);
         assert.equal(result.main,1,`${route}: main count`);
         assert(result.description,`${route}: missing description`);
@@ -64,6 +83,45 @@ const routes = [
         await page.screenshot({path:path.join('qa-artifacts/current-architecture',`contact-${width}.png`),fullPage:true,animations:'disabled'});
       }
       await context.close();
+    }
+    // Verify the editorial photographic scroll is actually responsive, while
+    // native scrolling and the text layout remain independent of the animation.
+    const visualRoutes=['/massage-services/','/massage-services/body-massage/','/massage-menu/','/contact/'];
+    for(const width of [375,1440]){
+      const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'no-preference'});
+      for(const route of visualRoutes){
+        await page.goto(origin+route,{waitUntil:'domcontentloaded'});
+        await page.waitForTimeout(450);
+        const initial=await page.evaluate(()=>{
+          const photo=document.querySelector('.hero__background');
+          return Number(photo.style.getPropertyValue('--at-subpage-hero-scale'))||0;
+        });
+        await page.evaluate(()=>{
+          const hero=document.querySelector('main .hero');
+          window.scrollTo({top:Math.floor(hero.offsetHeight*.58),behavior:'instant'});
+        });
+        await page.waitForTimeout(330);
+        const motion=await page.evaluate(()=>{
+          const el=document.querySelector('.hero__background');
+          return {
+            scale:Number(el.style.getPropertyValue('--at-subpage-hero-scale'))||0,
+            scroll:window.scrollY,visibleText:!!document.querySelector('.hero h1'),
+            sections:document.querySelectorAll('main > section').length
+          };
+        });
+        assert(motion.scale>initial+.008,
+          `${route} @${width}: scroll should gently zoom photo only ${initial} -> ${motion.scale}`);
+        assert(motion.scroll>130,`${route} @${width}: native scroll must advance`);
+        assert(motion.visibleText&&motion.sections>=3,`${route}: scroll story and content sections remain readable`);
+        if(['/massage-services/','/massage-services/body-massage/','/contact/'].includes(route)){
+          await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+          await page.waitForTimeout(220);
+          await page.screenshot({path:path.join('qa-artifacts/current-architecture',
+            `internal-hero-${width}-${route.split('/').filter(Boolean).join('-')}.png`),
+            animations:'disabled'});
+        }
+      }
+      await page.close();
     }
   } finally {await browser.close();}
   fs.writeFileSync('qa-artifacts/current-architecture/report.json',JSON.stringify(report,null,2));
