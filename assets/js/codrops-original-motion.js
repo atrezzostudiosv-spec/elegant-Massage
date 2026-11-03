@@ -136,15 +136,19 @@
     maskMaster.to({},{duration:2.25});
   });
   if(progressST){progressST.kill();progressST=null;}
-  progressST=ScrollTrigger.create({trigger:track,start:'top top',end:'bottom bottom',onUpdate:self=>{
-    const fills=qsa('.at-mask-progress__fill',track);
-    fills.forEach((fill,i)=>{fill.style.width=`${clamp((self.progress-i/fills.length)*fills.length)*100}%`;});
+  // The chapter state must follow the *rendered* scrubbed timeline, not
+  // the raw wheel position (the latter can run ahead during fast scroll jumps).
+  maskMaster.eventCallback('onUpdate',()=>{
     const position=maskMaster.time();
     let current=0;
     for(let i=1;i<scenes.length;i++){
-      if(position >= (maskMaster.labels[`chapter-${i}-ready`]||Infinity)-.05)current=i;
+      if(position >= (maskMaster.labels[`chapter-${i}-ready`]??Infinity)-.05)current=i;
     }
     setActiveChapter(current);
+  });
+  progressST=ScrollTrigger.create({trigger:track,start:'top top',end:'bottom bottom',onUpdate:self=>{
+    const fills=qsa('.at-mask-progress__fill',track);
+    fills.forEach((fill,i)=>{fill.style.width=`${clamp((self.progress-i/fills.length)*fills.length)*100}%`;});
   }});
   setActiveChapter(0);
  }
