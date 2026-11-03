@@ -88,6 +88,34 @@ const widths=[375,390,430,768,1024,1440];
       report.push({width,...snap,errors});
       await page.close();
     }
+    // Verify that both new background photographs really zoom with native scroll.
+    const motionPage=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'no-preference'});
+    await motionPage.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+    await motionPage.waitForTimeout(2100);
+    for(const [section,image] of [
+      ['.menu-pause','.menu-pause__photo img'],
+      ['.real-place--cinematic','.real-place__scene img']
+    ]){
+      const box=await motionPage.evaluate(selector=>{
+        const el=document.querySelector(selector),r=el.getBoundingClientRect();
+        return {top:scrollY+r.top,height:r.height};
+      },section);
+      const scale=async y=>{
+        await motionPage.evaluate(pos=>window.scrollTo(0,pos),y);
+        await motionPage.waitForTimeout(1050);
+        return motionPage.evaluate(sel=>{
+          const css=getComputedStyle(document.querySelector(sel)).transform;
+          const match=css.match(/^matrix\\(([^,]+)/);
+          return {css,value:match?Number(match[1]):1};
+        },image);
+      };
+      const early=await scale(box.top-900+45);
+      const late=await scale(box.top+box.height-65);
+      assert(late.value>=early.value+.018,
+        section+' requires observable scroll-driven photo zoom: '+JSON.stringify({early,late}));
+      console.log('CLOSING-ZOOM '+section+' '+JSON.stringify({early,late}));
+    }
+    await motionPage.close();
     const reduced=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
     await reduced.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
     const staticTransforms=await reduced.evaluate(()=>[
