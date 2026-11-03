@@ -62,7 +62,11 @@
    gridZoomTimeline(columns=this.columns){
      // Same Codrops choreography; responsive amplitude prevents cramped crops on phones.
      const mobile=innerWidth<=700, tablet=innerWidth<1024;
-     const scale=mobile?1.4:(tablet?1.7:2.05), sideways=mobile?23:(tablet?32:40), vertical=mobile?26:(tablet?33:40);
+     // Limit the final separation so the grid continues framing the title
+     // instead of leaving a blank white viewport at the end of the animation.
+     const scale=mobile?1.3:(tablet?1.55:1.72);
+     const sideways=mobile?14:(tablet?19:24);
+     const vertical=mobile?12:(tablet?16:20);
      const t=gsap.timeline({defaults:{duration:1,ease:'power3.inOut'}});
      t.to(this.grid,{scale});
      t.to(columns[0],{xPercent:-sideways},'<');
@@ -72,7 +76,7 @@
    }
    // All typography now follows the scrubbed timeline, eliminating delayed callback jumps.
    animateGridOnScroll(){
-     const t=gsap.timeline({scrollTrigger:{trigger:this.block,start:'top top',end:'bottom bottom',scrub:.30,invalidateOnRefresh:true}});
+     const t=gsap.timeline({scrollTrigger:{trigger:this.block,start:'top 55%',end:'bottom bottom',scrub:.34,invalidateOnRefresh:true}});
      t.add(this.gridRevealTimeline()).add(this.gridZoomTimeline(),'-=.6');
      t.to(this.title,{yPercent:0,duration:.4,ease:'power2.inOut'},'-=.42');
      t.to(this.description,{opacity:1,pointerEvents:'auto',duration:.3,ease:'power1.out'},'<');
@@ -99,14 +103,15 @@
     gsap.set(b.top,{attr:{y:b.y-b.h,height:b.h+.01}});
     gsap.set(b.bottom,{attr:{y:b.y,height:b.h+.01}});
   });
-  maskMaster=gsap.timeline({scrollTrigger:{trigger:track,start:'top top',end:'bottom bottom',scrub:.45,anticipatePin:1,invalidateOnRefresh:true}});
+  maskMaster=gsap.timeline({scrollTrigger:{trigger:track,start:'top top',end:'bottom bottom',scrub:.65,anticipatePin:1,invalidateOnRefresh:true}});
   blindSets.slice(1).forEach((blinds,k)=>{
     const i=k+1;
     maskMaster.addLabel(`chapter-${i}`);
     maskMaster.add(openBlinds(blinds),'+=.1');
     maskMaster.add(textOut(content[i-1]),'<');
     maskMaster.add(textIn(content[i]),'-=.35');
-    maskMaster.to({},{duration:.35});
+    // A short photographic hold gives each treatment time to register.
+    maskMaster.to({},{duration:.5});
   });
   if(progressST){progressST.kill();progressST=null;}
   progressST=ScrollTrigger.create({trigger:track,start:'top top',end:'bottom bottom',onUpdate:self=>{
