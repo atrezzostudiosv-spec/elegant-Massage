@@ -19,6 +19,11 @@ const widths=[375,390,430,768,1024,1440];
    active:document.documentElement.classList.contains('at-original-active'),
    gridActive:document.documentElement.classList.contains('at-grid-active'),
    blindRects:document.querySelectorAll('.at-mask-layer mask g rect').length,
+   themePresent:!!document.querySelector('link[href$="atrezzo-agate-palette.css"]'),
+   bodyColor:getComputedStyle(document.body).backgroundColor,
+   headerBook:(()=>{let e=document.querySelector('.glass-header__book');return {background:getComputedStyle(e).backgroundColor,text:getComputedStyle(e).color};})(),
+   realPlace:getComputedStyle(document.querySelector('.real-place')).backgroundColor,
+   footerColor:getComputedStyle(document.querySelector('.footer')).backgroundColor,
   }));
   // Accessibility and scroll-control regression after the November 3 fix.
   assert.equal(await page.locator('.at-grid__button').count(),0,'Remove redundant Discover Your Massage grid CTA');
@@ -44,6 +49,11 @@ const widths=[375,390,430,768,1024,1440];
      await page.evaluate(()=>scrollTo(0,0));
    }
   }
+  assert(state.themePresent,width+': agate palette must load');
+  assert.equal(state.bodyColor,'rgb(255, 255, 255)',width+': Home white paper');
+  assert.deepEqual(state.headerBook,{background:'rgb(83, 203, 217)',text:'rgb(37, 68, 96)'},width+': aqua header CTA with ocean text');
+  assert.equal(state.realPlace,'rgb(221, 235, 200)',width+': natural lime authentic location');
+  assert.equal(state.footerColor,'rgb(37, 68, 96)',width+': ocean footer');
   assert.equal(state.grid,12,'12 authentic Sticky Grid items');
   assert.equal(state.chapters,5,'Five massage chapters');
   assert.equal(state.masks,5,'Unique SVG masks');
