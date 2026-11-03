@@ -78,7 +78,7 @@ const widths=[375,390,430,768,1024,1440];
         visibleCount:photos.filter(el=>{const r=el.getBoundingClientRect();return el.naturalWidth>0 && r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth}).length
       };
    });
-   if(width===390||width===768)console.log('MID-GRID-DIAG '+width+' '+JSON.stringify(diagnostic));
+   if(width<=768)console.log('MID-GRID-DIAG '+width+' '+JSON.stringify(diagnostic));
    assert(diagnostic.visibleCount>0,width+': photographs must be visibly loaded at mid-scroll');
    await page.screenshot({path:`qa-artifacts/codrops-motion/${width}-grid-mid.png`,animations:'disabled'});
    await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(240);
