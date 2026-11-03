@@ -105,8 +105,8 @@ const widths=[375,390,430,768,1024,1440];
         await motionPage.waitForTimeout(1050);
         return motionPage.evaluate(sel=>{
           const css=getComputedStyle(document.querySelector(sel)).transform;
-          const match=css.match(/^matrix\\(([^,]+)/);
-          return {css,value:match?Number(match[1]):1};
+          const value=css.startsWith('matrix(')?Number(css.slice(7).split(',')[0]):1;
+          return {css,value};
         },image);
       };
       const early=await scale(box.top-900+45);
