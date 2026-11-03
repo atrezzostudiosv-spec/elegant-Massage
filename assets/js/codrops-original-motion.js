@@ -179,7 +179,7 @@
     const position=maskMaster.time();
     let current=0;
     for(let i=1;i<scenes.length;i++){
-      if(position >= (maskMaster.labels[`chapter-${i}-ready`]??Infinity)-.55)current=i;
+      if(position >= (maskMaster.labels[`chapter-${i}-ready`]??Infinity)-1.15)current=i;
     }
     setActiveChapter(current);
   });
@@ -212,7 +212,11 @@
      if(!initialHashHandled){
        initialHashHandled=true;
        const index=scenes.findIndex(scene=>'#'+scene.id===location.hash);
-       if(index>=0)originalJump(index);
+       if(index>=0){
+         originalJump(index);
+         // Some browsers restore the old scroll position after this frame.
+         setTimeout(()=>{if(location.hash==='#'+scenes[index].id)originalJump(index);},400);
+       }
      }
    });
  }

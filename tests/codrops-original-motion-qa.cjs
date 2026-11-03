@@ -186,17 +186,26 @@ const widths=[375,390,430,768,1024,1440];
     const pos=await page.evaluate(()=>{
       const active=document.querySelector('.chapter[aria-hidden="false"]');
       const shade=active?.querySelector('.chapter__shade');
+      const grade=active?.querySelector('.at-image-grade--mobile');
       return {scroll:scrollY,top:document.getElementById('cinema-track').offsetTop,
         active:active?.id,clip:getComputedStyle(active.querySelector('.chapter__content')).clipPath,
-        backdrop:getComputedStyle(active).backgroundColor,
-        shadeHeight:shade?.getBoundingClientRect().height,viewportHeight:innerHeight};
+        backdrop:getComputedStyle(active).backgroundColor,shadeDisplay:getComputedStyle(shade).display,
+        gradeHeight:grade?.getBoundingClientRect().height,viewportHeight:innerHeight};
     });
     assert(pos.scroll>=pos.top-100&&pos.active==='chair-thai'&&pos.clip.startsWith('inset(0%'),
       'selector should jump to a readable Chair chapter: '+JSON.stringify(pos));
     if(width===390){
       assert.equal(pos.backdrop,'rgba(0, 0, 0, 0)','mobile chapters cannot cover previous SVG images');
-      assert(Math.abs(pos.shadeHeight-pos.viewportHeight)<1,'mobile shade must cover full viewport: '+JSON.stringify(pos));
+      assert.equal(pos.shadeDisplay,'none','the old independent grade cannot appear late');
+      assert(Math.abs(pos.gradeHeight-pos.viewportHeight)<1,'masked mobile grade must cover full viewport: '+JSON.stringify(pos));
       await page.screenshot({path:'qa-artifacts/codrops-motion/390-chair-readable.png'});
+      await page.goto('http://127.0.0.1:8765/#foot-combo',{waitUntil:'domcontentloaded'});
+      await page.waitForTimeout(2900);
+      const direct=await page.evaluate(()=>({active:document.querySelector('.chapter[aria-hidden="false"]')?.id,
+        clip:getComputedStyle(document.querySelector('#foot-combo .chapter__content')).clipPath,
+        booking:document.querySelector('#foot-combo .chapter__book')?.getAttribute('href')}));
+      assert(direct.active==='foot-combo'&&direct.clip.startsWith('inset(0%')&&direct.booking?.startsWith('https://elegantmassage.setmore.com/'),
+        'direct chapter URLs must land on a readable, interactive treatment: '+JSON.stringify(direct));
     }
   }
   assert(!errors.length,`JS errors at ${width}: ${errors.join(' | ')}`);
