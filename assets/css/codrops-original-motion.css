@@ -16,7 +16,7 @@
 .at-grid__image{width:100%;height:100%;object-fit:cover;display:block}
 /* Source three-column reveal; separation remains within the viewport to avoid empty frames. */
 @media(min-width:1024px) and (min-height:650px) and (prefers-reduced-motion:no-preference){
- .at-grid-active .at-grid{height:230vh;height:230svh}
+ .at-grid-active .at-grid{height:275vh;height:275svh}
  .at-grid-active .at-grid__wrapper{position:sticky;top:0;height:100vh;min-height:0;padding:0 var(--gutter)}
  .at-grid-active .at-grid__content{height:100vh;min-height:0;width:100%;max-width:none;gap:0}
  .at-grid-active .at-grid__description{margin-top:24px}
@@ -30,7 +30,7 @@
 .at-mask-layer{display:none}
 .at-mask-progress{display:none}
 @media(min-width:1024px) and (min-height:650px) and (prefers-reduced-motion:no-preference){
- .at-original-active .cinema-track{height:475vh;height:475svh;position:relative;isolation:auto;overflow:visible}
+ .at-original-active .cinema-track{height:725vh;height:725svh;position:relative;isolation:auto;overflow:visible}
  .at-original-active .at-mask-stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#171719;isolation:isolate}
  .at-original-active .chapter{position:absolute;inset:0;width:100%;height:100%;min-height:0;overflow:hidden;display:flex;align-items:flex-end;isolation:auto;clip-path:none!important;pointer-events:none}
  .at-original-active .chapter__image{display:none}
@@ -66,7 +66,7 @@ html{scroll-behavior:auto}
 /* Active source Sticky Grid across desktop, tablet and mobile. Only the visual
    timeline eases; wheel, trackpad, touch and keyboard remain entirely native. */
 @media (min-height:540px) and (prefers-reduced-motion:no-preference) and (max-width:1023px) {
- .at-grid-active .at-grid{height:195vh;height:195svh}
+ .at-grid-active .at-grid{height:220vh;height:220svh}
  .at-grid-active .at-grid__wrapper{
    position:sticky;top:0;width:100%;height:100vh;height:100svh;min-height:0;
    display:grid;place-items:center;overflow:hidden;padding:0 var(--gutter)
@@ -86,7 +86,7 @@ html{scroll-behavior:auto}
  .at-grid-active .at-grid__title{font-size:clamp(4.6rem,9vw,7rem)}
 }
 @media (min-height:540px) and (prefers-reduced-motion:no-preference) and (max-width:700px){
- .at-grid-active .at-grid{height:175vh;height:175svh}
+ .at-grid-active .at-grid{height:195vh;height:195svh}
  .at-grid-active .at-grid__wrapper{padding:0 12px}
  .at-grid-active .at-grid__content{padding:0 12px}
  .at-grid-active .at-grid__gallery{width:min(94vw,450px)}
