@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 /* ATREZZO / Elegant Massage — Agate colour system · 2026-11-03
    Sampled from the client's supplied agate palette. Keep photography truthful;
    theme changes only UI surfaces, text, controls, rules and overlays.
@@ -71,8 +72,8 @@ summary:focus-visible, input:focus-visible, textarea:focus-visible {
 .touch-home .chapter__book:hover {background:var(--agate-mint);border-color:var(--agate-mint);color:var(--agate-ocean)}
 .touch-home .intro {background:var(--agate-ocean)}
 .touch-home .intro__scrim {
-  background:linear-gradient(90deg,rgba(10,28,45,.72),rgba(13,39,56,.35) 58%,rgba(15,37,54,.44)),
-             linear-gradient(0deg,rgba(8,23,36,.66),transparent 29%,transparent 69%,rgba(8,25,40,.3));
+  background:linear-gradient(90deg,rgba(0,0,0,.76),rgba(0,0,0,.37) 58%,rgba(0,0,0,.22)),
+             linear-gradient(0deg,rgba(0,0,0,.68),transparent 29%,transparent 69%,rgba(0,0,0,.32));
 }
 .touch-home .eyebrow--light {color:var(--agate-mint)}
 .touch-home .intro__content > p:not(.eyebrow) {color:var(--agate-white)}
@@ -224,3 +225,13 @@ body:not(.touch-home) .em-place .em-link {color:var(--agate-aqua)}
 /* Visual stacking fix: when returning to scrollY=0, the incoming Sticky Grid
    must not bleed over the introductory film before its section begins. */
 .touch-home .intro {z-index:3}
+
+/* Shared typography adapted from the Thai Massage visual specification. */
+:root{--serif:'Playfair Display',Georgia,serif;--sans:'Open Sans',Arial,Helvetica,sans-serif}
+.touch-home,body:not(.touch-home){font-family:var(--sans)}
+.touch-home :is(h1,h2,h3,.wordmark span,.footer__brand,.at-grid__title){font-family:var(--serif)}
+body:not(.touch-home) :is(h1,h2,h3,.brand,.footer-brand,.site-footer h3){font-family:var(--serif)}
+.touch-home .intro h1{font-size:clamp(3.15rem,9vw,9rem);line-height:.96;letter-spacing:-.055em}
+.touch-home .at-grid__title{letter-spacing:-.055em;line-height:1.05}
+.touch-home .wordmark span{font-size:clamp(1.45rem,2vw,1.85rem);font-style:italic}
+@media(max-width:700px){.touch-home .intro h1{font-size:clamp(3.05rem,11.2vw,4.8rem)}}
