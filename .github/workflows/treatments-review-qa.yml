@@ -1,0 +1,37 @@
+name: Elegant Massage — Treatment Pages Review
+on:
+  pull_request:
+    paths:
+      - 'massage-services/**'
+      - 'assets/css/treatments-editorial-2026.css'
+      - 'tests/treatment-editorial-qa.cjs'
+      - '.github/workflows/treatments-review-qa.yml'
+  workflow_dispatch:
+jobs:
+  treatment-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Serve treatment pages and run 5 x 8 editorial browser checks
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/elegant-treatment-http.log 2>&1 &
+          sleep 2
+          node tests/treatment-editorial-qa.cjs
+      - name: Upload full-page screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elegant-massage-treatment-pages-review
+          path: qa-artifacts/treatment-pages-2026/
+          if-no-files-found: warn
+          retention-days: 10
