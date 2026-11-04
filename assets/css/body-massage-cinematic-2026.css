@@ -17,7 +17,7 @@ body[data-page="body"] .em-body .em-kicker{
 }
 body[data-page="body"] .em-body a:focus-visible,
 body[data-page="body"] .em-body button:focus-visible{
-  outline:2px solid #95d9da;outline-offset:4px;
+  outline:2px solid var(--agate-aqua);outline-offset:4px;
 }
 body[data-page="body"] .em-body .em-book{
   display:inline-flex;justify-content:center;align-items:center;gap:2.3rem;
@@ -145,6 +145,7 @@ body[data-page="body"] .em-body .em-book--ghost:hover{
   linear-gradient(0deg,rgba(0,0,0,.20),transparent 45%);
 }
 .em-body-cta__inner{width:100%;max-width:850px}
+.em-body-cta .em-kicker,.em-body-cta h2 em{color:var(--agate-mint)}
 .em-body-cta h2{color:#fff;font-size:clamp(4.9rem,8vw,9rem);line-height:.93;max-width:12ch;margin:20px 0}
 .em-body-cta p:not(.em-kicker){font-size:clamp(1.03rem,1.35vw,1.19rem);color:var(--agate-white);line-height:1.7;max-width:43ch}
 .em-body-cta__actions{display:flex;gap:15px;flex-wrap:wrap;margin-top:36px}
@@ -177,7 +178,7 @@ body[data-page="body"] .em-body .em-book--ghost:hover{
   display:grid;place-items:center;background:var(--agate-white);color:var(--agate-ocean);
   font-size:1.35rem;cursor:pointer;
 }
-.em-body-modal__close:hover{background:#fff}
+.em-body-modal__close:hover{background:var(--agate-lime)}
 @media(max-width:870px){
   .em-body-hero{min-height:82svh;padding:155px var(--gutter) 85px}
   .em-body-hero h1{font-size:clamp(4.2rem,10.4vw,7rem)}
