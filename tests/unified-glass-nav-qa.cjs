@@ -35,7 +35,7 @@ const labels=['Treatments','Menu & Prices','About','Gallery','Contact'];
             top:rect(s.head),logo:rect(s.logo),toggle:rect(s.toggle),
             bg:hcss.backgroundColor,blur:hcss.backdropFilter,
             panelVisible:ncss.display!=='none',
-            nav:[...nav.querySelectorAll(':scope > a')].map(x=>x.textContent.trim()),
+            nav:[...nav.children].map(x=>x.matches('details')?x.querySelector('summary').textContent.trim():x.textContent.trim()),
             headerBookVisible:bcss.display!=='none',
             toggleVisible:getComputedStyle(toggle).display!=='none',
             dockCount:document.querySelectorAll('.em-mobile-booking').length,
