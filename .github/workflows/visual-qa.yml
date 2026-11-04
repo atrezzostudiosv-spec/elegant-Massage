@@ -25,6 +25,7 @@ jobs:
           node tests/codrops-original-motion-qa.cjs
           node tests/home-closing-sections-qa.cjs
           node tests/current-architecture-qa.cjs
+          node tests/unified-glass-nav-qa.cjs
       - name: Upload screenshots and browser evidence
         if: always()
         uses: actions/upload-artifact@v4
