@@ -42,7 +42,7 @@ const routes = [
           headerCTA:(()=>{const x=document.querySelector('.site-header .header-cta');return x?{background:getComputedStyle(x).backgroundColor,color:getComputedStyle(x).color}:null})(),
           footerBg:(()=>{const x=document.querySelector('.site-footer');return x?getComputedStyle(x).backgroundColor:null})(),
           heroOverlay:getComputedStyle(document.querySelector('.hero'),'::before').backgroundImage,
-          navTopics:[...document.querySelectorAll('.navigation>a')].map(a=>a.textContent.trim()),
+          navTopics:[...document.querySelector('.navigation').children].map(x=>x.matches('details')?x.querySelector('summary').textContent.trim():x.textContent.trim()),
           serviceRows:document.querySelectorAll('.service-row').length,
           snap:getComputedStyle(document.documentElement).scrollSnapType,
           reducedHeroTransform:getComputedStyle(document.querySelector('.hero__background')).transform,
