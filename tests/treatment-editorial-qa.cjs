@@ -79,7 +79,7 @@ fs.mkdirSync(out,{recursive:true});
     await page.locator('.treatment-hero__discover').click();
     await page.waitForTimeout(100);
     const target=await page.evaluate(()=>Math.abs(document.querySelector('#treatment-intro').getBoundingClientRect().top));
-    assert(target<Math.max(300,innerHeight*.55),slug+' intro anchor is usable '+target);
+    assert(target<Math.max(300,900*.55),slug+' intro anchor is usable '+target);
     await page.evaluate(()=>scrollTo(0,0));
     if(width<=870){
       const menu=page.locator('.site-header .toggle');
