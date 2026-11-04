@@ -47,6 +47,40 @@ async function place(page,selector){
    assert(state.noindex?.includes('noindex'),'Demo must remain noindex');
    assert.equal(state.navCount,5,'Approved five Treatments nav links');
    assert(state.dockCount===1,'No duplicate mobile dock');
+   // Current published Home AGATE palette takes precedence over the older
+   // Paper/Ink/Garnet concept once used for this experimental route.
+   const aesthetics=await page.evaluate(()=>{
+     const css=sel=>getComputedStyle(document.querySelector(sel));
+     const r=document.querySelector('[data-em-journey-chapter]:nth-child(2) .em-journey__chapter-inner').getBoundingClientRect();
+     return {
+       ocean:getComputedStyle(document.documentElement).getPropertyValue('--agate-ocean').trim(),
+       aqua:getComputedStyle(document.documentElement).getPropertyValue('--agate-aqua').trim(),
+       introBg:css('.em-body-intro').backgroundColor,
+       introH2:css('.em-body-intro h2').color,
+       bookBg:css('.em-body-hero .em-book').backgroundColor,
+       bookFg:css('.em-body-hero .em-book').color,
+       headingFont:css('.em-body-hero h1').fontFamily,
+       bodyFont:css('.em-body').fontFamily,
+       chapter2Left:r.left,
+       heroScrim:css('.em-body-hero__shade').backgroundImage,
+       journeyScrim:css('.em-journey__scrim').backgroundImage,
+       ctaScrim:css('.em-body-cta__shade').backgroundImage,
+       dialogBg:css('#body-treatment-dialog').backgroundColor
+     };
+   });
+   assert.equal(aesthetics.ocean,'#254460','Home Ocean design token retained');
+   assert.equal(aesthetics.aqua,'#53CBD9','Home Aqua design token retained');
+   assert.equal(aesthetics.introBg,'rgb(255, 255, 255)','Use Home white surface for editorial pause');
+   assert.equal(aesthetics.introH2,'rgb(37, 68, 96)','Use Home Ocean on copy headings');
+   assert.equal(aesthetics.bookBg,'rgb(83, 203, 217)','Home Aqua reservation CTA');
+   assert.equal(aesthetics.bookFg,'rgb(37, 68, 96)','High contrast Ocean text on Aqua');
+   assert(aesthetics.headingFont.includes('Playfair Display'),'Home approved headline type');
+   assert(aesthetics.bodyFont.includes('Open Sans'),'Home approved body type');
+   assert(aesthetics.chapter2Left<=width*.16,'All scroll narration stays at LEFT at '+width+': '+aesthetics.chapter2Left);
+   assert(aesthetics.journeyScrim.includes('rgba(0, 0, 0, 0.66)'),'Lighter neutral-black left-edge scrim');
+   assert(aesthetics.heroScrim.includes('rgba(0, 0, 0, 0.68)'),'Lighter hero overlay');
+   assert(aesthetics.ctaScrim.includes('rgba(0, 0, 0, 0.66)'),'Subtle final photo CTA overlay');
+   assert.equal(aesthetics.dialogBg,'rgb(255, 255, 255)','Home white background modal');
    assert(await page.locator('.em-body-hero__image').isVisible(),'Full background hero');
    for(const img of await page.locator('.em-body img').all()){
      const src=await img.getAttribute('src');
