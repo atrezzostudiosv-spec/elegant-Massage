@@ -114,6 +114,42 @@ async function place(page,selector){
        const photoIdx=await page.locator('[data-em-journey-photo]').evaluateAll(n=>n.findIndex(x=>x.classList.contains('is-active')));
        assert.equal(photoIdx,i,'Photo synchronized to chapter '+i+' width '+width);
      }
+     // The Home's key motion holds editorial copy on screen while the
+     // document and full-bleed photograph continue their native scroll.
+     // This is separate from the existing background-change assertions.
+     if(width>=871){
+       for(let index=0;index<3;index++){
+         const hold=await page.evaluate(async i=>{
+           const article=document.querySelectorAll('[data-em-journey-chapter]')[i];
+           const text=article.querySelector('.em-journey__chapter-inner');
+           const parentTop=scrollY+article.getBoundingClientRect().top;
+           async function capture(offset){
+             scrollTo({top:parentTop+innerHeight*offset,behavior:'instant'});
+             await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+             const r=text.getBoundingClientRect();
+             return {top:r.top,bottom:r.bottom,left:r.left,visible:r.top>=0&&r.bottom<=innerHeight+3,
+               scroll:scrollY,style:getComputedStyle(text).position};
+           }
+           return {first:await capture(.45),second:await capture(.93)};
+         },index);
+         assert.equal(hold.first.style,'sticky','Text must actually be sticky on desktop');
+         assert(hold.second.scroll-hold.first.scroll>400,
+           'Native page scroll should travel while text holds: '+JSON.stringify(hold));
+         assert(Math.abs(hold.second.top-hold.first.top)<3,
+           'Pinned text must hold its vertical position throughout chapter '+index+' at '+width+': '+JSON.stringify(hold));
+         assert(hold.first.visible&&hold.second.visible,
+           'Copy remains fully visible while scene progresses at '+width+': '+JSON.stringify(hold));
+       }
+       if(width===1440){
+         await page.evaluate(()=>{
+           const node=document.querySelectorAll('[data-em-journey-chapter]')[1];
+           const top=scrollY+node.getBoundingClientRect().top;
+           scrollTo({top:top+innerHeight*.84,behavior:'instant'});
+         });
+         await page.waitForTimeout(180);
+         await page.screenshot({path:path.join(output,'body-massage-1440-text-hold.png'),animations:'disabled'});
+       }
+     }
      await place(page,'[data-em-journey-chapter]:first-child');
      await page.waitForTimeout(150);
      assert.equal(await page.locator('[data-em-journey-photo]').evaluateAll(n=>n.findIndex(x=>x.classList.contains('is-active'))),0,'Reverse scroll resets image');
