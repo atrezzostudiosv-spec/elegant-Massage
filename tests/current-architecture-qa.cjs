@@ -41,11 +41,12 @@ const routes = [
           themeOcean:getComputedStyle(document.documentElement).getPropertyValue('--agate-ocean').trim(),
           headerCTA:(()=>{const x=document.querySelector('.site-header .header-cta');return x?{background:getComputedStyle(x).backgroundColor,color:getComputedStyle(x).color}:null})(),
           footerBg:(()=>{const x=document.querySelector('.site-footer');return x?getComputedStyle(x).backgroundColor:null})(),
-          heroOverlay:getComputedStyle(document.querySelector('.hero'),'::before').backgroundImage,
+          heroOverlay:(()=>{const shade=document.querySelector('.em-body-hero__shade');return shade?getComputedStyle(shade).backgroundImage:getComputedStyle(document.querySelector('.hero'),'::before').backgroundImage})(),
           navTopics:[...document.querySelector('.navigation').children].map(x=>x.matches('details')?x.querySelector('summary').textContent.trim():x.textContent.trim()),
           serviceRows:document.querySelectorAll('.service-row').length,
           snap:getComputedStyle(document.documentElement).scrollSnapType,
-          reducedHeroTransform:getComputedStyle(document.querySelector('.hero__background')).transform,
+          reducedHeroTransform:(()=>{const el=document.querySelector('.hero__background, .em-body-hero__image');return el?getComputedStyle(el).transform:null})(),
+          bodyCinematic:!!document.querySelector('.em-body-hero, .em-journey'),
           stickySidebar:(()=>{const x=document.querySelector('.content-layout aside');return x?getComputedStyle(x).position:null})(),
           mobileHeader:(()=>{
             const bounds=sel=>{const el=document.querySelector(sel);if(!el)return null;const r=el.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width};};
@@ -69,6 +70,7 @@ const routes = [
         ],`${route}: navigation must mirror Home's five primary links`);
         if(route==='/massage-services/')assert.equal(result.serviceRows,5,'Service index must show 5 confirmed modalities');
         assert.equal(result.snap,'none',`${route}: native scrolling; no scroll-snap trap`);
+        if(route==='/massage-services/body-massage/')assert(result.bodyCinematic,`${route}: cinematic scene structure must be present`);
         assert.equal(result.reducedHeroTransform,'none',`${route}: no photo motion under reduced-motion setting`);
         if(width<=430){
           const {brand,toggle}=result.mobileHeader;
@@ -124,27 +126,53 @@ const routes = [
       for(const route of visualRoutes){
         await page.goto(origin+route,{waitUntil:'domcontentloaded'});
         await page.waitForTimeout(450);
-        const initial=await page.evaluate(()=>{
-          const photo=document.querySelector('.hero__background');
-          return Number(photo.style.getPropertyValue('--at-subpage-hero-scale'))||0;
-        });
-        await page.evaluate(()=>{
-          const hero=document.querySelector('main .hero');
-          window.scrollTo({top:Math.floor(hero.offsetHeight*.58),behavior:'instant'});
-        });
-        await page.waitForTimeout(330);
-        const motion=await page.evaluate(()=>{
-          const el=document.querySelector('.hero__background');
-          return {
-            scale:Number(el.style.getPropertyValue('--at-subpage-hero-scale'))||0,
-            scroll:window.scrollY,visibleText:!!document.querySelector('.hero h1'),
-            sections:document.querySelectorAll('main > section').length
-          };
-        });
-        assert(motion.scale>initial+.008,
-          `${route} @${width}: scroll should gently zoom photo only ${initial} -> ${motion.scale}`);
-        assert(motion.scroll>130,`${route} @${width}: native scroll must advance`);
-        assert(motion.visibleText&&motion.sections>=3,`${route}: scroll story and content sections remain readable`);
+        if(route==='/massage-services/body-massage/'){
+          // Body Massage is an expressly approved, independent full-bleed
+          // photographic narrative. It does not retain the old .hero node.
+          assert.equal(await page.locator('[data-em-journey-chapter]').count(),3,
+            'Body cinematic route must contain three full-screen scenes');
+          const motion=await page.evaluate(()=>{
+            const chapter=document.querySelectorAll('[data-em-journey-chapter]')[1];
+            const r=chapter.getBoundingClientRect();
+            scrollTo({top:scrollY+r.top+(r.height-innerHeight)/2,behavior:'instant'});
+            return {scroll:scrollY,sections:document.querySelectorAll('main > section').length,
+              text:!!document.querySelector('.em-body-hero h1')};
+          });
+          await page.waitForTimeout(370);
+          assert(motion.scroll>130&&motion.text&&motion.sections>=4,
+            `${route} @${width}: native narrative scroll, hero text and sections preserved`);
+          if(width>=871){
+            const active=await page.locator('[data-em-journey-photo]').evaluateAll(nodes=>
+              nodes.findIndex(el=>el.classList.contains('is-active')));
+            assert.equal(active,1,`${route} @${width}: second chapter must activate its full-screen photo`);
+          }else{
+            const bg=await page.locator('[data-em-journey-chapter]').nth(1).evaluate(el=>
+              getComputedStyle(el,'::before').backgroundImage);
+            assert(bg.includes('.webp'),`${route} @${width}: mobile chapter should use full background photography`);
+          }
+        }else{
+          const initial=await page.evaluate(()=>{
+            const photo=document.querySelector('.hero__background');
+            return Number(photo.style.getPropertyValue('--at-subpage-hero-scale'))||0;
+          });
+          await page.evaluate(()=>{
+            const hero=document.querySelector('main .hero');
+            window.scrollTo({top:Math.floor(hero.offsetHeight*.58),behavior:'instant'});
+          });
+          await page.waitForTimeout(330);
+          const motion=await page.evaluate(()=>{
+            const el=document.querySelector('.hero__background');
+            return {
+              scale:Number(el.style.getPropertyValue('--at-subpage-hero-scale'))||0,
+              scroll:window.scrollY,visibleText:!!document.querySelector('.hero h1'),
+              sections:document.querySelectorAll('main > section').length
+            };
+          });
+          assert(motion.scale>initial+.008,
+            `${route} @${width}: scroll should gently zoom photo only ${initial} -> ${motion.scale}`);
+          assert(motion.scroll>130,`${route} @${width}: native scroll must advance`);
+          assert(motion.visibleText&&motion.sections>=3,`${route}: scroll story and content sections remain readable`);
+        }
         if(['/massage-services/','/massage-services/body-massage/','/contact/'].includes(route)){
           await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
           await page.waitForTimeout(220);
