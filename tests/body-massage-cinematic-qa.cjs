@@ -60,8 +60,8 @@ async function place(page,selector){
    const dialog=page.locator('#body-treatment-dialog');
    assert(await dialog.evaluate(x=>x.open),'Native modal opens');
    assert(await page.locator('#body-dialog-title').isVisible(),'Dialog title visible');
-   assert((await dialog.innerText()).includes('Previously listed appointment lengths'),'Duration provenance clear');
-   assert((await dialog.innerText()).includes('live booking schedule'),'No unverified current price');
+   assert((await dialog.textContent()).includes('Previously listed appointment lengths'),'Duration provenance clear');
+   assert((await dialog.textContent()).includes('live booking schedule'),'No unverified current price');
    assert.equal(await dialog.locator('.em-body-modal__book').getAttribute('href'),
       'https://elegantmassage.setmore.com/#services','Booking URL unchanged');
    await page.keyboard.press('Escape');
