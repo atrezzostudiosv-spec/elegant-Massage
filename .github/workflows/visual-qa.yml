@@ -26,6 +26,7 @@ jobs:
           node tests/home-closing-sections-qa.cjs
           node tests/current-architecture-qa.cjs
           node tests/unified-glass-nav-qa.cjs
+          node tests/treatments-menu-hover-qa.cjs
       - name: Upload screenshots and browser evidence
         if: always()
         uses: actions/upload-artifact@v4
