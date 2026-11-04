@@ -1,0 +1,243 @@
+/* ATREZZO — Unified smoked-glass navigation, 2026-11-04.
+   Scope: header/menu and mobile conversion dock only. No changes to
+   photographic scroll timelines, images, treatments, or page architecture. */
+:root{
+  --em-glass:rgba(21,43,57,.76);
+  --em-glass-scrolled:rgba(22,44,58,.89);
+  --em-glass-dropdown:rgba(18,37,51,.96);
+  --em-glass-edge:rgba(239,250,250,.30);
+  --em-glass-shadow:0 17px 48px rgba(8,20,31,.25),inset 0 1px 0 rgba(255,255,255,.14);
+}
+
+/* Desktop and tablet: matching floating glass panels in every page. */
+.touch-home .glass-header,
+body[data-page] .site-header,
+body[data-page] .site-header:not(.scrolled):not(.menu-open),
+body[data-page] .site-header.scrolled,
+body[data-page] .site-header.menu-open {
+  position:fixed;
+  top:14px;left:var(--gutter);right:var(--gutter);bottom:auto;width:auto;
+  border:1px solid var(--em-glass-edge);
+  border-radius:10px;
+  background:var(--em-glass);
+  -webkit-backdrop-filter:blur(28px) saturate(125%);
+  backdrop-filter:blur(28px) saturate(125%);
+  color:#fff;
+  box-shadow:var(--em-glass-shadow);
+}
+.touch-home .glass-header.is-scrolled,
+body[data-page] .site-header.scrolled,
+body[data-page] .site-header.menu-open{
+  background:var(--em-glass-scrolled);
+  box-shadow:0 20px 55px rgba(8,20,31,.28),inset 0 1px 0 rgba(255,255,255,.14);
+}
+body[data-page] .site-header{z-index:100}
+body[data-page] .site-header.em-header-hidden{
+  transform:translateY(calc(-100% - 24px));
+}
+body[data-page] .header-row{
+  min-height:76px;
+  padding:0 clamp(17px,2.5vw,38px);
+  display:grid;
+  grid-template-columns:minmax(168px,1fr) auto minmax(125px,1fr);
+  align-items:center;gap:clamp(12px,1.7vw,24px);
+}
+body[data-page] .site-header .brand{
+  display:flex;flex-direction:column;align-items:flex-start;
+  font:italic 400 clamp(1.55rem,2.1vw,1.95rem)/.94 'Playfair Display',Georgia,serif;
+  letter-spacing:-.047em;white-space:nowrap;min-width:0;color:#fff;text-decoration:none;
+}
+body[data-page] .site-header .brand small{
+  margin-top:7px;
+  font:600 .47rem/1.2 'Open Sans',Arial,sans-serif;
+  letter-spacing:.20em;text-transform:uppercase;color:var(--agate-mint);
+}
+body[data-page] .site-header .navigation{
+  position:static;display:flex;align-items:center;flex-direction:row;
+  gap:clamp(14px,1.8vw,30px);
+  padding:0;max-height:none;overflow:visible;box-shadow:none;
+  background:transparent;color:#fff;
+}
+body[data-page] .site-header .navigation>a{
+  display:inline-flex;align-items:center;
+  padding:0;border:0;
+  color:rgba(255,255,255,.95);
+  text-decoration:none;
+  font:.75rem/1.4 'Open Sans',Arial,sans-serif;
+  letter-spacing:0;text-transform:none;font-weight:500;white-space:nowrap;
+  transition:color .2s ease;
+}
+body[data-page] .site-header .navigation>a:hover,
+body[data-page] .site-header .navigation>a:focus-visible{color:var(--agate-aqua)}
+body[data-page] .site-header .header-cta{
+  justify-self:end;
+  min-height:43px;display:inline-flex;align-items:center;justify-content:center;
+  gap:19px;padding:11px 17px;border-radius:3px;
+  background:var(--agate-aqua);border:1px solid var(--agate-aqua);
+  color:var(--agate-ocean);
+  font:700 .79rem/1.4 'Open Sans',Arial,sans-serif;
+  letter-spacing:0;text-transform:none;white-space:nowrap;
+}
+body[data-page] .site-header .header-cta:hover{
+  background:var(--agate-mint);border-color:var(--agate-mint);color:var(--agate-ocean);
+}
+body[data-page] .site-header .toggle{display:none}
+body[data-page] .site-header .toggle span{
+  display:block;width:23px;height:1.5px;background:currentColor;
+  margin:5px auto;transition:transform .23s ease,opacity .18s ease;
+}
+body[data-page] .site-header .toggle::before{content:none;display:none}
+
+@media (min-width:871px) and (max-width:1180px){
+  body[data-page] .header-row{
+    grid-template-columns:minmax(158px,1fr) auto auto;gap:14px;
+    padding:0 19px;
+  }
+  body[data-page] .site-header .brand{font-size:clamp(1.38rem,1.85vw,1.7rem)}
+  body[data-page] .site-header .navigation{gap:clamp(10px,1.15vw,18px)}
+  body[data-page] .site-header .navigation>a{font-size:.71rem}
+  body[data-page] .site-header .header-cta{padding:11px 13px}
+}
+
+/* A single mobile header: wordmark + menu control; booking belongs below. */
+@media (max-width:870px){
+  .touch-home .glass-header,
+  body[data-page] .site-header,
+  body[data-page] .site-header:not(.scrolled):not(.menu-open),
+  body[data-page] .site-header.scrolled,
+  body[data-page] .site-header.menu-open{
+    top:10px;left:14px;right:14px;width:auto;
+    border-radius:10px;
+    background:var(--em-glass);
+  }
+  .touch-home .glass-header__inner,
+  body[data-page] .header-row{
+    min-height:63px;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:11px;align-items:center;padding:0 15px;
+  }
+  .touch-home .glass-header__book,
+  body[data-page] .site-header .header-cta{
+    display:none!important;
+  }
+  .touch-home .wordmark span,
+  body[data-page] .site-header .brand{
+    font-size:clamp(1.45rem,3.7vw,1.83rem);
+    line-height:.95;white-space:nowrap;
+    min-width:0;
+  }
+  .touch-home .wordmark small,
+  body[data-page] .site-header .brand small{
+    font-size:.42rem;letter-spacing:.16em;margin-top:6px;
+  }
+  .touch-home .menu-toggle,
+  body[data-page] .site-header .toggle{
+    grid-column:2;justify-self:end;
+    display:block;position:relative;flex:0 0 44px;
+    width:44px;height:44px;min-width:44px;
+    padding:9px;border:1px solid transparent;border-radius:5px;
+    background:transparent;color:#fff;
+    font-size:0;letter-spacing:0;cursor:pointer;
+  }
+  body[data-page] .site-header .toggle span{
+    width:24px;height:1.5px;margin:6px auto;
+  }
+  body[data-page] .site-header .toggle[aria-expanded="true"] span:first-child{
+    transform:translateY(7.5px) rotate(45deg);
+  }
+  body[data-page] .site-header .toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+  body[data-page] .site-header .toggle[aria-expanded="true"] span:last-child{
+    transform:translateY(-7.5px) rotate(-45deg);
+  }
+  .touch-home .menu-toggle[aria-expanded="true"],
+  body[data-page] .site-header .toggle[aria-expanded="true"]{
+    border-color:rgba(83,203,217,.62);
+    background:rgba(255,255,255,.06);
+  }
+  .touch-home .main-nav,
+  body[data-page] .site-header .navigation{
+    position:absolute;
+    top:calc(100% + 9px);left:0;right:0;
+    display:none;flex-direction:column;align-items:stretch;
+    gap:0;max-height:min(70svh,510px);overflow:auto;
+    padding:12px 19px;
+    background:var(--em-glass-dropdown)!important;
+    border:1px solid var(--em-glass-edge);
+    border-radius:10px;
+    box-shadow:0 24px 55px rgba(8,20,31,.30),inset 0 1px 0 rgba(255,255,255,.1);
+    -webkit-backdrop-filter:blur(24px) saturate(120%);
+    backdrop-filter:blur(24px) saturate(120%);
+    color:#fff;
+  }
+  .touch-home .main-nav[data-open="true"],
+  body[data-page] .site-header.menu-open .navigation{display:flex}
+  .touch-home .main-nav a,
+  body[data-page] .site-header .navigation>a{
+    display:block;width:100%;
+    padding:16px 10px;
+    border:0;border-bottom:1px solid rgba(255,255,255,.18);
+    border-radius:0;
+    color:#fff!important;
+    background:none;
+    font:500 clamp(.93rem,2.1vw,1.03rem)/1.4 'Open Sans',Arial,sans-serif;
+    letter-spacing:0;text-transform:none;
+    text-decoration:none;
+    transition:color .2s ease,padding-left .2s ease;
+  }
+  .touch-home .main-nav a:last-child,
+  body[data-page] .site-header .navigation>a:last-child{border-bottom:0}
+  .touch-home .main-nav a:hover,
+  .touch-home .main-nav a:focus-visible,
+  body[data-page] .site-header .navigation>a:hover,
+  body[data-page] .site-header .navigation>a:focus-visible{
+    color:var(--agate-aqua)!important;
+    padding-left:15px;
+  }
+  /* Shared smoked-glass booking dock. Floating and inset, never a full-width strip. */
+  .em-mobile-booking{
+    position:fixed;
+    display:flex!important;align-items:center;justify-content:space-between;
+    left:14px;right:14px;
+    bottom:calc(12px + env(safe-area-inset-bottom,0px));
+    width:auto;z-index:85;
+    min-height:62px;
+    padding:16px 22px;
+    border:1px solid rgba(239,250,250,.37);
+    border-radius:10px;
+    background:linear-gradient(115deg,rgba(19,40,53,.84),rgba(28,53,68,.79));
+    -webkit-backdrop-filter:blur(24px) saturate(125%);
+    backdrop-filter:blur(24px) saturate(125%);
+    box-shadow:0 14px 42px rgba(7,22,35,.29),inset 0 1px 0 rgba(255,255,255,.14);
+    color:#fff!important;
+    font:700 .76rem/1.4 'Open Sans',Arial,sans-serif;
+    letter-spacing:.105em;text-transform:uppercase;
+    text-decoration:none;
+    gap:22px;
+  }
+  .em-mobile-booking span{
+    color:var(--agate-aqua)!important;
+    font-size:1.3rem;transition:transform .2s ease;
+  }
+  .em-mobile-booking:hover span{transform:translate(2px,-2px)}
+  .em-mobile-booking:focus-visible{outline:2px solid var(--agate-aqua);outline-offset:3px}
+  .touch-home .footer,body[data-page] .site-footer{
+    padding-bottom:calc(104px + env(safe-area-inset-bottom,0px));
+  }
+  .touch-home .intro__skip{bottom:98px}
+}
+@media (max-width:430px){
+  .touch-home .glass-header__inner,
+  body[data-page] .header-row{padding:0 12px;gap:6px}
+  .touch-home .wordmark span,
+  body[data-page] .site-header .brand{font-size:clamp(1.28rem,5.85vw,1.57rem)}
+  .touch-home .wordmark small,
+  body[data-page] .site-header .brand small{font-size:.39rem;letter-spacing:.13em}
+}
+@media (min-width:871px){
+  .em-mobile-booking{display:none!important}
+}
+@media (prefers-reduced-motion:reduce){
+  .em-mobile-booking span,
+  body[data-page] .site-header .toggle span{transition:none!important}
+}
