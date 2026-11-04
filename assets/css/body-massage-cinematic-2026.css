@@ -227,3 +227,24 @@ body[data-page="body"] .em-body .em-book--ghost:hover{
   .em-body-cta__photo{transform:none!important;will-change:auto}
   .em-body .em-book{transition:none!important}
 }
+
+/* Home-aligned reading hold for desktop narrative scenes.
+   Before: only .em-journey__canvas was sticky and article copy scrolled away.
+   Keep each article in native flow, make only its readable content sticky
+   inside a longer chapter. Each scene pauses the copy for ~1 viewport of
+   scroll while the full-bleed background stays fixed. No scroll hijack. */
+@media (min-width:871px) and (min-height:750px) and (prefers-reduced-motion:no-preference) {
+  body[data-page="body"] .em-journey__chapter {
+    display:block;
+    min-height:205svh;
+    padding-top:25svh;
+    padding-bottom:32svh;
+  }
+  body[data-page="body"] .em-journey__chapter-inner {
+    position:sticky;
+    top:24svh;
+    align-self:auto;
+  }
+}
+/* Mobile, short viewports and reduced-motion users retain the existing
+   directly readable, full-background sections without prolonged pinning. */
