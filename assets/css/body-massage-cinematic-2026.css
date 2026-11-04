@@ -238,7 +238,7 @@ body[data-page="body"] .em-body .em-book--ghost:hover{
     display:block;
     min-height:205svh;
     padding-top:25svh;
-    padding-bottom:32svh;
+    padding-bottom:12svh;
   }
   body[data-page="body"] .em-journey__chapter-inner {
     position:sticky;
