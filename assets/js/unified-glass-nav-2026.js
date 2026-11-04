@@ -50,11 +50,26 @@
   const primaryToggle=header.querySelector('.menu-toggle,.toggle');
   const mobileNav=header.querySelector('.main-nav,.navigation');
   const close=()=>{details.open=false};
+  let hoverExitTimer=0;
+  const cancelHoverExit=()=>{
+    if(hoverExitTimer){clearTimeout(hoverExitTimer);hoverExitTimer=0;}
+  };
   details.addEventListener('pointerenter',e=>{
-    if(desktop.matches&&e.pointerType!=='touch')details.open=true;
+    if(desktop.matches&&e.pointerType!=='touch'){
+      cancelHoverExit();
+      details.open=true;
+    }
   });
   details.addEventListener('pointerleave',e=>{
-    if(desktop.matches&&e.pointerType!=='touch'&&!details.contains(d.activeElement))close();
+    if(desktop.matches&&e.pointerType!=='touch'){
+      // A short closing grace prevents diagonal mouse travel from crossing
+      // a one-pixel hover gap and collapsing the flyout before the link.
+      cancelHoverExit();
+      hoverExitTimer=setTimeout(()=>{
+        hoverExitTimer=0;
+        if(!details.matches(':hover')&&!details.contains(d.activeElement))close();
+      },200);
+    }
   });
   /* Prevent a click from closing an already hover-open desktop disclosure. */
   summary.addEventListener('click',e=>{
