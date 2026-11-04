@@ -255,3 +255,142 @@ body[data-page] .site-header .toggle::before{content:none;display:none}
     color:var(--agate-aqua);
   }
 }
+
+
+/* Hover-safe Treatments navigation, sharing the approved smoked-glass style.
+   Desktop: native <details> panel opens on hover with an invisible hover bridge.
+   Mobile: normal disclosure inside the same hamburger menu; no extra route. */
+.touch-home .main-nav .treatments-menu,
+body[data-page] .site-header .navigation .treatments-menu{
+  position:relative;display:flex;align-items:center;
+  align-self:stretch;flex:0 0 auto;
+}
+.touch-home .main-nav .treatments-menu>summary,
+body[data-page] .site-header .navigation .treatments-menu>summary{
+  list-style:none;
+  display:inline-flex;align-items:center;justify-content:space-between;
+  gap:11px;min-height:44px;padding:0;
+  border:0;outline-offset:6px;cursor:pointer;
+  color:rgba(255,255,255,.96);
+  font:500 .76rem/1.4 'Open Sans',Arial,sans-serif;
+  white-space:nowrap;
+  -webkit-tap-highlight-color:transparent;
+}
+.touch-home .main-nav .treatments-menu>summary::-webkit-details-marker,
+body[data-page] .site-header .navigation .treatments-menu>summary::-webkit-details-marker{display:none}
+.touch-home .main-nav .treatments-menu>summary::after,
+body[data-page] .site-header .navigation .treatments-menu>summary::after{
+  content:"";display:inline-block;flex:0 0 auto;
+  width:6px;height:6px;margin:-3px 1px 0 0;
+  border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg);
+  transition:transform .22s ease,margin .22s ease;
+}
+.touch-home .main-nav .treatments-menu[open]>summary::after,
+body[data-page] .site-header .navigation .treatments-menu[open]>summary::after{
+  transform:rotate(225deg);margin:3px 1px 0 0;
+}
+.touch-home .main-nav .treatments-menu>summary:hover,
+.touch-home .main-nav .treatments-menu>summary:focus-visible,
+body[data-page] .site-header .navigation .treatments-menu>summary:hover,
+body[data-page] .site-header .navigation .treatments-menu>summary:focus-visible{color:var(--agate-aqua)}
+.touch-home .main-nav .treatments-menu>summary:focus-visible,
+body[data-page] .site-header .navigation .treatments-menu>summary:focus-visible{
+  outline:2px solid var(--agate-aqua);border-radius:3px;
+}
+/* Hover corridor is part of the <details> hit area, even over the visible gap. */
+@media(min-width:871px){
+  .treatments-menu[open]::after{
+    content:"";position:absolute;top:100%;left:-24px;
+    width:max(100%,344px);height:13px;
+    pointer-events:auto;
+  }
+  .touch-home .main-nav .treatments-menu__panel,
+  body[data-page] .site-header .navigation .treatments-menu__panel{
+    position:absolute;z-index:120;top:100%;left:-20px;
+    width:335px;min-width:335px;padding-top:11px;
+    background:transparent;
+  }
+  .touch-home .main-nav .treatments-menu__inner,
+  body[data-page] .site-header .navigation .treatments-menu__inner{
+    padding:10px;
+    border:1px solid rgba(239,250,250,.33);border-radius:9px;
+    background:rgba(18,37,51,.96);
+    -webkit-backdrop-filter:blur(24px) saturate(120%);
+    backdrop-filter:blur(24px) saturate(120%);
+    box-shadow:0 22px 50px rgba(8,20,31,.34),inset 0 1px 0 rgba(255,255,255,.12);
+    animation:em-treatments-reveal .23s cubic-bezier(.22,1,.36,1) both;
+  }
+  .touch-home .main-nav .treatments-menu__link,
+  body[data-page] .site-header .navigation .treatments-menu__link{
+    display:block;width:100%;
+    padding:13px 13px;border-bottom:1px solid rgba(255,255,255,.12);
+    font:500 .79rem/1.45 'Open Sans',Arial,sans-serif;
+    color:#fff;text-decoration:none;border-radius:3px;
+    white-space:normal;
+    transition:background .20s ease,color .20s ease,padding-left .20s ease;
+  }
+  .touch-home .main-nav .treatments-menu__link:last-child,
+  body[data-page] .site-header .navigation .treatments-menu__link:last-child{border-bottom:0}
+  .touch-home .main-nav .treatments-menu__link:hover,
+  .touch-home .main-nav .treatments-menu__link:focus-visible,
+  body[data-page] .site-header .navigation .treatments-menu__link:hover,
+  body[data-page] .site-header .navigation .treatments-menu__link:focus-visible{
+    color:var(--agate-aqua);
+    background:rgba(255,255,255,.055);
+    padding-left:18px;
+  }
+  @keyframes em-treatments-reveal{
+    from{opacity:0;transform:translateY(-5px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+}
+@media(max-width:870px){
+  .touch-home .main-nav .treatments-menu,
+  body[data-page] .site-header .navigation .treatments-menu{
+    align-self:stretch;display:block;width:100%;min-width:0;
+    border-bottom:1px solid rgba(255,255,255,.18);
+  }
+  .touch-home .main-nav .treatments-menu>summary,
+  body[data-page] .site-header .navigation .treatments-menu>summary{
+    display:flex;width:100%;min-height:57px;
+    padding:16px 10px;gap:20px;
+    color:#fff;font:500 clamp(.93rem,2.1vw,1.03rem)/1.4 'Open Sans',Arial,sans-serif;
+  }
+  .touch-home .main-nav .treatments-menu[open]>summary,
+  body[data-page] .site-header .navigation .treatments-menu[open]>summary{color:var(--agate-aqua)}
+  .touch-home .main-nav .treatments-menu__panel,
+  body[data-page] .site-header .navigation .treatments-menu__panel{
+    position:static;display:block;width:100%;min-width:0;
+    padding:0 0 10px;background:transparent;
+  }
+  .touch-home .main-nav .treatments-menu__inner,
+  body[data-page] .site-header .navigation .treatments-menu__inner{
+    display:block;padding:4px 10px 6px;
+    border:0;border-left:1px solid rgba(83,203,217,.40);
+    border-radius:0;
+    background:rgba(255,255,255,.045);
+    box-shadow:none;
+  }
+  .touch-home .main-nav .treatments-menu__link,
+  body[data-page] .site-header .navigation .treatments-menu__link{
+    display:block;width:100%;padding:11px 11px;
+    border:0;border-bottom:1px solid rgba(255,255,255,.10);
+    color:#fff;font:500 .83rem/1.35 'Open Sans',Arial,sans-serif;
+    text-decoration:none;letter-spacing:0;white-space:normal;
+    transition:color .2s ease,background .2s ease;
+  }
+  .touch-home .main-nav .treatments-menu__link:last-child,
+  body[data-page] .site-header .navigation .treatments-menu__link:last-child{border-bottom:0}
+  .touch-home .main-nav .treatments-menu__link:hover,
+  .touch-home .main-nav .treatments-menu__link:focus-visible,
+  body[data-page] .site-header .navigation .treatments-menu__link:hover,
+  body[data-page] .site-header .navigation .treatments-menu__link:focus-visible{
+    color:var(--agate-aqua);background:rgba(255,255,255,.05);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .treatments-menu__inner{animation:none!important}
+  .treatments-menu>summary::after{transition:none!important}
+}

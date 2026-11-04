@@ -37,3 +37,53 @@
     });
   }
 })();
+/* Native Treatments disclosure: pointer-hover on desktop, disclosure-tap on
+   mobile, keyboard Enter/Space and Escape. No hover delay/closing gap. */
+(()=>{
+  'use strict';
+  const d=document;
+  const desktop=matchMedia('(min-width:871px)');
+  const header=d.querySelector('.glass-header,.site-header');
+  const details=d.querySelector('.treatments-menu');
+  if(!details||!header)return;
+  const summary=details.querySelector('summary');
+  const primaryToggle=header.querySelector('.menu-toggle,.toggle');
+  const mobileNav=header.querySelector('.main-nav,.navigation');
+  const close=()=>{details.open=false};
+  details.addEventListener('pointerenter',e=>{
+    if(desktop.matches&&e.pointerType!=='touch')details.open=true;
+  });
+  details.addEventListener('pointerleave',e=>{
+    if(desktop.matches&&e.pointerType!=='touch'&&!details.contains(d.activeElement))close();
+  });
+  /* Prevent a click from closing an already hover-open desktop disclosure. */
+  summary.addEventListener('click',e=>{
+    if(desktop.matches){
+      e.preventDefault();
+      details.open=true;
+    }
+  });
+  details.addEventListener('focusout',()=>{
+    if(desktop.matches){
+      requestAnimationFrame(()=>{
+        if(!details.contains(d.activeElement)&&!details.matches(':hover'))close();
+      });
+    }
+  });
+  d.addEventListener('keydown',e=>{
+    if(e.key==='Escape'&&details.open){
+      close();
+      if(details.contains(d.activeElement))summary.focus();
+    }
+  });
+  d.addEventListener('pointerdown',e=>{
+    if(!details.contains(e.target)&&details.open)close();
+  },{passive:true});
+  mobileNav?.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click',close);
+  });
+  primaryToggle?.addEventListener('click',()=>{
+    if(primaryToggle.getAttribute('aria-expanded')==='false')close();
+  });
+  desktop.addEventListener?.('change',close);
+})();
