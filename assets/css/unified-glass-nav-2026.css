@@ -241,3 +241,17 @@ body[data-page] .site-header .toggle::before{content:none;display:none}
   .em-mobile-booking span,
   body[data-page] .site-header .toggle span{transition:none!important}
 }
+/* Palette overlay uses a higher-specificity solid background for old internal
+   booking strips. Explicitly supersede it so both contexts share ONE glass. */
+@media (max-width:870px){
+  .touch-home .em-mobile-booking,
+  body[data-page] .em-mobile-booking{
+    background:linear-gradient(115deg,rgba(19,40,53,.84),rgba(28,53,68,.79));
+    color:#fff;
+    border-color:rgba(239,250,250,.37);
+  }
+  .touch-home .em-mobile-booking span,
+  body[data-page] .em-mobile-booking span{
+    color:var(--agate-aqua);
+  }
+}
