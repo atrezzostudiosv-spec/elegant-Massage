@@ -22,6 +22,7 @@ jobs:
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/elegant-http.log 2>&1 &
           sleep 2
+          node scripts/sync-footer.cjs --check
           node tests/codrops-original-motion-qa.cjs
           node tests/home-closing-sections-qa.cjs
           node tests/current-architecture-qa.cjs

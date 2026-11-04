@@ -34,7 +34,7 @@ const widths=[375,390,430,768,1024,1440];
    bodyColor:getComputedStyle(document.body).backgroundColor,
    headerBook:(()=>{let e=document.querySelector('.glass-header__book');return {background:getComputedStyle(e).backgroundColor,text:getComputedStyle(e).color};})(),
    realPlace:getComputedStyle(document.querySelector('.real-place')).backgroundColor,
-   footerColor:getComputedStyle(document.querySelector('.footer')).backgroundColor,
+   footerColor:getComputedStyle(document.querySelector('.em-footer')).backgroundColor,
   }));
   // Accessibility and scroll-control regression after the November 3 fix.
   assert.equal(await page.locator('.at-grid__button').count(),0,'Remove redundant Discover Your Massage grid CTA');

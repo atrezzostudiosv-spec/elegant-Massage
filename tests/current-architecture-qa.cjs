@@ -40,8 +40,11 @@ const routes = [
           themeBg:getComputedStyle(document.body).backgroundColor,
           themeOcean:getComputedStyle(document.documentElement).getPropertyValue('--agate-ocean').trim(),
           headerCTA:(()=>{const x=document.querySelector('.site-header .header-cta');return x?{background:getComputedStyle(x).backgroundColor,color:getComputedStyle(x).color}:null})(),
-          footerBg:(()=>{const x=document.querySelector('.site-footer');return x?getComputedStyle(x).backgroundColor:null})(),
-          heroOverlay:(()=>{const shade=document.querySelector('.em-body-hero__shade');return shade?getComputedStyle(shade).backgroundImage:getComputedStyle(document.querySelector('.hero'),'::before').backgroundImage})(),
+          footerBg:(()=>{const x=document.querySelector('.em-footer');return x?getComputedStyle(x).backgroundColor:null})(),
+          footerLinks:[...document.querySelectorAll('.em-footer__nav a')].map(a=>new URL(a.href).pathname),
+          contactStorefront:!!document.querySelector('.contact-hero__photo img'),
+          contactForm:document.querySelector('form.contact-inquiry__form')?.getAttribute('action'),
+          heroOverlay:(()=>{const shade=document.querySelector('.em-body-hero__shade'),hero=document.querySelector('.hero');return shade?getComputedStyle(shade).backgroundImage:hero?getComputedStyle(hero,'::before').backgroundImage:''})(),
           navTopics:[...document.querySelector('.navigation').children].map(x=>x.matches('details')?x.querySelector('summary').textContent.trim():x.textContent.trim()),
           serviceRows:document.querySelectorAll('.service-row').length,
           snap:getComputedStyle(document.documentElement).scrollSnapType,
@@ -63,15 +66,20 @@ const routes = [
         assert.equal(result.themeOcean,'#254460',`${route}: wrong primary palette`);
         assert.deepEqual(result.headerCTA,{background:'rgb(83, 203, 217)',color:'rgb(37, 68, 96)'},`${route}: Book Now aqua/ocean contrast`);
         assert.equal(result.footerBg,'rgb(37, 68, 96)',`${route}: footer must be ocean blue`);
-        assert(result.heroOverlay.includes('rgba(0, 0, 0,') && !result.heroOverlay.includes('rgba(15, 38, 60'),
+        assert.deepEqual(result.footerLinks,['/massage-services/','/massage-menu/','/about/','/gallery/','/contact/'],`${route}: shared footer links`);
+        if(route!='/contact/')assert(result.heroOverlay.includes('rgba(0, 0, 0,') && !result.heroOverlay.includes('rgba(15, 38, 60'),
           `${route} @${width}: photograph must have neutral black gradient, not ocean-blue: ${result.heroOverlay}`);
+        if(route==='/contact/'){
+          assert(result.contactStorefront,`${route}: original storefront photograph`);
+          assert.equal(result.contactForm,'https://formsubmit.co/atrezzostudiosv@gmail.com',`${route}: preview form destination`);
+        }
         assert.deepEqual(result.navTopics,[
           'Treatments','Menu & Prices','About','Gallery','Contact'
         ],`${route}: navigation must mirror Home's five primary links`);
         if(route==='/massage-services/')assert.equal(result.serviceRows,5,'Service index must show 5 confirmed modalities');
         assert.equal(result.snap,'none',`${route}: native scrolling; no scroll-snap trap`);
         if(route==='/massage-services/body-massage/')assert(result.bodyCinematic,`${route}: cinematic scene structure must be present`);
-        assert.equal(result.reducedHeroTransform,'none',`${route}: no photo motion under reduced-motion setting`);
+        if(route!='/contact/')assert.equal(result.reducedHeroTransform,'none',`${route}: no photo motion under reduced-motion setting`);
         if(width<=430){
           const {brand,toggle}=result.mobileHeader;
           assert(brand&&toggle,`${route}: missing mobile navigation controls`);
@@ -150,6 +158,14 @@ const routes = [
               getComputedStyle(el,'::before').backgroundImage);
             assert(bg.includes('.webp'),`${route} @${width}: mobile chapter should use full background photography`);
           }
+        }else if(route==='/contact/'){
+          const contact=await page.evaluate(()=>({
+            sections:document.querySelectorAll('main > section').length,
+            storefront:!!document.querySelector('.contact-hero__photo img'),
+            form:!!document.querySelector('form.contact-inquiry__form')
+          }));
+          assert(contact.sections>=4&&contact.storefront&&contact.form,
+            `${route} @${width}: contact story and form remain available`);
         }else{
           const initial=await page.evaluate(()=>{
             const photo=document.querySelector('.hero__background');

@@ -284,7 +284,7 @@ const browserPromise=chromium.launch({headless:true,args:['--autoplay-policy=no-
   }
   results.push({editorialStory:story});
   await page.goto(BASE+'/contact/',{waitUntil:'domcontentloaded'});
-  const form=page.locator('form.contact-form');
+  const form=page.locator('form.contact-inquiry__form');
   assert(await form.count()===1,'contact form missing');
   assert(await form.getAttribute('action')==='https://formsubmit.co/atrezzostudiosv@gmail.com','contact test recipient changed');
   assert(!(await form.evaluate(el=>el.checkValidity())),'empty contact form should fail validation');
