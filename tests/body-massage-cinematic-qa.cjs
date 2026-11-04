@@ -95,6 +95,8 @@ async function place(page,selector){
        return {first,last};
      });
      assert(scale.last>scale.first+.03,'CTA zoom tracks scroll '+JSON.stringify(scale));
+     await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));
+     await page.waitForTimeout(350);
      await page.locator('.site-header .treatments-menu summary').hover();
      assert(await page.locator('.site-header .treatments-menu').evaluate(x=>x.open),'Header hover remains working at '+width);
      await page.locator('.site-header .treatments-menu__link').last().hover();
