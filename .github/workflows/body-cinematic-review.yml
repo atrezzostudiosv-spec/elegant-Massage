@@ -1,0 +1,38 @@
+name: Elegant Massage — Body Cinematic Review
+on:
+  pull_request:
+    paths:
+      - 'massage-services/body-massage/index.html'
+      - 'assets/css/body-massage-cinematic-2026.css'
+      - 'assets/js/body-massage-cinematic-2026.js'
+      - 'tests/body-massage-cinematic-qa.cjs'
+      - '.github/workflows/body-cinematic-review.yml'
+  workflow_dispatch:
+jobs:
+  body-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Serve Body Massage and test native scroll interactions
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/body-massage-http.log 2>&1 &
+          sleep 2
+          node tests/body-massage-cinematic-qa.cjs
+      - name: Upload screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elegant-body-massage-cinematic-review
+          path: qa-artifacts/body-cinematic-scroll/
+          if-no-files-found: warn
+          retention-days: 10
