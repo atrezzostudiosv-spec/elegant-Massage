@@ -40,7 +40,7 @@ const labels=['Treatments','Menu & Prices','About','Gallery','Contact'];
             toggleVisible:getComputedStyle(toggle).display!=='none',
             dockCount:document.querySelectorAll('.em-mobile-booking').length,
             dockVisible:dcss?.display!=='none',dock:cta?rect('.em-mobile-booking'):null,
-            dockHref:cta?.getAttribute('href'),dockBlur:dcss?.backdropFilter,
+            dockHref:cta?.getAttribute('href'),dockBlur:dcss?.backdropFilter,dockBackground:dcss?.backgroundImage,
             dockPadding:parseFloat(getComputedStyle(document.querySelector('footer')).paddingBottom),
             siteNoindex:el('meta[name="robots"]')?.content?.includes('noindex')
           };
@@ -60,6 +60,7 @@ const labels=['Treatments','Menu & Prices','About','Gallery','Contact'];
             route+' inset mobile booking dock');
           assert(state.dock.bottom<=900-5&&state.dock.bottom>=850,route+' dock near bottom');
           assert(state.dockBlur.includes('blur('),route+' frosted dock');
+          assert(state.dockBackground.includes('linear-gradient('),route+' booking dock must be genuinely translucent glass: '+state.dockBackground);
           assert(state.dockPadding>=90,route+' footer reserves space');
           await page.locator(selectors.toggle).click();
           assert.equal(await page.locator(selectors.toggle).getAttribute('aria-expanded'),'true',route+' menu expands');
