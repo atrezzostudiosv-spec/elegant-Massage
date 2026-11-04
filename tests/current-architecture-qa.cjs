@@ -42,7 +42,7 @@ const routes = [
           headerCTA:(()=>{const x=document.querySelector('.site-header .header-cta');return x?{background:getComputedStyle(x).backgroundColor,color:getComputedStyle(x).color}:null})(),
           footerBg:(()=>{const x=document.querySelector('.site-footer');return x?getComputedStyle(x).backgroundColor:null})(),
           heroOverlay:getComputedStyle(document.querySelector('.hero'),'::before').backgroundImage,
-          navTopics:[...document.querySelectorAll('.navigation .dropdown a')].map(a=>a.textContent.trim()),
+          navTopics:[...document.querySelectorAll('.navigation>a')].map(a=>a.textContent.trim()),
           serviceRows:document.querySelectorAll('.service-row').length,
           snap:getComputedStyle(document.documentElement).scrollSnapType,
           reducedHeroTransform:getComputedStyle(document.querySelector('.hero__background')).transform,
@@ -65,18 +65,17 @@ const routes = [
         assert(result.heroOverlay.includes('rgba(0, 0, 0,') && !result.heroOverlay.includes('rgba(15, 38, 60'),
           `${route} @${width}: photograph must have neutral black gradient, not ocean-blue: ${result.heroOverlay}`);
         assert.deepEqual(result.navTopics,[
-          'All Massage Services','Body Massage','Combo Specials (Foot & Back)',
-          'Couples Massage','Chair & Thai Massage','Four Hands Massage'
-        ],`${route}: navigation must promote only the 5 confirmed appointment types`);
+          'Treatments','Menu & Prices','About','Gallery','Contact'
+        ],`${route}: navigation must mirror Home's five primary links`);
         if(route==='/massage-services/')assert.equal(result.serviceRows,5,'Service index must show 5 confirmed modalities');
         assert.equal(result.snap,'none',`${route}: native scrolling; no scroll-snap trap`);
         assert.equal(result.reducedHeroTransform,'none',`${route}: no photo motion under reduced-motion setting`);
         if(width<=430){
-          const {brand,book,toggle}=result.mobileHeader;
-          assert(brand&&book&&toggle,`${route}: missing mobile navigation controls`);
+          const {brand,toggle}=result.mobileHeader;
+          assert(brand&&toggle,`${route}: missing mobile navigation controls`);
           assert(brand.left>=0&&toggle.right<=width-6,`${route}: clipped mobile menu toggle ${JSON.stringify(result.mobileHeader)}`);
-          assert(brand.right+3<=book.left&&book.right+3<=toggle.left,
-            `${route}: internal mobile header controls overlap ${JSON.stringify(result.mobileHeader)}`);
+          assert(brand.right+3<=toggle.left,
+            `${route}: internal mobile logo and toggle overlap ${JSON.stringify(result.mobileHeader)}`);
         }
         if(result.stickySidebar){
           assert.equal(result.stickySidebar,width>=871?'sticky':'static',
@@ -100,7 +99,7 @@ const routes = [
       await context.close();
     }
     // Mobile navigation remains keyboard accessible after icon-only toggle.
-    for(const width of [375,390,430]){
+    for(const width of [375,390,430,768]){
       const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});
       await page.goto(origin+'/massage-services/',{waitUntil:'domcontentloaded'});
       const toggle=page.locator('.site-header .toggle');
@@ -108,7 +107,7 @@ const routes = [
         const r=sel=>{const el=document.querySelector(sel).getBoundingClientRect();return {left:el.left,right:el.right,width:el.width};};
         return {brand:r('.site-header .brand'),book:r('.site-header .header-cta'),toggle:r('.site-header .toggle')};
       });
-      assert(header.toggle.right<=width-6&&header.brand.right+3<=header.book.left&&header.book.right+3<=header.toggle.left,
+      assert(header.toggle.right<=width-6&&header.brand.right+3<=header.toggle.left,
         width+': header controls clipped/overlapping: '+JSON.stringify(header));
       await toggle.click();
       assert.equal(await toggle.getAttribute('aria-expanded'),'true','Menu button opens navigation');
