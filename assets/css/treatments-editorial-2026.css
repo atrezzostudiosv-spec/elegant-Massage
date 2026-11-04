@@ -1,0 +1,483 @@
+/* Elegant Massage — treatment chapters, 2026-11-04.
+   Scope: the five visitor-facing treatment detail pages only.
+   The closed Home, smoked-glass header, nav hover, Setmore and Menu & Prices
+   remain outside these selectors. Cinematic but native, accessible scroll. */
+
+body.treatment-detail {
+  --t-paper:#f5f1e9;
+  --t-cream:#faf8f3;
+  --t-ink:#24262a;
+  --t-muted:#5c5e60;
+  --t-garnet:#783b48;
+  background:var(--t-paper);
+}
+body.treatment-detail .treatment-main{
+  font-family:'DM Sans',Arial,sans-serif;
+  color:var(--t-ink);
+  overflow:clip;
+}
+body.treatment-detail .treatment-main :is(h1,h2,h3){
+  font-family:'Instrument Serif',Georgia,serif;
+  font-weight:400;
+  text-transform:none;
+  letter-spacing:-.035em;
+}
+body.treatment-detail .treatment-main h1 em,
+body.treatment-detail .treatment-main h2 em{
+  font-weight:400;
+  font-style:italic;
+}
+body.treatment-detail .treatment-main .eyebrow{
+  font-family:'DM Sans',Arial,sans-serif;
+  font-size:clamp(.62rem,.8vw,.75rem);
+  font-weight:600;
+  letter-spacing:.18em;
+  line-height:1.4;
+}
+body.treatment-detail .treatment-main .hero:not(.hero--home){
+  min-height:clamp(650px,88svh,940px);
+  padding:clamp(145px,18vh,210px) var(--gutter) clamp(68px,9vh,115px);
+  display:flex;
+  align-items:flex-end;
+  background:#272d32;
+  position:relative;
+}
+body.treatment-detail .treatment-main .hero:not(.hero--home)::before{
+  background:linear-gradient(90deg,rgba(0,0,0,.83) 0%,rgba(0,0,0,.52) 44%,rgba(0,0,0,.10) 85%),
+             linear-gradient(0deg,rgba(0,0,0,.62) 0%,rgba(0,0,0,0) 49%);
+}
+body.treatment-detail .treatment-main .hero__copy{
+  width:min(100%,960px);
+  max-width:960px;
+}
+body.treatment-detail .treatment-main .hero h1{
+  font-size:clamp(4.3rem,8vw,9.25rem);
+  line-height:.91;
+  max-width:12ch;
+  margin:clamp(18px,2vw,32px) 0 24px;
+  color:#fff;
+}
+body.treatment-detail .treatment-main .hero h1 em{color:#eee5dc}
+body.treatment-detail .treatment-main .hero .lede{
+  max-width:46ch;
+  color:rgba(255,255,255,.9);
+  font-size:clamp(1rem,1.35vw,1.15rem);
+  line-height:1.7;
+  margin:0;
+  font-weight:400;
+}
+body.treatment-detail .treatment-main .hero .actions{
+  gap:clamp(15px,2.2vw,34px);
+  margin-top:clamp(26px,3vw,39px);
+}
+body.treatment-detail .treatment-main .button{
+  background:var(--t-garnet);
+  border-color:var(--t-garnet);
+  color:#fff;
+  border-radius:2px;
+  min-height:52px;
+  padding:13px 23px;
+  font-family:'DM Sans',Arial,sans-serif;
+  font-size:.76rem;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+body.treatment-detail .treatment-main .button:hover,
+body.treatment-detail .treatment-main .button:focus-visible{
+  background:#91495a;border-color:#91495a;
+  transform:none;
+}
+body.treatment-detail .treatment-main .button:focus-visible,
+body.treatment-detail .treatment-main a:focus-visible{
+  outline:2px solid #bde9eb;outline-offset:4px;
+}
+body.treatment-detail .treatment-main .hero .text-link{
+  color:#fff;text-decoration:none;
+  font-family:'DM Sans',Arial,sans-serif;
+  font-size:.85rem;letter-spacing:.02em;
+  padding-bottom:8px;
+  border-bottom:1px solid rgba(255,255,255,.6);
+}
+body.treatment-detail .treatment-main .hero .text-link:hover{
+  color:#ddf0ed;border-color:#ddf0ed;
+}
+.treatment-hero__serial{
+  display:inline-flex;align-items:center;gap:17px;
+  margin-top:2px;
+  color:rgba(255,255,255,.78);
+  font:500 .7rem/1.2 'DM Sans',Arial,sans-serif;
+  letter-spacing:.12em;
+}
+.treatment-hero__serial::before{
+  content:"";width:44px;height:1px;background:currentColor;opacity:.7;
+}
+.treatment-hero__discover{
+  display:inline-flex;margin-top:clamp(36px,6vh,75px);
+  color:rgba(255,255,255,.84)!important;
+  font:500 .7rem/1.5 'DM Sans',Arial,sans-serif;
+  letter-spacing:.1em;text-transform:uppercase;
+  text-decoration:none!important;
+  border-bottom:1px solid rgba(255,255,255,.42);
+  padding-bottom:8px;
+}
+.treatment-hero__discover:hover{color:#fff!important;border-color:#fff}
+
+/* A full editorial passage: no framed photo cards. */
+body.treatment-detail .treatment-main .treatment-intro{
+  padding:clamp(70px,10vw,156px) 0;
+  background:var(--t-paper);
+}
+body.treatment-detail .treatment-main .treatment-intro>.container.split{
+  display:grid;
+  grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);
+  gap:clamp(50px,8.5vw,150px);
+  align-items:center;
+}
+body.treatment-detail .treatment-main .treatment-intro>.container.split>div:first-child{
+  max-width:600px;
+}
+body.treatment-detail .treatment-main .treatment-intro h2{
+  font-size:clamp(3.6rem,6vw,7.4rem);
+  max-width:11ch;
+  line-height:.97;
+  margin:20px 0 27px;
+  color:var(--t-ink);
+}
+body.treatment-detail .treatment-main .treatment-intro .lede{
+  font:400 clamp(1.06rem,1.38vw,1.25rem)/1.85 'DM Sans',Arial,sans-serif;
+  color:var(--t-muted);
+  max-width:39ch;
+}
+body.treatment-detail .treatment-main .treatment-intro .scene--portrait{
+  width:100%;
+  min-height:0;
+  aspect-ratio:4/4.7;
+  max-height:780px;
+  border:0;border-radius:0;
+  box-shadow:none;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+body.treatment-detail .treatment-main .treatment-intro .media-qualifier{
+  font:400 .67rem/1.5 'DM Sans',Arial,sans-serif;
+  color:#656767;
+  max-width:50ch;margin-top:11px;
+}
+
+/* Editorial ledger with visible reading order, not a stack of cards. */
+body.treatment-detail .treatment-main .treatment-guide{
+  background:var(--t-cream);
+  padding:clamp(70px,10vw,142px) 0;
+}
+body.treatment-detail .treatment-main .treatment-guide>.container.content-layout{
+  display:grid;
+  grid-template-columns:minmax(0,.69fr) minmax(0,1.31fr);
+  gap:clamp(55px,8vw,135px);
+  align-items:start;
+}
+body.treatment-detail .treatment-main .treatment-guide aside{
+  position:sticky;top:128px;
+  max-width:500px;
+}
+body.treatment-detail .treatment-main .treatment-guide aside h2{
+  color:var(--t-ink);
+  font-size:clamp(3.5rem,5.1vw,6.8rem);
+  line-height:1.01;
+  letter-spacing:-.036em;
+  max-width:11ch;
+  margin:19px 0 34px;
+}
+body.treatment-detail .treatment-main .treatment-guide aside .button{
+  min-height:48px;
+}
+body.treatment-detail .treatment-main .treatment-guide article{
+  display:grid;
+  grid-template-columns:clamp(90px,11vw,144px) minmax(0,1fr);
+  column-gap:clamp(12px,2.2vw,35px);
+  padding:clamp(26px,3.1vw,46px) 0;
+  border:0;border-top:1px solid rgba(36,38,42,.23);
+  background:transparent;
+}
+body.treatment-detail .treatment-main .treatment-guide article:last-child{
+  border-bottom:1px solid rgba(36,38,42,.23);
+}
+body.treatment-detail .treatment-main .treatment-guide article .eyebrow{
+  grid-column:1;grid-row:1 / span 2;
+  margin:12px 0 0;
+  color:#7a5860;
+  font-size:.63rem;
+  letter-spacing:.13em;
+  white-space:normal;
+}
+body.treatment-detail .treatment-main .treatment-guide article h3{
+  grid-column:2;grid-row:1;
+  font-size:clamp(2.35rem,3.5vw,4.1rem);
+  max-width:19ch;
+  line-height:1.04;
+  margin:0 0 16px;
+  color:var(--t-ink);
+}
+body.treatment-detail .treatment-main .treatment-guide article .lede{
+  grid-column:2;grid-row:2;
+  margin:0;max-width:53ch;
+  font:400 clamp(.97rem,1.05vw,1.04rem)/1.86 'DM Sans',Arial,sans-serif;
+  color:#5a5d5e;
+}
+
+/* Purposeful shared conversion ending. No unrelated stock-photo repetition. */
+body.treatment-detail .treatment-main .treatment-close{
+  position:relative;
+  background:var(--t-ink);
+  color:#fff;
+  min-height:clamp(460px,60svh,650px);
+  padding:clamp(80px,11vw,160px) 0;
+}
+body.treatment-detail .treatment-main .treatment-close::before{display:none}
+body.treatment-detail .treatment-main .treatment-close>.container{
+  width:100%;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  column-gap:clamp(24px,5vw,95px);
+  align-items:end;
+}
+body.treatment-detail .treatment-main .treatment-close .eyebrow,
+body.treatment-detail .treatment-main .treatment-close h2,
+body.treatment-detail .treatment-main .treatment-close .lede{grid-column:1}
+body.treatment-detail .treatment-main .treatment-close h2{
+  font-size:clamp(4.1rem,7.1vw,8.7rem);
+  line-height:.94;
+  margin:18px 0 25px;
+  max-width:11ch;
+  letter-spacing:-.045em;
+}
+body.treatment-detail .treatment-main .treatment-close h2 em{color:#f0dfe3}
+body.treatment-detail .treatment-main .treatment-close .lede{
+  font:400 clamp(1rem,1.28vw,1.14rem)/1.73 'DM Sans',Arial,sans-serif;
+  max-width:43ch;
+  color:rgba(255,255,255,.82);
+  margin:0;
+}
+body.treatment-detail .treatment-main .treatment-close .actions{
+  grid-column:2;grid-row:1 / 4;
+  display:flex;flex-direction:column;align-items:stretch;
+  width:min(100%,295px);
+  min-width:235px;gap:14px;margin:0;
+}
+body.treatment-detail .treatment-main .treatment-close .button{
+  justify-content:center;
+  text-align:center;
+  min-height:58px;
+}
+body.treatment-detail .treatment-main .treatment-close .button--outline{
+  background:transparent;
+  border-color:rgba(255,255,255,.6);
+  color:#fff;
+}
+body.treatment-detail .treatment-main .treatment-close .button--outline:hover{
+  color:var(--t-ink);background:#fff;border-color:#fff;
+}
+
+/* Each treatment gets its own photographic rhythm and composition. */
+body.treatment-detail[data-page="body"] .treatment-intro .scene--portrait{aspect-ratio:4/4.9}
+body.treatment-detail[data-page="combo"] .treatment-intro>.container.split,
+body.treatment-detail[data-page="four"] .treatment-intro>.container.split{
+  grid-template-columns:minmax(0,1.14fr) minmax(0,.86fr);
+}
+body.treatment-detail[data-page="combo"] .treatment-intro>.container.split>div:last-child,
+body.treatment-detail[data-page="four"] .treatment-intro>.container.split>div:last-child{
+  grid-column:1;grid-row:1;
+}
+body.treatment-detail[data-page="combo"] .treatment-intro>.container.split>div:first-child,
+body.treatment-detail[data-page="four"] .treatment-intro>.container.split>div:first-child{
+  grid-column:2;grid-row:1;
+}
+body.treatment-detail[data-page="combo"] .hero__background{
+  background-image:url('../images/elegant-massage-combination-single-desktop.webp');
+  background-position:60% 50%;
+}
+body.treatment-detail[data-page="combo"] .treatment-intro .scene--portrait{aspect-ratio:5/4.4}
+body.treatment-detail[data-page="couples"] .treatment-intro>.container.split{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+}
+body.treatment-detail[data-page="couples"] .treatment-intro .scene--portrait{
+  aspect-ratio:4/4.15;
+}
+body.treatment-detail[data-page="couples"] .treatment-close{background:#663641}
+body.treatment-detail[data-page="chair"] .treatment-intro>.container.split{
+  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+}
+body.treatment-detail[data-page="chair"] .treatment-intro .scene--portrait{
+  aspect-ratio:4/5.3;max-width:640px;
+}
+body.treatment-detail[data-page="chair"] .treatment-close{
+  background:#ebebe4;color:var(--t-ink);
+}
+body.treatment-detail[data-page="chair"] .treatment-close h2,
+body.treatment-detail[data-page="chair"] .treatment-close .lede{
+  color:var(--t-ink);
+}
+body.treatment-detail[data-page="chair"] .treatment-close h2 em{color:var(--t-garnet)}
+body.treatment-detail[data-page="chair"] .treatment-close .button--outline{
+  color:var(--t-ink);border-color:var(--t-ink);
+}
+body.treatment-detail[data-page="chair"] .treatment-close .button--outline:hover{
+  color:#fff;background:var(--t-ink);
+}
+body.treatment-detail[data-page="four"] .treatment-intro .scene--portrait{
+  aspect-ratio:5/4.3;
+}
+body.treatment-detail[data-page="four"] .treatment-close{
+  background:linear-gradient(120deg,#24262a,#373039 105%);
+}
+/* Image composition carefully adjusted for single-image combination. */
+@media(max-width:640px){
+  body.treatment-detail[data-page="combo"] .hero__background{
+    background-image:url('../images/elegant-massage-combination-single-mobile.webp');
+    background-position:53% 44%;
+  }
+}
+@media(max-width:1024px){
+  body.treatment-detail .treatment-main .hero:not(.hero--home){
+    min-height:clamp(580px,78svh,770px);
+    padding:clamp(137px,16vh,165px) var(--gutter) 65px;
+  }
+  body.treatment-detail .treatment-main .hero h1{
+    font-size:clamp(3.7rem,8.5vw,6rem);
+    max-width:12ch;
+  }
+  body.treatment-detail .treatment-main .treatment-intro>.container.split,
+  body.treatment-detail[data-page="combo"] .treatment-intro>.container.split,
+  body.treatment-detail[data-page="four"] .treatment-intro>.container.split{
+    gap:clamp(28px,5vw,55px);
+  }
+  body.treatment-detail .treatment-main .treatment-guide>.container.content-layout{
+    gap:clamp(25px,4vw,65px);
+  }
+}
+@media(max-width:870px){
+  body.treatment-detail .treatment-main .hero:not(.hero--home){
+    min-height:clamp(590px,82svh,810px);
+    padding:clamp(123px,16vh,160px) var(--gutter) 75px;
+  }
+  body.treatment-detail .treatment-main .hero h1{
+    font-size:clamp(3.55rem,10.3vw,6.3rem);
+    max-width:12ch;
+  }
+  body.treatment-detail .treatment-main .hero:not(.hero--home)::before{
+    background:linear-gradient(90deg,rgba(0,0,0,.8),rgba(0,0,0,.25)),
+               linear-gradient(0deg,rgba(0,0,0,.6),transparent 70%);
+  }
+  body.treatment-detail .treatment-main .treatment-intro>.container.split,
+  body.treatment-detail[data-page="combo"] .treatment-intro>.container.split,
+  body.treatment-detail[data-page="four"] .treatment-intro>.container.split,
+  body.treatment-detail[data-page="couples"] .treatment-intro>.container.split,
+  body.treatment-detail[data-page="chair"] .treatment-intro>.container.split{
+    grid-template-columns:minmax(0,1fr);
+    gap:clamp(35px,6vw,68px);
+  }
+  body.treatment-detail[data-page="combo"] .treatment-intro>.container.split>div:first-child,
+  body.treatment-detail[data-page="four"] .treatment-intro>.container.split>div:first-child{
+    grid-column:1;grid-row:1;
+  }
+  body.treatment-detail[data-page="combo"] .treatment-intro>.container.split>div:last-child,
+  body.treatment-detail[data-page="four"] .treatment-intro>.container.split>div:last-child{
+    grid-column:1;grid-row:2;
+  }
+  body.treatment-detail .treatment-main .treatment-intro h2{
+    max-width:14ch;font-size:clamp(3.4rem,7vw,5.2rem);
+  }
+  body.treatment-detail .treatment-main .treatment-intro .scene--portrait,
+  body.treatment-detail[data-page="chair"] .treatment-intro .scene--portrait{
+    width:100%;max-width:none;
+    aspect-ratio:5/4;min-height:0;
+  }
+  body.treatment-detail .treatment-main .treatment-guide>.container.content-layout{
+    grid-template-columns:minmax(0,1fr);
+    gap:clamp(38px,5vw,65px);
+  }
+  body.treatment-detail .treatment-main .treatment-guide aside{
+    position:static;max-width:720px;
+  }
+  body.treatment-detail .treatment-main .treatment-guide aside h2{
+    max-width:15ch;
+    font-size:clamp(3.3rem,6.8vw,5.3rem);
+  }
+  body.treatment-detail .treatment-main .treatment-close>.container{
+    grid-template-columns:minmax(0,1fr);
+  }
+  body.treatment-detail .treatment-main .treatment-close .actions{
+    grid-column:1;grid-row:4;
+    flex-direction:row;flex-wrap:wrap;
+    width:100%;margin-top:32px;min-width:0;
+  }
+}
+@media(max-width:520px){
+  body.treatment-detail .treatment-main .hero:not(.hero--home){
+    min-height:clamp(595px,83svh,790px);
+    padding:128px 22px 65px;
+  }
+  body.treatment-detail .treatment-main .hero h1{
+    font-size:clamp(3.5rem,12.4vw,4.65rem);
+    line-height:.95;
+    max-width:11ch;
+    margin:23px 0;
+  }
+  body.treatment-detail .treatment-main .hero .actions{
+    gap:22px;
+  }
+  body.treatment-detail .treatment-main .hero .text-link{
+    display:inline-flex;
+    align-items:center;
+  }
+  .treatment-hero__discover{margin-top:36px}
+  body.treatment-detail .treatment-main .treatment-intro{
+    padding:75px 0;
+  }
+  body.treatment-detail .treatment-main .treatment-intro h2{
+    font-size:clamp(3.4rem,11.5vw,4.5rem);max-width:13ch;
+  }
+  body.treatment-detail .treatment-main .treatment-intro .scene--portrait,
+  body.treatment-detail[data-page="chair"] .treatment-intro .scene--portrait{
+    aspect-ratio:4/4.8;
+  }
+  body.treatment-detail .treatment-main .treatment-guide{
+    padding:75px 0;
+  }
+  body.treatment-detail .treatment-main .treatment-guide article{
+    grid-template-columns:minmax(0,1fr);
+    gap:0;
+    padding:29px 0 33px;
+  }
+  body.treatment-detail .treatment-main .treatment-guide article .eyebrow{
+    grid-column:1;grid-row:1;margin:0 0 16px;
+  }
+  body.treatment-detail .treatment-main .treatment-guide article h3{
+    grid-column:1;grid-row:2;font-size:clamp(2.6rem,9.5vw,3.9rem);
+    margin:0 0 14px;
+  }
+  body.treatment-detail .treatment-main .treatment-guide article .lede{
+    grid-column:1;grid-row:3;
+  }
+  body.treatment-detail .treatment-main .treatment-close{
+    min-height:0;padding:85px 0 110px;
+  }
+  body.treatment-detail .treatment-main .treatment-close h2{
+    font-size:clamp(3.9rem,12vw,5.4rem);
+  }
+  body.treatment-detail .treatment-main .treatment-close .actions{
+    flex-direction:column;
+  }
+  body.treatment-detail .treatment-main .treatment-close .button{
+    width:100%;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.treatment-detail .treatment-main *,
+  body.treatment-detail .treatment-main *::before,
+  body.treatment-detail .treatment-main *::after{
+    animation:none!important;
+    transition-duration:0.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
