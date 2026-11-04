@@ -33,6 +33,7 @@ const expected=[
         assert.equal(await details.count(),1,route+' one Treatments disclosure');
         assert.equal(await links.count(),5,route+' five direct treatments');
         assert.equal(await details.evaluate(el=>el.open),false,route+' starts closed');
+        assert.equal(await summary.evaluate(el=>getComputedStyle(el).textTransform),'none',route+' Treatments typography must match Home without uppercase conversion');
         const paths=await links.evaluateAll(nodes=>nodes.map(n=>({label:n.textContent.trim(),pathname:new URL(n.href).pathname})));
         assert.deepEqual(paths,expected.map(([label,pathname])=>({label,pathname})),route+' only verified treatment pages');
         if(mobile){
