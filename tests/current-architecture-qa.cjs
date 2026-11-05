@@ -46,7 +46,7 @@ const routes = [
           contactForm:document.querySelector('form.contact-inquiry__form')?.getAttribute('action'),
           heroOverlay:(()=>{const shade=document.querySelector('.em-body-hero__shade'),hero=document.querySelector('.hero');return shade?getComputedStyle(shade).backgroundImage:hero?getComputedStyle(hero,'::before').backgroundImage:''})(),
           navTopics:[...document.querySelector('.navigation').children].map(x=>x.matches('details')?x.querySelector('summary').textContent.trim():x.textContent.trim()),
-          serviceRows:document.querySelectorAll('.service-row').length,
+          atlasItems:document.querySelectorAll('[data-atz-atlas-item]').length,
           snap:getComputedStyle(document.documentElement).scrollSnapType,
           reducedHeroTransform:(()=>{const el=document.querySelector('.hero__background, .em-body-hero__image');return el?getComputedStyle(el).transform:null})(),
           bodyCinematic:!!document.querySelector('.em-body-hero, .em-journey'),
@@ -76,7 +76,7 @@ const routes = [
         assert.deepEqual(result.navTopics,[
           'Treatments','Menu & Prices','About','Gallery','Contact'
         ],`${route}: navigation must mirror Home's five primary links`);
-        if(route==='/massage-services/')assert.equal(result.serviceRows,5,'Service index must show 5 confirmed modalities');
+        if(route==='/massage-services/')assert.equal(result.atlasItems,6,'Service atlas must show six treatment guides');
         assert.equal(result.snap,'none',`${route}: native scrolling; no scroll-snap trap`);
         if(route==='/massage-services/body-massage/')assert(result.bodyCinematic,`${route}: cinematic scene structure must be present`);
         if(route!='/contact/')assert.equal(result.reducedHeroTransform,'none',`${route}: no photo motion under reduced-motion setting`);

@@ -221,7 +221,7 @@ body[data-page] .site-header .toggle::before{content:none;display:none}
   }
   .em-mobile-booking:hover span{transform:translate(2px,-2px)}
   .em-mobile-booking:focus-visible{outline:2px solid var(--agate-aqua);outline-offset:3px}
-  .touch-home .footer,body[data-page] .site-footer{
+  .touch-home .em-footer,body[data-page] .em-footer{
     padding-bottom:calc(104px + env(safe-area-inset-bottom,0px));
   }
   .touch-home .intro__skip{bottom:98px}
