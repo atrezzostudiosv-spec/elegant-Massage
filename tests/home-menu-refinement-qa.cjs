@@ -106,6 +106,11 @@ async function computed(page){
         'Selector and title must align at the left reading edge at '+width);
       assert(editorial.headingAlign==='left',
         'Title must read as left-led editorial copy, not centered at '+width);
+      if([375,768,1440].includes(width))
+        await page.locator('.treatments__opening').screenshot({
+          path:path.join(dest,'intro-floral-full-bleed-'+width+'.png'),
+          animations:'disabled',timeout:30000
+        });
 
 
       // Capture the exact frame that formerly showed a solid blue rectangle.
