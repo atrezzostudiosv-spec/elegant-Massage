@@ -234,8 +234,8 @@
 @media(max-width:700px){
   .touch-home .at-mask-stage{
     background:
-      linear-gradient(180deg,rgba(249,248,245,.15),rgba(249,248,245,.90)) center / cover no-repeat,
-      url('../images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp') right top / auto min(55svh,480px) no-repeat,
+      linear-gradient(180deg,rgba(249,248,245,.04) 0%,rgba(249,248,245,.13) 56%,rgba(249,248,245,.56) 100%) center / cover no-repeat,
+      url('../images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp') 62% center / cover no-repeat,
       #f8f7f4;
   }
 }
