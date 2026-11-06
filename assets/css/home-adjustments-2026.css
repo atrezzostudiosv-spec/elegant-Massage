@@ -222,6 +222,13 @@
 }
 .touch-home .at-mask-stage{
   background:
+    /* Blend the top edge of the still-life into the ivory section above. */
+    linear-gradient(180deg,
+      #f8f7f4 0%,
+      rgba(248,247,244,.96) 6%,
+      rgba(248,247,244,.76) 14%,
+      rgba(248,247,244,.34) 24%,
+      rgba(248,247,244,0) 34%) center / cover no-repeat,
     linear-gradient(90deg,
       rgba(249,248,245,.995) 0%,
       rgba(249,248,245,.985) 32%,
@@ -234,6 +241,12 @@
 @media(max-width:700px){
   .touch-home .at-mask-stage{
     background:
+      linear-gradient(180deg,
+        #f8f7f4 0%,
+        rgba(248,247,244,.94) 6%,
+        rgba(248,247,244,.65) 14%,
+        rgba(248,247,244,.22) 25%,
+        rgba(248,247,244,0) 35%) center / cover no-repeat,
       linear-gradient(180deg,rgba(249,248,245,.04) 0%,rgba(249,248,245,.13) 56%,rgba(249,248,245,.56) 100%) center / cover no-repeat,
       url('../images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp') 62% center / cover no-repeat,
       #f8f7f4;
