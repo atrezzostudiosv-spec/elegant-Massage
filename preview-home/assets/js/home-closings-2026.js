@@ -36,6 +36,26 @@
         }
       }));
     }
+    // ONE introductory copy block is now part of the same floral SVG-mask
+    // stage, not a standalone section above it. While the scene is held, the
+    // text naturally dissolves as the Body Massage blinds begin to open.
+    // No modifications to Codrops/Hiroki's original five treatment timeline.
+    const treatmentTrack=document.querySelector('#cinema-track');
+    const stageIntro=treatmentTrack?.querySelector('.at-mask-stage > .treatments__opening');
+    if(treatmentTrack&&stageIntro&&matchMedia('(min-height:650px)').matches){
+      motions.push(gsap.fromTo(stageIntro,
+        {autoAlpha:1,y:0},
+        {autoAlpha:0,y:-18,ease:'none',scrollTrigger:{
+          trigger:treatmentTrack,
+          start:'top top',
+          end:()=>'+='+Math.round(Math.max(250,window.innerHeight*.44)),
+          scrub:.55,invalidateOnRefresh:true,
+          onUpdate:self=>{stageIntro.style.pointerEvents=self.progress>.70?'none':'auto';},
+          onLeave:()=>{stageIntro.style.pointerEvents='none';},
+          onEnterBack:()=>{stageIntro.style.pointerEvents='auto';}
+        }}
+      ));
+    }
     // Text remains in the DOM and visible even if animations never initialize.
     const reveals=[
       {root:'.menu-pause',selectors:'.menu-pause__eyebrow,.menu-pause h2,.menu-pause__copy,.menu-pause__footer'},
