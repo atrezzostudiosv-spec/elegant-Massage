@@ -75,6 +75,21 @@ async function computed(page){
       });
       assert(loaded,'The spa still-life asset must decode at '+width);
 
+      // Capture the exact frame that formerly showed a solid blue rectangle.
+      // The first mask starts closed; the photographic canvas must be visible.
+      const trackY=await page.evaluate(()=>{
+        const r=document.querySelector('#cinema-track').getBoundingClientRect();
+        return window.scrollY+r.top;
+      });
+      await page.evaluate(y=>window.scrollTo({top:y+3,behavior:'instant'}),trackY);
+      await sleep(800);
+      if(width===375||width===768||width===1440)
+        await page.locator('.at-mask-stage').screenshot({
+          path:path.join(dest,'transition-'+width+'.png'),
+          animations:'disabled',timeout:30000
+        });
+
+
       assert.equal(c.menuSource,'./assets/images/martes/body-editorial.webp','Menu must use new approved uploaded photo');
       assert(c.heroCTA.radius>=c.heroCTA.height*.45,'Home hero CTA must be a pill');
       assert(c.menuCTA.radius>=c.menuCTA.height*.45,'Home menu CTA must be a pill');
