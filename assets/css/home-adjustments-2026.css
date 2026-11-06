@@ -1,0 +1,210 @@
+/* ATREZZO / Elegant Massage — Home-specific refinements, 2026-11-06.
+   Requested: hide Sticky Grid subtitle on mobile, purposefully pin/zoom Menu 02,
+   and bring Home CTAs into the approved pill+secondary-text system.
+   Scoped to .touch-home: the 12 approved internal pages are unchanged. */
+
+/* On mobile the enormous editorial title has no supporting caption. */
+@media(max-width:700px){
+  .touch-home .at-grid__description{display:none!important}
+}
+
+/* Floating header disappears only after downward movement and reveals
+   on upward movement; never hide it while the user navigates the menu. */
+.touch-home .glass-header{
+  transition:transform .35s cubic-bezier(.22,1,.36,1),
+             background .25s ease,box-shadow .25s ease;
+  will-change:transform;
+}
+.touch-home .glass-header.em-home-header-hidden:not(:focus-within){
+  transform:translate3d(0,calc(-100% - 36px),0);
+}
+.touch-home .glass-header:focus-within{transform:translate3d(0,0,0)}
+
+/* MENU 02 / A native-scroll editorial reading hold. The section provides
+   travel distance and the inner stage holds at viewport top. Never intercept
+   wheel, keyboard, or touch events. A scrubbed photograph-only zoom is
+   managed by the already-installed GSAP/ScrollTrigger animation system. */
+.touch-home .menu-pause{
+  display:block;
+  position:relative;
+  height:174svh;
+  min-height:1120px;
+  padding:0;
+  overflow:visible;
+  isolation:auto;
+  background:#19312d;
+  color:#f7f8f3;
+}
+.touch-home .menu-pause__stage{
+  display:grid;
+  position:sticky;
+  top:0;
+  width:100%;
+  height:100svh;
+  min-height:650px;
+  align-items:center;
+  padding:0;
+  overflow:hidden;
+  isolation:isolate;
+  background:#19312d;
+}
+.touch-home .menu-pause__photo img{
+  object-position:70% 46%;
+  transform-origin:67% 46%;
+  transform:scale(1.015);
+}
+.touch-home .menu-pause__veil{
+  background:
+    linear-gradient(90deg,rgba(13,35,33,.89) 0%,rgba(17,41,39,.80) 31%,
+                        rgba(18,38,37,.46) 64%,rgba(15,32,30,.14) 100%),
+    linear-gradient(0deg,rgba(6,19,18,.55),transparent 42%,rgba(12,30,27,.16));
+}
+.touch-home .menu-pause__body{
+  width:min(calc(100% - var(--gutter)*2),var(--max));
+  padding-top:clamp(92px,9svh,125px);
+  padding-bottom:clamp(30px,5svh,70px);
+  color:#fff;
+}
+.touch-home .menu-pause__eyebrow{color:#d2e4d7}
+.touch-home .menu-pause h2,.touch-home .menu-pause h2 em{color:#f8f9f6}
+.touch-home .menu-pause__copy p{color:#f1f5f0}
+.touch-home .menu-pause__footer{
+  border-top-color:rgba(255,255,255,.42);
+  color:#e4eee6;
+  margin-top:clamp(38px,5.5svh,78px);
+}
+.touch-home .menu-pause__photo{z-index:-3}
+
+/* Glass CTA capsules, one primary button; all other paired actions are
+   simple underlined editorial links. Same interaction vocabulary as internal. */
+.touch-home .glass-header__book,
+.touch-home .intro__actions .button--garnet,
+.touch-home .chapter__book,
+.touch-home .menu-pause__cta,
+.touch-home .real-place__action--primary,
+.touch-home .visit--mapped .visit__actions .visit__book,
+.touch-home .em-footer__book,
+.touch-home .em-mobile-booking{
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:clamp(16px,2vw,32px);
+  min-height:54px;
+  padding:13px clamp(23px,2.5vw,38px);
+  border:1px solid rgba(248,253,250,.56);
+  border-radius:999px;
+  background:rgba(19,42,53,.77);
+  color:#fff;
+  box-shadow:0 12px 32px rgba(9,25,33,.19),inset 0 1px 0 rgba(255,255,255,.15);
+  -webkit-backdrop-filter:blur(18px) saturate(118%);
+  backdrop-filter:blur(18px) saturate(118%);
+  font:700 clamp(.75rem,.9vw,.88rem)/1.4 var(--sans);
+  letter-spacing:.075em;text-transform:uppercase;text-decoration:none;
+  transition:background .23s,border-color .23s,transform .23s,box-shadow .23s;
+}
+.touch-home .glass-header__book{min-height:43px;padding:10px 20px;min-width:0;background:rgba(255,255,255,.14)}
+.touch-home .glass-header__book:hover{background:rgba(255,255,255,.23)}
+.touch-home .intro__actions .button--garnet,
+.touch-home .real-place__action--primary{background:rgba(19,42,53,.64)}
+.touch-home .glass-header__book:hover,
+.touch-home .intro__actions .button--garnet:hover,
+.touch-home .chapter__book:hover,
+.touch-home .menu-pause__cta:hover,
+.touch-home .real-place__action--primary:hover,
+.touch-home .visit--mapped .visit__actions .visit__book:hover,
+.touch-home .em-footer__book:hover,
+.touch-home .em-mobile-booking:hover{
+  color:#fff;background:rgba(18,41,53,.91);
+  border-color:rgba(255,255,255,.82);
+  box-shadow:0 16px 39px rgba(9,25,33,.26),inset 0 1px 0 rgba(255,255,255,.17);
+  transform:translateY(-2px);
+}
+.touch-home .chapter__learn,
+.touch-home .intro__actions .button--outline-light,
+.touch-home .real-place__action:not(.real-place__action--primary),
+.touch-home .visit--mapped .visit__actions .button--ink,
+.touch-home .visit--mapped .visit__actions .button--outline-ink{
+  display:inline-flex;
+  align-items:center;justify-content:space-between;
+  gap:clamp(16px,2.3vw,42px);
+  min-height:0;
+  width:auto;
+  padding:10px 0 12px;
+  border:0;
+  border-bottom:1px solid currentColor;
+  border-radius:0;
+  color:#fff;
+  background:transparent;
+  box-shadow:none;
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+  font:700 clamp(.76rem,.9vw,.88rem)/1.45 var(--sans);
+  letter-spacing:.075em;
+  text-transform:uppercase;text-decoration:none;
+  transition:color .23s,border-color .23s;
+}
+.touch-home .intro__actions .button--outline-light:hover,
+.touch-home .real-place__action:not(.real-place__action--primary):hover,
+.touch-home .chapter__learn:hover{
+  color:#d2e4d7;background:transparent;border-bottom-color:#d2e4d7;
+}
+.touch-home .visit--mapped .visit__actions .button--ink,
+.touch-home .visit--mapped .visit__actions .button--outline-ink{
+  color:var(--agate-ocean);
+}
+.touch-home .visit--mapped .visit__actions .button--ink:hover,
+.touch-home .visit--mapped .visit__actions .button--outline-ink:hover{
+  color:#1c354d;background:transparent;border-bottom-color:#1c354d;
+}
+/* Booking is the only filled CTA in Visit Us; maps/contact are secondary. */
+.touch-home .visit--mapped .visit__actions .visit__book{
+  background:rgba(19,42,53,.84);
+}
+.touch-home .visit--mapped .visit__actions .button--ink{order:1}
+.touch-home .visit--mapped .visit__actions .visit__book{order:0}
+.touch-home .visit--mapped .visit__actions .button--outline-ink{order:2}
+
+/* Keep the illustrated menu section distinct from the existing grid/chapter.
+   Text is available immediately even if JS fails. */
+@media(max-width:1023px){
+  .touch-home .menu-pause__body{padding-top:85px}
+  .touch-home .menu-pause__layout{gap:28px}
+  .touch-home .menu-pause__photo img{object-position:72% 45%}
+}
+@media(max-width:767px){
+  /* Short/mobile viewports keep normal reading flow; no sticky clipping. */
+  .touch-home .menu-pause{height:auto;min-height:0;overflow:hidden}
+  .touch-home .menu-pause__stage{position:relative;top:auto;height:auto;min-height:690px;padding:74px 0 42px;overflow:hidden}
+  .touch-home .menu-pause__body{padding:0}
+  .touch-home .menu-pause__photo img{object-position:72% center}
+  .touch-home .menu-pause__veil{
+    background:
+      linear-gradient(180deg,rgba(13,35,33,.82),rgba(13,35,33,.75) 50%,rgba(15,34,32,.57)),
+      linear-gradient(90deg,rgba(13,35,33,.46),transparent);
+  }
+  .touch-home .menu-pause__footer{margin-top:45px}
+}
+@media(max-width:430px){
+  .touch-home .intro__actions .button--outline-light{width:auto;max-width:100%}
+  .touch-home .menu-pause__cta{width:auto;max-width:100%}
+  .touch-home .real-place--cinematic .real-place__actions{display:flex;flex-wrap:wrap;gap:24px}
+  .touch-home .real-place--cinematic .real-place__action{width:auto}
+  .touch-home .visit--mapped .visit__actions{display:flex;flex-wrap:wrap;gap:22px}
+  .touch-home .visit--mapped .visit__actions .button,
+  .touch-home .visit--mapped .visit__actions .visit__book{width:auto;max-width:100%}
+}
+@media(max-height:680px) and (min-width:768px){
+  .touch-home .menu-pause{height:auto;min-height:0}
+  .touch-home .menu-pause__stage{position:relative;top:auto;height:auto;min-height:670px;padding:90px 0 40px}
+}
+@media(prefers-reduced-motion:reduce){
+  .touch-home .glass-header{transition:none;will-change:auto}
+  .touch-home .menu-pause{height:auto;min-height:0}
+  .touch-home .menu-pause__stage{position:relative;top:auto;height:auto;min-height:clamp(670px,90svh,820px);overflow:hidden}
+  .touch-home .menu-pause__photo img{transform:none!important;will-change:auto}
+  .touch-home .glass-header__book,
+  .touch-home .intro__actions .button--garnet,
+  .touch-home .chapter__book,
+  .touch-home .menu-pause__cta,
+  .touch-home .real-place__action,
+  .touch-home .visit__actions a,
+  .touch-home .em-footer__book,
+  .touch-home .em-mobile-booking{transition:none;transform:none}
+}
