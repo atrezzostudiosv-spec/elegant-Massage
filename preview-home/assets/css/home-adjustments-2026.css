@@ -208,3 +208,34 @@
   .touch-home .em-footer__book,
   .touch-home .em-mobile-booking{transition:none;transform:none}
 }
+
+/* 2026-11-06 / The photographic bridge into the first service chapter.
+   A deliberately quiet pale still-life replaces the solid ocean-blue canvas
+   visible while the SVG blinds start opening. It is an original illustrative
+   background only, not a photograph of Elegant Massage facilities.
+   Keep Codrops/Hiroki masks, chapter text and native scroll untouched. */
+.touch-home .treatments {
+  background-color:#f8f7f4;
+}
+.touch-home .cinema-track{
+  background-color:#f8f7f4;
+}
+.touch-home .at-mask-stage{
+  background:
+    linear-gradient(90deg,
+      rgba(249,248,245,.995) 0%,
+      rgba(249,248,245,.985) 32%,
+      rgba(249,248,245,.90) 48%,
+      rgba(249,248,245,.38) 69%,
+      rgba(249,248,245,.02) 100%) center / cover no-repeat,
+    url('../images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp') right center / auto 100% no-repeat,
+    #f8f7f4;
+}
+@media(max-width:700px){
+  .touch-home .at-mask-stage{
+    background:
+      linear-gradient(180deg,rgba(249,248,245,.15),rgba(249,248,245,.90)) center / cover no-repeat,
+      url('../images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp') right top / auto min(55svh,480px) no-repeat,
+      #f8f7f4;
+  }
+}
