@@ -10,6 +10,7 @@ on:
       - 'assets/css/internal-refinement-2026.css'
       - 'assets/brand/**'
       - 'tests/internal-refinement-qa.cjs'
+      - 'tests/internal-pill-glass-qa.cjs'
       - '.github/workflows/internal-pages-review.yml'
   workflow_dispatch:
 jobs:
@@ -33,6 +34,7 @@ jobs:
           sleep 2
           node tests/internal-refinement-qa.cjs
           node tests/current-architecture-qa.cjs
+          node tests/internal-pill-glass-qa.cjs
       - name: Upload screenshots and QA report
         if: always()
         uses: actions/upload-artifact@v4
@@ -41,5 +43,6 @@ jobs:
           path: |
             qa-artifacts/internal-refinement/
             qa-artifacts/current-architecture/
+            qa-artifacts/internal-pill-glass/
           if-no-files-found: warn
           retention-days: 14
