@@ -235,7 +235,7 @@
       rgba(249,248,245,.90) 48%,
       rgba(249,248,245,.38) 69%,
       rgba(249,248,245,.02) 100%) center / cover no-repeat,
-    url('../images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp') right center / auto 100% no-repeat,
+    url('../images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp') 64% center / cover no-repeat,
     #f8f7f4;
 }
 @media(max-width:700px){
@@ -259,5 +259,110 @@
 @media(min-height:650px) and (prefers-reduced-motion:no-preference){
   .at-original-active .touch-home .at-mask-stage > .chapter{
     background:transparent;
+  }
+}
+
+
+/* ATREZZO / 01 FIND YOUR MASSAGE / editorial integration (2026-11-06).
+   Same approved floral image across the FULL viewport width, including the
+   negative space under the copy. No painted ivory/image boundary. Both
+   transitions end/start in the same marfil tone so the chapter isn't cut. */
+.touch-home .treatments__opening{
+  box-sizing:border-box;
+  width:100%;
+  max-width:none;
+  min-height:100svh;
+  margin:0;
+  padding:
+    clamp(112px,12svh,160px)
+    clamp(26px,7.6vw,145px)
+    clamp(90px,10svh,145px);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  text-align:left;
+  background-color:#f8f7f4;
+  background-image:
+    linear-gradient(180deg,
+      #f8f7f4 0%,
+      rgba(248,247,244,.32) 12%,
+      rgba(248,247,244,0) 31%,
+      rgba(248,247,244,0) 70%,
+      rgba(248,247,244,.46) 86%,
+      #f8f7f4 100%),
+    linear-gradient(90deg,
+      rgba(248,247,244,.97) 0%,
+      rgba(248,247,244,.88) 27%,
+      rgba(248,247,244,.45) 52%,
+      rgba(248,247,244,0) 77%),
+    url('../images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp');
+  background-position:center,center,64% center;
+  background-repeat:no-repeat;
+  background-size:cover,cover,cover;
+}
+.touch-home .treatments__opening > .eyebrow,
+.touch-home .treatments__opening > h2,
+.touch-home .treatments__opening > p:not(.eyebrow),
+.touch-home .treatments__opening > .chapter-jump{
+  margin-inline:0;
+  text-align:left;
+}
+.touch-home .treatments__opening > .eyebrow{max-width:55ch}
+.touch-home .treatments__opening h2{
+  max-width:min(720px,60vw);
+  font-size:clamp(3.5rem,6.7vw,8rem);
+  line-height:.98;
+  text-wrap:balance;
+  margin-top:clamp(18px,2vw,30px);
+  margin-bottom:clamp(25px,3vw,42px);
+}
+.touch-home .treatments__opening > p:not(.eyebrow){
+  max-width:49ch;
+  line-height:1.72;
+  margin-bottom:0;
+}
+.touch-home .treatments__opening .chapter-jump{
+  margin-top:clamp(32px,5vh,58px);
+  max-width:100%;
+}
+/* Do not apply a second opaque plate: the photographic canvas must actually
+   extend from left edge to right edge behind the subtle readable overlay. */
+@media(max-width:1023px){
+  .touch-home .treatments__opening{
+    padding-inline:clamp(30px,6vw,75px);
+    min-height:clamp(780px,100svh,980px);
+  }
+  .touch-home .treatments__opening h2{
+    max-width:min(670px,76vw);
+    font-size:clamp(3.7rem,8.5vw,6rem);
+  }
+}
+@media(max-width:700px){
+  .touch-home .treatments__opening{
+    min-height:740px;
+    padding:clamp(112px,12svh,155px) var(--gutter) 112px;
+    background-image:
+      linear-gradient(180deg,
+        #f8f7f4 0%,
+        rgba(248,247,244,.75) 15%,
+        rgba(248,247,244,.38) 45%,
+        rgba(248,247,244,.55) 77%,
+        #f8f7f4 100%),
+      linear-gradient(90deg,
+        rgba(248,247,244,.86),rgba(248,247,244,.32)),
+      url('../images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp');
+    background-position:center,center,60% center;
+    background-size:cover,cover,cover;
+  }
+  .touch-home .treatments__opening h2{
+    max-width:100%;
+    font-size:clamp(3.1rem,11vw,5.1rem);
+    text-wrap:wrap;
+  }
+  .touch-home .treatments__opening > p:not(.eyebrow){max-width:38ch}
+  .touch-home .treatments__opening .chapter-jump{
+    max-width:335px;
+    margin-top:32px;
   }
 }
