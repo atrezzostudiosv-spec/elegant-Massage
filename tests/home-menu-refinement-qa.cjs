@@ -55,6 +55,26 @@ async function computed(page){
       assert(c.scrollWidth<=width+2,'Horizontal overflow '+width+' '+c.scrollWidth);
       assert(c.docSections.includes('introduction')&&c.docSections.includes('atrezzo-original-grid')&&c.docSections.includes('find-your-massage'),'Original Home journey preserved');
       assert(c.docSections.includes('massage-menu-preview'),'Menu stage retained');
+      // A clean, illustrative spa still-life replaces the opaque background
+      // under the first SVG mask; keep the SVG stage and its reveal unchanged.
+      const bridge=await page.evaluate(()=>{
+        const stage=document.querySelector('.at-mask-stage');
+        const css=getComputedStyle(stage);
+        const chapters=document.querySelectorAll('#cinema-track .chapter');
+        return {backgroundImage:css.backgroundImage,backgroundColor:css.backgroundColor,
+          stagePresent:!!stage,chapters:chapters.length,
+          imageUrl:'./assets/images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp'};
+      });
+      assert(bridge.stagePresent&&bridge.chapters===5,'Original 5-chapter stage preserved');
+      assert(bridge.backgroundImage.includes('elegant-massage-spa-stilllife-blossoms-stones-candle.webp'),
+             'Transition must show still-life photo rather than flat colour at '+width);
+      const loaded=await page.evaluate(async()=>{
+        const im=new Image();
+        im.src='./assets/images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp';
+        try{await im.decode();return im.naturalWidth>0}catch(e){return false}
+      });
+      assert(loaded,'The spa still-life asset must decode at '+width);
+
       assert.equal(c.menuSource,'./assets/images/martes/body-editorial.webp','Menu must use new approved uploaded photo');
       assert(c.heroCTA.radius>=c.heroCTA.height*.45,'Home hero CTA must be a pill');
       assert(c.menuCTA.radius>=c.menuCTA.height*.45,'Home menu CTA must be a pill');
