@@ -88,6 +88,10 @@ async function computed(page){
           path:path.join(dest,'transition-'+width+'.png'),
           animations:'disabled',timeout:30000
         });
+      // Reset to the document start before testing downward menu hide.
+      // The screenshot scrolls deep into the page, so without this reset
+      // the next scroll to 680px would actually be an UPWARD movement.
+      await at(page,0);
 
 
       assert.equal(c.menuSource,'./assets/images/martes/body-editorial.webp','Menu must use new approved uploaded photo');
