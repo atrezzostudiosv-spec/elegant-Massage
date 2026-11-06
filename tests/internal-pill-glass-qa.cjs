@@ -33,6 +33,17 @@ function fail(desc,s){assert(s,desc)}
          const secondary=document.querySelector('.closing .actions .button--outline, .em-body-cta .em-book--ghost, .em-contact-close__link');
          const header=document.querySelector('.site-header .header-cta');
          const dock=document.querySelector('.em-mobile-booking');
+         const finalKicker=document.querySelector('.closing .eyebrow, .em-body-cta .em-kicker, .em-contact-close .eyebrow');
+         const finalHeading=document.querySelector('.closing h2, .em-body-cta h2, .em-contact-close h2');
+         const finalActions=document.querySelector('.closing .actions, .em-body-cta__actions, .em-contact-close__actions');
+         const finalPosition=finalKicker&&finalHeading&&finalActions?{
+           kickerLeft:finalKicker.getBoundingClientRect().left,
+           headingLeft:finalHeading.getBoundingClientRect().left,
+           actionsLeft:finalActions.getBoundingClientRect().left,
+           headingRight:finalHeading.getBoundingClientRect().right,
+           headingTextAlign:getComputedStyle(finalHeading).textAlign,
+           actionsJustify:getComputedStyle(finalActions).justifyContent
+         }:null;
          function visual(el){
            if(!el)return null;
            const s=getComputedStyle(el);
@@ -44,6 +55,7 @@ function fail(desc,s){assert(s,desc)}
          return {primary:visual(primary),final:visual(final),secondary:visual(secondary),
            header:visual(header),dock:visual(dock),bodyWidth:document.body.scrollWidth,
            htmlWidth:document.documentElement.scrollWidth,innerWidth:innerWidth,
+           finalPosition:finalPosition,
            noscript:document.querySelector('meta[name="robots"]')?.content};
        },selectors);
        fail(route+' must have first main CTA',styles.primary?.visible);
@@ -63,6 +75,12 @@ function fail(desc,s){assert(s,desc)}
        }else{
          fail(route+' mobile dock capsule',styles.dock?.visible&&styles.dock.radius>=styles.dock.height*.44);
        }
+       fail(route+' final CTA hierarchy exists',!!styles.finalPosition);
+       const pos=styles.finalPosition;
+       fail(route+' final CTA kicker moved left @'+width, pos.kickerLeft >= 0 && pos.kickerLeft <= (width>=1024?width*.18:70));
+       fail(route+' final CTA title aligned left @'+width, Math.abs(pos.headingLeft-pos.kickerLeft)<=4);
+       fail(route+' final CTA actions aligned left @'+width, Math.abs(pos.actionsLeft-pos.kickerLeft)<=4);
+       fail(route+' final CTA title must not be centered @'+width, pos.headingTextAlign!=='center');
        fail(route+' no overflow at '+width,styles.bodyWidth<=width+2&&styles.htmlWidth<=width+2);
        fail(route+' noindex',styles.noscript?.includes('noindex'));
        assert.equal(errors.length,0,route+' page errors '+errors.join('|'));
