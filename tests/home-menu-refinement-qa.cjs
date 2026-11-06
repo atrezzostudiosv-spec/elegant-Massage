@@ -77,6 +77,35 @@ async function computed(page){
       assert(loaded.width>=600&&loaded.height>=650,
              'The background needs a genuine responsive-quality source at '+width+': '+JSON.stringify(loaded));
 
+      const editorial=await page.evaluate(()=>{
+        const opening=document.querySelector('.treatments__opening');
+        const stage=document.querySelector('.at-mask-stage');
+        const title=opening.querySelector('h2');
+        const jump=opening.querySelector('.chapter-jump');
+        const st=getComputedStyle(stage),op=getComputedStyle(opening);
+        const rr=opening.getBoundingClientRect(),hr=title.getBoundingClientRect(),jr=jump.getBoundingClientRect();
+        return {openingWidth:rr.width,openingLeft:rr.left,headingLeft:hr.left,
+          headingRight:hr.right,jumpLeft:jr.left,openingBackground:op.backgroundImage,
+          openingSize:op.backgroundSize,maskBackground:st.backgroundImage,
+          maskSize:st.backgroundSize,headingAlign:getComputedStyle(title).textAlign};
+      });
+      const imageFile='elegant-massage-spa-stilllife-blossoms-stones-candle.webp';
+      assert(editorial.openingWidth>=width-2&&Math.abs(editorial.openingLeft)<2,
+        'The floral introduction must span the complete viewport '+width+': '+JSON.stringify(editorial));
+      assert(editorial.openingBackground.includes(imageFile),
+        'The title and selector must sit over the same full-bleed photograph at '+width);
+      assert(editorial.openingSize.split(',').every(x=>x.trim()==='cover'),
+        'Every introductory background layer must cover without a vertical image seam at '+width);
+      assert(editorial.maskSize.split(',').at(-1).trim()==='cover',
+        'The masked-chapter photo must cover the full width at '+width);
+      assert(editorial.headingLeft>=-2&&editorial.headingRight<=width+2,
+        'Title must not clip at '+width);
+      assert(Math.abs(editorial.jumpLeft-editorial.headingLeft)<4,
+        'Selector and title must align at the left reading edge at '+width);
+      assert(editorial.headingAlign==='left',
+        'Title must read as left-led editorial copy, not centered at '+width);
+
+
       // Capture the exact frame that formerly showed a solid blue rectangle.
       // The first mask starts closed; the photographic canvas must be visible.
       const trackY=await page.evaluate(()=>{
