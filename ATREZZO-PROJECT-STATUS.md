@@ -330,3 +330,13 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - The isolated public demo copy at `/preview-home/` matches the PR branch CSS exactly. The root Home is unchanged; commercial indexing is unauthorized.
 - QA: dedicated GitHub workflow 42211002967 passed at 375/768/1024/1440. It validates image coverage, original five-chapter mask, typography bounds, selector alignment, header direction, non-indexing and reduced motion. A follow-up run additionally captures 01 intro full-width screenshots for visual review.
 - Visual approval of this revised treatment introduction and mask backdrop is still pending. Do not merge PR #10 without approval; do not claim physical Safari/iOS browser verification.
+
+## 2026-11-06 — Duplicated 01 intro REMOVED; single floral editorial scene in review
+- User identified the exact defect: earlier changes had LEFT the original `01 / FIND YOUR MASSAGE` text section above and placed a second photographic background there, instead of moving the content into the EXISTING floral transition. This was a real implementation error.
+- Corrected the DOM rather than masking it with CSS: **one** `.treatments__opening` remains, physically moved into `#atrezzo-mask-stage` before the five `.chapter` entries; the former standalone block before `#cinema-track` was deleted.
+- Intro still contains exactly one existing `#treatments-title`, description and functional `#chapter-selector`. No content, service or booking URL invented or changed. First chapter retains existing original SVG blinds.
+- `home-adjustments-2026.css` positions that sole intro above the same full-bleed spa backdrop, using a light ivory readability veil that fades with the intro. The separate intro-photo duplication CSS was removed. Desktop and 375px screenshots manually inspected: readable text and floral composition.
+- `home-closings-2026.js` adds scrub-linked fade of the title/veil over the first ~44% of viewport scroll, returns it when scrolling up, and prevents invisible overlay from stealing clicks. Does not alter Codrops core.
+- Isolated `/preview-home/` received the precise HTML/CSS/JS edits. Static parity: one heading, one selector, one intro; preview CSS and JS exactly match PR #10. Home root index remains unchanged and demo remains noindex.
+- QA 42228729951 verified responsive 375/768/1024/1440, scene integration, original five chapters, no horizontal overflow, menu navigation, and accessibility fallback. Additional assertions for forward/reverse intro fade added to current QA run 42228934536; completion pending.
+- **Do not reopen completed other sections. Do not merge draft PR #10 without specific user visual approval of this corrected single-scene composition.**
