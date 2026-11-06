@@ -109,8 +109,10 @@ async function computed(page){
       assert(editorial.maskSize.split(',')[2]?.trim()==='cover',
         'The masked-chapter WebP must fill the full width at '+width+': '+editorial.maskSize);
       if(editorial.maskActive)
-        assert(editorial.openingPosition==='absolute'&&editorial.openingBackground==='none',
-          'While the SVG mask runs, the intro must be a TRANSPARENT overlay on the same photo, not a new photographic panel');
+        assert(editorial.openingPosition==='absolute'&&
+          editorial.openingBackground.includes('linear-gradient(')&&
+          !editorial.openingBackground.includes(imageFile),
+          'Active introduction must use ONLY a soft reading veil over the single mask-stage photo, not a second photo panel');
       else
         assert(editorial.openingBackground.includes(imageFile),
           'Fallback should show the photo behind the sole intro, not a blank panel');
