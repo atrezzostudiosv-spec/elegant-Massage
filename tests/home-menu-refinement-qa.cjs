@@ -96,8 +96,10 @@ async function computed(page){
         'The title and selector must sit over the same full-bleed photograph at '+width);
       assert(editorial.openingSize.split(',').every(x=>x.trim()==='cover'),
         'Every introductory background layer must cover without a vertical image seam at '+width);
-      assert(editorial.maskSize.split(',').at(-1).trim()==='cover',
-        'The masked-chapter photo must cover the full width at '+width);
+      // The final background layer is a solid ivory fallback (computed size
+      // "auto"); the third layer is the actual WebP and must use cover.
+      assert(editorial.maskSize.split(',')[2]?.trim()==='cover',
+        'The masked-chapter WebP must cover the full width at '+width+': '+editorial.maskSize);
       assert(editorial.headingLeft>=-2&&editorial.headingRight<=width+2,
         'Title must not clip at '+width);
       assert(Math.abs(editorial.jumpLeft-editorial.headingLeft)<4,
