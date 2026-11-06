@@ -71,9 +71,11 @@ async function computed(page){
       const loaded=await page.evaluate(async()=>{
         const im=new Image();
         im.src='./assets/images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp';
-        try{await im.decode();return im.naturalWidth>0}catch(e){return false}
+        try{await im.decode();return {ok:im.naturalWidth>0,width:im.naturalWidth,height:im.naturalHeight}}catch(e){return {ok:false,width:0,height:0}}
       });
-      assert(loaded,'The spa still-life asset must decode at '+width);
+      assert(loaded.ok,'The spa still-life asset must decode at '+width);
+      assert(loaded.width>=600&&loaded.height>=650,
+             'The background needs a genuine responsive-quality source at '+width+': '+JSON.stringify(loaded));
 
       // Capture the exact frame that formerly showed a solid blue rectangle.
       // The first mask starts closed; the photographic canvas must be visible.
