@@ -27,6 +27,10 @@ const widths = [375,768,1024,1440];
         const resp=await page.goto(origin+route,{waitUntil:'domcontentloaded',timeout:30000});
         assert.equal(resp.status(),200,route+': status not 200');
         await page.waitForTimeout(100);
+        if(await page.locator('.em-editorial-section--calm img').count()){
+          await page.locator('.em-editorial-section--calm img').first().scrollIntoViewIfNeeded();
+          await page.waitForFunction(()=>[...document.querySelectorAll('.em-editorial-section--calm img')].every(img=>img.complete&&img.naturalWidth>0),{timeout:12000});
+        }
         const info=await page.evaluate(()=>{
           const map=document.querySelector('.em-location');
           const footer=document.querySelector('.em-footer');
