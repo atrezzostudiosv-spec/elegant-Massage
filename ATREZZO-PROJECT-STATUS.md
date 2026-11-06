@@ -315,3 +315,10 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Working preview: `https://atrezzostudiosv-spec.github.io/elegant-Massage/preview-home/`, updated via main preview copy only. Latest GitHub Pages deployment of the high-res resource succeeded at commit `9540e8babe28230dea4af97502223a35b667d85e`.
 - Initial QA verified image decode, original five SVG chapters, native scroll, no horizontal overflow, noindex, responsive behaviour and reduced motion. A screenshot inspection caught a lower-half white gap on mobile; that defect was corrected. Screenshot inspection then identified excessive softness at desktop, so the low-resolution temporary WebP was replaced by the verified higher-resolution asset. Final-specific QA workflow requires source >=600px and runs at 375, 768, 1024, 1440.
 - Current status: FUNCTIONAL IMPLEMENTATION DONE, VISUAL USER APPROVAL PENDING. Keep PR #10 draft pending review; do not merge or index the demo. No claim of Safari/iOS/physical-device verification.
+
+## 2026-11-06 — Fade superior de la transición floral, APLICADO AL PREVIEW
+- El usuario aprobó conservar la fotografía floral y pidió solamente eliminar la línea dura entre la introducción blanca «01 / FIND YOUR MASSAGE» y la imagen mediante un degradado en el borde superior.
+- Implementado en `assets/css/home-adjustments-2026.css`: capa superior `linear-gradient(180deg, #f8f7f4 → transparent)` sobre el fondo preexistente de `.at-mask-stage`, con porcentajes adaptados para escritorio y móvil.
+- La foto original, su recorte, los capítulos, los SVG masks, las transiciones y la estructura HTML no fueron modificados. Se conserva `prefers-reduced-motion`.
+- Archivo CSS del PR #10 replicado de manera idéntica en `preview-home/assets/css/home-adjustments-2026.css` de main para revisión visual sin alterar la Home principal ni sus 12 páginas internas. El PR #10 permanece abierto en borrador, no autorizado para publicación comercial.
+- Pendiente de cerrar: QA final del nuevo fundido y despliegue de GitHub Pages, además de revisión visual del usuario. No se da por aprobado el resultado fotográfico automáticamente.
