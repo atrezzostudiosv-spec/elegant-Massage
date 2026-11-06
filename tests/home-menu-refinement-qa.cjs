@@ -76,7 +76,7 @@ async function computed(page){
       assert(await page.locator('.glass-header').evaluate(el=>!el.classList.contains('em-home-header-hidden')),'Header visible at top');
 
       // Confirm image and layout at the reading hold after actual scroll.
-      await at(page,c.menuTop+Math.min(120,Math.max(10,c.menuHeight-innerHeight)));
+      await at(page,c.menuTop+Math.min(120,Math.max(10,c.menuHeight-900)));
       await page.waitForFunction(()=>{const im=document.querySelector('.menu-pause__photo img');return !!im&&im.complete&&im.naturalWidth>0;},null,{timeout:12000});
       const sc=await page.evaluate(()=>{
         const photo=document.querySelector('.menu-pause__photo img');
@@ -97,7 +97,7 @@ async function computed(page){
         assert(late>=early+.020,'Menu photo needs meaningful progress-linked zoom '+width+': '+early+' '+late);
         results.push({width,early,late,header:{hiddenDown,shownUp},menuSource:c.menuSource});
       }else results.push({width,header:{hiddenDown,shownUp},menuSource:c.menuSource});
-      await page.locator('.menu-pause').screenshot({path:path.join(dest,'menu-'+width+'.png'),timeout:30000,animations:'disabled'});
+      await page.locator('.menu-pause__stage').screenshot({path:path.join(dest,'menu-'+width+'.png'),timeout:30000,animations:'disabled'});
       assert.equal(errors.length,0,'JS errors '+width+': '+errors.join('|'));
       await page.close();
     }
