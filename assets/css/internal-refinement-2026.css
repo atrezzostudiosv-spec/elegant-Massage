@@ -43,3 +43,162 @@ body[data-page="specialty"] .hero__background{background-image:url('../images/el
 @media(max-width:900px){.em-editorial-pair{grid-template-columns:1fr}.em-editorial-photo img{height:min(68svh,520px)}.em-location__shell{grid-template-columns:1fr}.em-location__details{max-width:760px}.em-location h2{max-width:17ch}.em-location__map iframe{height:390px}}
 @media(max-width:520px){.em-editorial-photo img{height:370px}.em-location__shell{width:calc(100% - 40px)}.em-location__map iframe{height:320px}.em-location__map-fallback{justify-content:flex-start}.em-contact-close__actions{align-items:stretch;flex-direction:column}.em-contact-close__actions>*{width:100%;text-align:center;justify-content:center}}
 @media(prefers-reduced-motion:reduce){.em-location__directions{transition:none}}
+
+/* 2026-11-06 / Atrezzo interaction system: pills + smoked glass.
+   Internal pages ONLY; no selectors without body[data-page].
+   One pill primary action and one understated typographic secondary action.
+   User approved examples: fully rounded capsule, no rectangular CTA. */
+body[data-page]{
+  --at-pill-ink:rgba(18,40,53,.78);
+  --at-pill-ink-strong:rgba(18,41,53,.90);
+  --at-pill-white:rgba(255,255,255,.91);
+  --at-pill-edge:rgba(248,253,250,.49);
+  --at-pill-shadow:0 12px 32px rgba(9,25,33,.21),inset 0 1px 0 rgba(255,255,255,.13);
+}
+/* Apply to actionable CTA surfaces, not informational cards or navigation text. */
+body[data-page] .button:not(.button--outline),
+body[data-page] .site-header .header-cta,
+body[data-page] .em-body .em-book:not(.em-book--ghost),
+body[data-page] .em-body-modal__book,
+body[data-page] .contact-action--primary,
+body[data-page] .em-location__directions,
+body[data-page] .em-mobile-booking {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(16px,2vw,32px);
+  min-height:56px;
+  padding:14px clamp(24px,2.75vw,38px);
+  border:1px solid var(--at-pill-edge);
+  border-radius:999px;
+  background:var(--at-pill-ink);
+  color:#fff;
+  box-shadow:var(--at-pill-shadow);
+  -webkit-backdrop-filter:blur(18px) saturate(120%);
+  backdrop-filter:blur(18px) saturate(120%);
+  font-family:"Open Sans",Arial,sans-serif;
+  font-size:clamp(.72rem,.83vw,.83rem);
+  font-weight:700;
+  line-height:1.4;
+  letter-spacing:.075em;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:background-color .25s,border-color .25s,transform .25s,box-shadow .25s;
+}
+/* Hero/closing photo surfaces should transmit more of the image through the glass. */
+body[data-page] .hero .button:not(.button--outline),
+body[data-page] .closing .button:not(.button--outline),
+body[data-page] .em-body-hero .em-book:not(.em-book--ghost),
+body[data-page] .em-body-cta .em-book:not(.em-book--ghost),
+body[data-page] .em-contact-close .button:not(.button--outline){
+  background:rgba(19,42,53,.61);
+}
+body[data-page] .button:not(.button--outline):hover,
+body[data-page] .site-header .header-cta:hover,
+body[data-page] .em-body .em-book:not(.em-book--ghost):hover,
+body[data-page] .em-body-modal__book:hover,
+body[data-page] .contact-action--primary:hover,
+body[data-page] .em-location__directions:hover,
+body[data-page] .em-mobile-booking:hover {
+  background:var(--at-pill-ink-strong);
+  color:#fff;
+  border-color:rgba(255,255,255,.76);
+  box-shadow:0 17px 36px rgba(9,25,33,.25),inset 0 1px 0 rgba(255,255,255,.18);
+  transform:translateY(-2px);
+}
+/* Header capsule belongs inside an already smoky navigation surface. */
+body[data-page] .site-header .header-cta{
+  min-height:43px;
+  padding:10px 21px;
+  background:rgba(255,255,255,.16);
+  border-color:rgba(255,255,255,.44);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.17);
+  font-size:.72rem;
+  letter-spacing:.045em;
+}
+body[data-page] .site-header .header-cta:hover{background:rgba(255,255,255,.23)}
+/* One secondary action is a text link (never another outlined box). */
+body[data-page] .actions .button--outline,
+body[data-page] .em-body .em-book--ghost,
+body[data-page] .hero .text-link,
+body[data-page] .contact-hero .contact-action--text,
+body[data-page] .em-contact-close__link {
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:clamp(18px,2.6vw,42px);
+  width:auto;
+  max-width:100%;
+  min-height:0;
+  padding:9px 0 12px;
+  background:transparent;
+  border:0;
+  border-bottom:1px solid currentColor;
+  border-radius:0;
+  box-shadow:none;
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+  color:#fff;
+  font-family:"Open Sans",Arial,sans-serif;
+  font-size:clamp(.75rem,.89vw,.9rem);
+  font-weight:700;
+  letter-spacing:.095em;
+  line-height:1.4;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:color .25s,border-color .25s;
+}
+body[data-page] .contact-hero .contact-action--text{color:var(--agate-ocean)}
+body[data-page] .actions .button--outline:hover,
+body[data-page] .em-body .em-book--ghost:hover,
+body[data-page] .hero .text-link:hover,
+body[data-page] .em-contact-close__link:hover {
+  background:transparent;
+  color:var(--agate-mint);
+  border-bottom-color:var(--agate-mint);
+  box-shadow:none;
+  transform:none;
+}
+body[data-page] .contact-hero .contact-action--text:hover{color:#1c354d;border-bottom-color:#1c354d}
+/* Text link under the primary CTA is intentionally NOT expanded to a button on mobile. */
+@media(max-width:870px){
+  body[data-page] .em-mobile-booking{
+    min-height:62px;
+    padding:15px 25px;
+    border-radius:999px;
+    background:linear-gradient(115deg,rgba(19,40,53,.85),rgba(28,53,68,.80));
+    color:#fff;
+    justify-content:space-between;
+  }
+  body[data-page] .em-mobile-booking:hover{
+    background:linear-gradient(115deg,rgba(19,40,53,.91),rgba(28,53,68,.86));
+  }
+}
+@media(max-width:650px){
+  body[data-page] .em-body-hero .em-book:not(.em-book--ghost),
+  body[data-page] .em-body-cta__actions .em-book:not(.em-book--ghost){
+    width:auto;
+    max-width:100%;
+  }
+  body[data-page] .em-body-hero .em-book--ghost,
+  body[data-page] .em-body-cta__actions .em-book--ghost{
+    width:auto;
+    max-width:100%;
+    justify-content:space-between;
+  }
+  body[data-page] .hero .actions,
+  body[data-page] .closing .actions,
+  body[data-page] .em-body-hero__actions,
+  body[data-page] .em-body-cta__actions{
+    align-items:flex-start;
+    gap:20px 28px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body[data-page] .button:not(.button--outline),
+  body[data-page] .site-header .header-cta,
+  body[data-page] .em-body .em-book,
+  body[data-page] .contact-action--primary,
+  body[data-page] .em-location__directions,
+  body[data-page] .em-mobile-booking{transition:none}
+}
