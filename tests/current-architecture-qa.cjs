@@ -47,6 +47,8 @@ const routes = [
           heroOverlay:(()=>{const shade=document.querySelector('.em-body-hero__shade'),hero=document.querySelector('.hero');return shade?getComputedStyle(shade).backgroundImage:hero?getComputedStyle(hero,'::before').backgroundImage:''})(),
           navTopics:[...document.querySelector('.navigation').children].map(x=>x.matches('details')?x.querySelector('summary').textContent.trim():x.textContent.trim()),
           atlasItems:document.querySelectorAll('[data-atz-atlas-item]').length,
+          editorialCards:document.querySelectorAll('.em-editorial-section .atc-mosaic-card').length,
+          aboutDisclosures:document.querySelectorAll('.em-about-principles .atc-process-card').length,
           snap:getComputedStyle(document.documentElement).scrollSnapType,
           reducedHeroTransform:(()=>{const el=document.querySelector('.hero__background, .em-body-hero__image');return el?getComputedStyle(el).transform:null})(),
           bodyCinematic:!!document.querySelector('.em-body-hero, .em-journey'),
@@ -77,6 +79,9 @@ const routes = [
           'Treatments','Menu & Prices','About','Gallery','Contact'
         ],`${route}: navigation must mirror Home's five primary links`);
         if(route==='/massage-services/')assert.equal(result.atlasItems,6,'Service atlas must show six treatment guides');
+        if(['/about/','/massage-services/body-massage/','/massage-services/combination-massage/','/massage-services/couples-massage/','/massage-services/chair-massage/','/massage-services/four-hands-massage/'].includes(route))
+          assert.equal(result.editorialCards,3,`${route}: Atrezzo editorial mosaic must show three linked photographs`);
+        if(route==='/about/')assert.equal(result.aboutDisclosures,3,'About must show three accessible process disclosures');
         assert.equal(result.snap,'none',`${route}: native scrolling; no scroll-snap trap`);
         if(route==='/massage-services/body-massage/')assert(result.bodyCinematic,`${route}: cinematic scene structure must be present`);
         if(route!='/contact/')assert.equal(result.reducedHeroTransform,'none',`${route}: no photo motion under reduced-motion setting`);
