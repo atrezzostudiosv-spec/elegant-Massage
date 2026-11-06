@@ -239,3 +239,12 @@
       #f8f7f4;
   }
 }
+
+/* In the original masked mobile sequence, the fallback chapter background
+   was opaque. Once the mask engine is active it must be transparent so the
+   floral background is genuinely visible before the first blind opens. */
+@media(min-height:650px) and (prefers-reduced-motion:no-preference){
+  .at-original-active .touch-home .at-mask-stage > .chapter{
+    background:transparent;
+  }
+}
