@@ -149,9 +149,30 @@ async function computed(page){
           path:path.join(dest,'transition-'+width+'.png'),
           animations:'disabled',timeout:30000
         });
+      // The single title must dissolve before the first masked treatment
+      // takes over; returning upward must reveal the SAME title again.
+      if(editorial.maskActive && [375,1440].includes(width)){
+        const introStart=await page.evaluate(()=>{
+          const r=document.querySelector('#cinema-track').getBoundingClientRect();
+          return Math.round(window.scrollY+r.top);
+        });
+        const introStyle=async()=>page.locator('.at-mask-stage > .treatments__opening').evaluate(el=>({
+          opacity:parseFloat(getComputedStyle(el).opacity),
+          pointer:getComputedStyle(el).pointerEvents
+        }));
+        await at(page,introStart);
+        const entering=await introStyle();
+        await at(page,introStart+700);
+        const leaving=await introStyle();
+        await at(page,introStart);
+        const returning=await introStyle();
+        assert(entering.opacity>=.80,'Single intro must be visible when scene enters '+width+': '+JSON.stringify(entering));
+        assert(leaving.opacity<=.15 && leaving.pointer==='none',
+          'Single intro must yield to Body Massage and stop intercepting taps '+width+': '+JSON.stringify(leaving));
+        assert(returning.opacity>=.80 && returning.pointer==='auto',
+          'Single intro must return when scrolling back up '+width+': '+JSON.stringify(returning));
+      }
       // Reset to the document start before testing downward menu hide.
-      // The screenshot scrolls deep into the page, so without this reset
-      // the next scroll to 680px would actually be an UPWARD movement.
       await at(page,0);
 
 
