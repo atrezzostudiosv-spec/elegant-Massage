@@ -66,7 +66,7 @@ const routes = [
         assert(result.themePresent,`${route}: missing new palette stylesheet`);
         assert.equal(result.themeBg,'rgb(255, 255, 255)',`${route}: internal paper must be white`);
         assert.equal(result.themeOcean,'#254460',`${route}: wrong primary palette`);
-        assert.deepEqual(result.headerCTA,{background:'rgb(83, 203, 217)',color:'rgb(37, 68, 96)'},`${route}: Book Now aqua/ocean contrast`);
+        assert.deepEqual(result.headerCTA,{background:'rgba(255, 255, 255, 0.16)',color:'rgb(255, 255, 255)'},`${route}: internal Book Now must use smoked glass, not bright aqua`);
         assert.equal(result.footerBg,'rgb(37, 68, 96)',`${route}: footer must be ocean blue`);
         assert.deepEqual(result.footerLinks,['/massage-services/','/massage-menu/','/about/','/gallery/','/contact/'],`${route}: shared footer links`);
         if(route!='/contact/')assert(result.heroOverlay.includes('rgba(0, 0, 0,') && !result.heroOverlay.includes('rgba(15, 38, 60'),
