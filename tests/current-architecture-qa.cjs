@@ -73,14 +73,15 @@ const routes = [
           `${route} @${width}: photograph must have neutral black gradient, not ocean-blue: ${result.heroOverlay}`);
         if(route==='/contact/'){
           assert(result.contactStorefront,`${route}: original storefront photograph`);
-          assert.equal(result.contactForm,'https://formsubmit.co/atrezzostudiosv@gmail.com',`${route}: preview form destination`);
+          assert.equal(result.contactForm,undefined,`${route}: non-business test form should be removed`);
         }
         assert.deepEqual(result.navTopics,[
           'Treatments','Menu & Prices','About','Gallery','Contact'
         ],`${route}: navigation must mirror Home's five primary links`);
         if(route==='/massage-services/')assert.equal(result.atlasItems,6,'Service atlas must show six treatment guides');
-        if(['/about/','/massage-services/body-massage/','/massage-services/combination-massage/','/massage-services/couples-massage/','/massage-services/chair-massage/','/massage-services/four-hands-massage/'].includes(route))
-          assert.equal(result.editorialCards,3,`${route}: Atrezzo editorial mosaic must show three linked photographs`);
+        if(route==='/about/') assert.equal(result.editorialCards,3,'About disclosures/mosaic retained');
+        if(['/massage-services/body-massage/','/massage-services/combination-massage/','/massage-services/couples-massage/','/massage-services/chair-massage/','/massage-services/four-hands-massage/'].includes(route))
+          assert.equal(result.editorialCards,0,`${route}: repetitive click-through mosaics must be removed`);
         if(route==='/about/')assert.equal(result.aboutDisclosures,3,'About must show three accessible process disclosures');
         assert.equal(result.snap,'none',`${route}: native scrolling; no scroll-snap trap`);
         if(route==='/massage-services/body-massage/')assert(result.bodyCinematic,`${route}: cinematic scene structure must be present`);
@@ -169,8 +170,8 @@ const routes = [
             storefront:!!document.querySelector('.contact-hero__photo img'),
             form:!!document.querySelector('form.contact-inquiry__form')
           }));
-          assert(contact.sections>=4&&contact.storefront&&contact.form,
-            `${route} @${width}: contact story and form remain available`);
+          assert(contact.sections>=4&&contact.storefront&&!contact.form,
+            `${route} @${width}: direct contact and location replace the test form`);
         }else{
           const initial=await page.evaluate(()=>{
             const photo=document.querySelector('.hero__background');

@@ -1,0 +1,45 @@
+name: Elegant Massage — Internal Pages Review
+on:
+  pull_request:
+    paths:
+      - 'about/**'
+      - 'contact/**'
+      - 'gallery/**'
+      - 'massage-menu/**'
+      - 'massage-services/**'
+      - 'assets/css/internal-refinement-2026.css'
+      - 'assets/brand/**'
+      - 'tests/internal-refinement-qa.cjs'
+      - '.github/workflows/internal-pages-review.yml'
+  workflow_dispatch:
+jobs:
+  internal-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Chromium for Playwright
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify all internal pages at four widths
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/elegant-internal-http.log 2>&1 &
+          sleep 2
+          node tests/internal-refinement-qa.cjs
+          node tests/current-architecture-qa.cjs
+      - name: Upload screenshots and QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elegant-internal-pages-review
+          path: |
+            qa-artifacts/internal-refinement/
+            qa-artifacts/current-architecture/
+          if-no-files-found: warn
+          retention-days: 14
