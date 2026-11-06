@@ -202,3 +202,57 @@ body[data-page] .contact-hero .contact-action--text:hover{color:#1c354d;border-b
   body[data-page] .em-location__directions,
   body[data-page] .em-mobile-booking{transition:none}
 }
+
+/* 2026-11-06 / Final booking composition — left aligned, not centred.
+   A flex child with intrinsic width had been visually centred by .container
+   auto margins. Give it full row width and deliberate editorial left inset.
+   The photo, height, copy, CTA destinations and Home stay unchanged. */
+body[data-page] .closing > .container{
+  box-sizing:border-box;
+  flex:0 0 100%;
+  width:100%;
+  max-width:none;
+  margin-inline:0;
+  padding-inline:clamp(24px,6.8vw,136px);
+  text-align:left;
+}
+body[data-page] .closing > .container > :is(.eyebrow,h2,.lede,.actions){
+  margin-left:0;
+  margin-right:0;
+}
+body[data-page] .closing > .container > h2{
+  max-width:12ch;
+  text-wrap:balance;
+}
+body[data-page] .closing > .container > .lede{
+  max-width:48ch;
+}
+/* Contact's final CTA follows the same left-led editorial composition. */
+body[data-page="contact"] .em-contact-close__inner{
+  width:100%;
+  max-width:900px;
+  margin:0;
+  text-align:left;
+}
+body[data-page="contact"] .em-contact-close__inner > p:not(.eyebrow){
+  margin-left:0;
+  margin-right:0;
+}
+body[data-page="contact"] .em-contact-close__actions{
+  justify-content:flex-start;
+}
+/* Body Massage already starts at the left gutter; lock that intent. */
+body[data-page="body"] .em-body-cta__inner{
+  margin-inline:0;
+  text-align:left;
+}
+@media(max-width:870px){
+  body[data-page] .closing > .container{
+    padding-inline:var(--gutter);
+  }
+}
+@media(max-width:560px){
+  body[data-page] .closing > .container > h2{
+    text-wrap:wrap;
+  }
+}
