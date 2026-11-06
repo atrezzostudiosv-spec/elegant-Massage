@@ -286,3 +286,12 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - PREVIOUS INTERIM NOTE SUPERSEDED: the original WebP fallback and 26,928-byte placeholder PNG were replaced; current image generation uses the editorial photograph from the repository.
 - Final CHECKS STILL OPEN: confirm latest main-branch GitHub Actions deployment and full regression; Safari/iOS/Android, iframe loading from external Google, real social crawler previews, final domain/canonicals, remaining MARTES image-mapping decisions. The Home remains outside this phase.
 - Primary current phase: Technical validation of the integrated internal demo. Visual approval recorded and closed. Next one action: finish and record CI/browser regression against merged main, without reopening approved composition.
+
+## 2026-11-06 — APPROVED: Internal CTA visual system and final-left alignment
+- User explicitly approved *all* button/CTA changes, including the latest request to move the ending CTA block farther to the left. Approval recorded and closed; do not reopen the styling without a verified defect or a new explicit request.
+- PR #9 (`feature/internal-pill-glass-cta-2026-11-06`) **merged** into main via squash commit `e403c815507ca8702692cff459864cb54b58d87e`.
+- Internal-only stylesheet `assets/css/internal-refinement-2026.css` is the source of truth: fully rounded smoked-glass primary CTA; second paired action is understated underlined text; left-aligned final booking composition. Applied across internal header, treatment pages, Body Massage, contact, map directions, and mobile booking dock.
+- The isolated `preview-internal/assets/css/internal-refinement-2026.css` and production-demo internal stylesheet match (both blob SHA `665defa3e7cdc49b107b71e93b378b5d3bdb82ac` at integration). Do not let their visual states diverge.
+- Home `index.html` **not modified**, original blob SHA `92ec96a468c15f51110abd6b025aec4185e8bdc6`.
+- Verified statically after merge: 12/12 internal pages maintain `noindex,nofollow`, link the new CSS, contain one location section before footer, and preserve final booking CTA. Earlier PR-branch browser QA (48 route/viewport combinations) passed at 375, 768, 1024, 1440 px, including left-aligned CTA checks.
+- Commercial launch **NOT** authorized. Remaining checks that do NOT reopen visual approval: latest main-branch Pages deploy and regression, real Safari/iOS/Android, external maps, social scraping, final domain and any outstanding exact photo-to-page replacement decisions.
