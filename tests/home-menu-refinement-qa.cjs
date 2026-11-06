@@ -84,33 +84,54 @@ async function computed(page){
         const jump=opening.querySelector('.chapter-jump');
         const st=getComputedStyle(stage),op=getComputedStyle(opening);
         const rr=opening.getBoundingClientRect(),hr=title.getBoundingClientRect(),jr=jump.getBoundingClientRect();
-        return {openingWidth:rr.width,openingLeft:rr.left,headingLeft:hr.left,
+        return {
+          openingCount:document.querySelectorAll('.treatments__opening').length,
+          headingCount:document.querySelectorAll('#treatments-title').length,
+          selectorCount:document.querySelectorAll('#chapter-selector').length,
+          introIsStageChild:opening.parentElement===stage,
+          introBeforeTrack:!!document.querySelector('.treatments > .treatments__opening'),
+          openingWidth:rr.width,openingLeft:rr.left,headingLeft:hr.left,
           headingRight:hr.right,jumpLeft:jr.left,openingBackground:op.backgroundImage,
-          openingSize:op.backgroundSize,maskBackground:st.backgroundImage,
-          maskSize:st.backgroundSize,headingAlign:getComputedStyle(title).textAlign};
+          openingPosition:op.position,maskBackground:st.backgroundImage,
+          maskSize:st.backgroundSize,headingAlign:getComputedStyle(title).textAlign,
+          maskActive:document.documentElement.classList.contains('at-original-active')
+        };
       });
       const imageFile='elegant-massage-spa-stilllife-blossoms-stones-candle.webp';
+      assert(editorial.openingCount===1&&editorial.headingCount===1&&editorial.selectorCount===1,
+        'Find Your Massage title, copy and selector MUST NOT be duplicated at '+width);
+      assert(editorial.introIsStageChild&&!editorial.introBeforeTrack,
+        'The sole introduction MUST be moved inside the floral scene, not left above it at '+width);
       assert(editorial.openingWidth>=width-2&&Math.abs(editorial.openingLeft)<2,
-        'The floral introduction must span the complete viewport '+width+': '+JSON.stringify(editorial));
-      assert(editorial.openingBackground.includes(imageFile),
-        'The title and selector must sit over the same full-bleed photograph at '+width);
-      assert(editorial.openingSize.split(',').every(x=>x.trim()==='cover'),
-        'Every introductory background layer must cover without a vertical image seam at '+width);
-      // The final background layer is a solid ivory fallback (computed size
-      // "auto"); the third layer is the actual WebP and must use cover.
+        'Single floral introduction spans the whole viewport at '+width+': '+JSON.stringify(editorial));
+      assert(editorial.maskBackground.includes(imageFile),
+        'The new title and selector must share the underlying mask-stage photograph at '+width);
       assert(editorial.maskSize.split(',')[2]?.trim()==='cover',
-        'The masked-chapter WebP must cover the full width at '+width+': '+editorial.maskSize);
+        'The masked-chapter WebP must fill the full width at '+width+': '+editorial.maskSize);
+      if(editorial.maskActive)
+        assert(editorial.openingPosition==='absolute'&&editorial.openingBackground==='none',
+          'While the SVG mask runs, the intro must be a TRANSPARENT overlay on the same photo, not a new photographic panel');
+      else
+        assert(editorial.openingBackground.includes(imageFile),
+          'Fallback should show the photo behind the sole intro, not a blank panel');
       assert(editorial.headingLeft>=-2&&editorial.headingRight<=width+2,
         'Title must not clip at '+width);
       assert(Math.abs(editorial.jumpLeft-editorial.headingLeft)<4,
         'Selector and title must align at the left reading edge at '+width);
       assert(editorial.headingAlign==='left',
         'Title must read as left-led editorial copy, not centered at '+width);
-      if([375,768,1440].includes(width))
-        await page.locator('.treatments__opening').screenshot({
-          path:path.join(dest,'intro-floral-full-bleed-'+width+'.png'),
+      // Screenshot the actual incoming scene, not a second standalone photo.
+      if([375,768,1440].includes(width)){
+        const y=await page.evaluate(()=>{
+          const rect=document.querySelector('#cinema-track').getBoundingClientRect();
+          return Math.round(window.scrollY+rect.top+2);
+        });
+        await at(page,y);
+        await page.locator('.at-mask-stage').screenshot({
+          path:path.join(dest,'single-intro-over-floral-'+width+'.png'),
           animations:'disabled',timeout:30000
         });
+      }
 
 
       // Capture the exact frame that formerly showed a solid blue rectangle.
