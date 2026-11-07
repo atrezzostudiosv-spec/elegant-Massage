@@ -303,3 +303,8 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Fallback: at <=870px, reduced motion or desktop height under 650px, scenes return to normal readable flow. Demo remains `noindex`; Home unchanged.
 - **VALIDATION:** GitHub commits confirmed for changed files, but CI/browser-scroll screenshots and GitHub Pages deployment status have not yet been verified in this intervention. Therefore status is **EN VALIDACIÓN**, not visually closed.
 - **NEXT ACTION:** Run/inspect Body Cinematic Playwright QA plus Pages deployment and review the actual forward/reverse scroll at desktop and mobile.
+
+## 2026-11-07 — Hot Stone Therapy final-slide reading hold
+- User explicitly requested final Body Massage slide to stop briefly before advancing to the following section. Scoped correction only: `em-journey__chapters::after` provides an additional `80svh` of native scroll on desktop, retaining the third sticky Hot Stone Therapy slide before it releases into the booking scene.
+- Source and preview-internal CSS mirrors updated identically. Mobile (<=870px), reduced-motion and short-height displays remain normal flow; no JS wheel/touch interception. Home untouched.
+- STATUS: IMPLEMENTED ON MAIN; browser scroll/visual QA and Pages deployment for this latest change remain to be confirmed.
