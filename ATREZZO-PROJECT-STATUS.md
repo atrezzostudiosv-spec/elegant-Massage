@@ -308,3 +308,9 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - User explicitly requested final Body Massage slide to stop briefly before advancing to the following section. Scoped correction only: `em-journey__chapters::after` provides an additional `80svh` of native scroll on desktop, retaining the third sticky Hot Stone Therapy slide before it releases into the booking scene.
 - Source and preview-internal CSS mirrors updated identically. Mobile (<=870px), reduced-motion and short-height displays remain normal flow; no JS wheel/touch interception. Home untouched.
 - STATUS: IMPLEMENTED ON MAIN; browser scroll/visual QA and Pages deployment for this latest change remain to be confirmed.
+
+## 2026-11-07 — Body Massage / second slide pause
+- User identified lack of a reading hold on `02 / 03 · THE FLOW` (Swedish & Warm Oil) and explicitly requested the correction.
+- Applied a desktop-only `margin-bottom:80svh` to the second sticky photo chapter. This extends the second chapter's native-scroll hold before the third slide begins its top-edge wipe; previous third-slide pause and Home remain untouched.
+- Main and preview-internal CSS mirrors synchronized. Added regression assertions to `tests/body-massage-cinematic-qa.cjs` checking the hold, second scene pinned at top and third scene not covering it mid-hold.
+- Status **EN VALIDACIÓN** until latest GitHub Actions / deployment and browser test report are confirmed. No commercial launch authorized; demo remains `noindex`.
