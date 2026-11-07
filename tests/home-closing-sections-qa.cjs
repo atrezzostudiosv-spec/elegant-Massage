@@ -33,6 +33,17 @@ const widths=[375,390,430,768,1024,1440];
           menuLink:sel('.menu-pause__cta')?.getAttribute('href'),
           menuImage:img('.menu-pause__photo img'),
           realImage:img('.real-place__scene img'),
+          visitImage:img('.visit__backdrop img'),
+          heroSkip:!!sel('.intro__skip'),
+          footerCTA:!!sel('.em-footer__book'),
+          realSticky:getComputedStyle(sel('.real-place__stage')).position,
+          visitSticky:getComputedStyle(sel('.visit__stage')).position,
+          realHeight:real?.getBoundingClientRect().height,
+          visitHeight:visit?.getBoundingClientRect().height,
+          primaryRadius:sel('.real-place__action--primary')?.getBoundingClientRect().height ?
+             parseFloat(getComputedStyle(sel('.real-place__action--primary')).borderTopLeftRadius):0,
+          visitBookBackground:getComputedStyle(sel('.visit__book')).backgroundColor,
+          visitBookRadius:getComputedStyle(sel('.visit__book')).borderTopLeftRadius,
           galleryLink:sel('.real-place__action[href="./gallery/"]')?.getAttribute('href'),
           aboutLink:sel('.real-place__action[href="./about/"]')?.getAttribute('href'),
           mapSrc:map?.getAttribute('src'),mapTitle:map?.getAttribute('title'),
@@ -55,7 +66,22 @@ const widths=[375,390,430,768,1024,1440];
       assert(snap.menu&&snap.real&&snap.visit,'All 3 approved Home sections must exist');
       assert(snap.menuH2.includes('Your time.')&&snap.menuH2.includes('Your choice.'),'Menu title');
       assert.equal(snap.menuLink,'./massage-menu/');
-      assert(snap.menuImage&&snap.realImage,'Both photographic nodes must exist');
+      assert(snap.menuImage&&snap.realImage&&snap.visitImage,
+        'Menu, real storefront and Visit Us need all three distinct photographic nodes');
+      assert(snap.realImage.src.includes('elegant-massage-flower-mound-exterior-editorial-2026.webp'),
+        'The actual user-supplied exterior WebP must be used');
+      assert(snap.visitImage.src.includes('elegant-massage-visit-floral-wellness-background-2026.webp'),
+        'The actual user-supplied floral WebP must be used');
+      assert(!snap.heroSkip&&!snap.footerCTA,'The two requested obsolete buttons must be gone');
+      assert(snap.primaryRadius>=23,'Real place primary CTA must be a smoked-glass pill');
+      assert(snap.visitBookBackground==='rgba(0, 0, 0, 0)'&&snap.visitBookRadius==='0px',
+        'Book Now in Visit Us must be an underlined text link, not another capsule');
+      if(width>=768){
+        assert(snap.realSticky==='sticky'&&snap.visitSticky==='sticky',
+          'Desktop final two photographic scenes must hold in native-scroll sticky stages');
+        assert(snap.realHeight>=900*1.7&&snap.visitHeight>=900*1.7,
+          'The two chapters must provide real scroll distance for reading, not just an animated speed change');
+      }
       assert(!snap.usesOtherScene,'Menu photo must be unique versus Sticky Grid and slides');
       assert.equal(snap.galleryLink,'./gallery/');assert.equal(snap.aboutLink,'./about/');
       assert(snap.mapSrc?.startsWith('https://www.google.com/maps?'),'Real Google Maps embed URL');
@@ -66,14 +92,15 @@ const widths=[375,390,430,768,1024,1440];
       assert(snap.booking.startsWith('https://elegantmassage.setmore.com/#services'),'Verified booking destination');
       assert(snap.address.includes('2911 Cross Timbers'),'Verified address preserved');
       assert(snap.newCSS&&snap.newScript,'Scoped styles and behavior must load');
-      assert(snap.note.includes('date unverified'),'Historical photo qualification');
+      assert(snap.note.includes('Exterior illustration supplied'),
+        'User-supplied illustrative exterior must not be misrepresented as historic documentary evidence');
       assert(snap.noindex,'Demo noindex required');
       assert(snap.scrollWidth<=width+2,`Horizontal overflow at ${width}: ${snap.scrollWidth}`);
       for(const [id,name] of [['.menu-pause','menu'],['.real-place--cinematic','real'],['.visit--mapped','visit']]){
         await page.locator(id).scrollIntoViewIfNeeded();
         await page.waitForTimeout(850);
-        if(name==='menu'||name==='real'){
-          const imgSel=name==='menu'?'.menu-pause__photo img':'.real-place__scene img';
+        if(name==='menu'||name==='real'||name==='visit'){
+          const imgSel=name==='menu'?'.menu-pause__photo img':name==='real'?'.real-place__scene img':'.visit__backdrop img';
           await page.waitForFunction(sel=>{
             const im=document.querySelector(sel);
             return !!im&&im.complete&&im.naturalWidth>0;
@@ -81,20 +108,26 @@ const widths=[375,390,430,768,1024,1440];
         }
         const rect=await page.locator(id).evaluate(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height};});
         assert(rect.width<=width+2&&rect.height>300,`${width} ${name} invalid dimensions: ${JSON.stringify(rect)}`);
-        if(width===375||width===390||width===768||width===1440)
-          await page.locator(id).screenshot({path:path.join(dir,`${width}-${name}.png`),animations:'disabled',timeout:30000});
+        if(width===375||width===390||width===768||width===1440){
+          const capture=name==='real'?'.real-place__stage':name==='visit'?'.visit__stage':id;
+          await page.locator(capture).screenshot({
+            path:path.join(dir,`${width}-${name}.png`),animations:'disabled',timeout:30000
+          });
+        }
       }
       assert(!errors.length,`Browser errors at ${width}: ${errors.join(' | ')}`);
       report.push({width,...snap,errors});
       await page.close();
     }
-    // Verify that both new background photographs really zoom with native scroll.
+    // Verify all three photographic chapters zoom with native scroll; final
+    // exterior & map backgrounds must zoom during their sticky reading hold.
     const motionPage=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'no-preference'});
     await motionPage.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
     await motionPage.waitForTimeout(2100);
-    for(const [section,image] of [
-      ['.menu-pause','.menu-pause__photo img'],
-      ['.real-place--cinematic','.real-place__scene img']
+    for(const [section,image,sticky] of [
+      ['.menu-pause','.menu-pause__photo img',false],
+      ['.real-place--cinematic','.real-place__scene img',true],
+      ['.visit--mapped','.visit__backdrop img',true]
     ]){
       const box=await motionPage.evaluate(selector=>{
         const el=document.querySelector(selector),r=el.getBoundingClientRect();
@@ -109,8 +142,8 @@ const widths=[375,390,430,768,1024,1440];
           return {css,value};
         },image);
       };
-      const early=await scale(box.top-900+45);
-      const late=await scale(box.top+box.height-65);
+      const early=await scale(sticky?box.top+45:box.top-900+45);
+      const late=await scale(sticky?box.top+box.height-900-45:box.top+box.height-65);
       assert(late.value>=early.value+.018,
         section+' requires observable scroll-driven photo zoom: '+JSON.stringify({early,late}));
       console.log('CLOSING-ZOOM '+section+' '+JSON.stringify({early,late}));
@@ -120,7 +153,8 @@ const widths=[375,390,430,768,1024,1440];
     await reduced.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
     const staticTransforms=await reduced.evaluate(()=>[
       getComputedStyle(document.querySelector('.menu-pause__photo img')).transform,
-      getComputedStyle(document.querySelector('.real-place__scene img')).transform
+      getComputedStyle(document.querySelector('.real-place__scene img')).transform,
+      getComputedStyle(document.querySelector('.visit__backdrop img')).transform
     ]);
     assert(staticTransforms.every(t=>t==='none'),'Reduced motion must remove new zoom: '+JSON.stringify(staticTransforms));
     await reduced.close();
