@@ -149,28 +149,52 @@ async function computed(page){
           path:path.join(dest,'transition-'+width+'.png'),
           animations:'disabled',timeout:30000
         });
-      // The single title must dissolve before the first masked treatment
-      // takes over; returning upward must reveal the SAME title again.
+      // The new intro stays readable for nearly one complete viewport of
+      // natural scroll; photo-only zoom begins before the first of five masks.
       if(editorial.maskActive && [375,1440].includes(width)){
         const introStart=await page.evaluate(()=>{
           const r=document.querySelector('#cinema-track').getBoundingClientRect();
           return Math.round(window.scrollY+r.top);
         });
-        const introStyle=async()=>page.locator('.at-mask-stage > .treatments__opening').evaluate(el=>({
-          opacity:parseFloat(getComputedStyle(el).opacity),
-          pointer:getComputedStyle(el).pointerEvents
-        }));
+        const introStyle=async()=>page.evaluate(()=>{
+          const el=document.querySelector('.at-mask-stage > .treatments__opening');
+          const stage=document.querySelector('.at-mask-stage');
+          const transform=getComputedStyle(stage,'::before').transform;
+          const m=transform.match(/^matrix\\(([^,]+)/);
+          return {
+            opacity:parseFloat(getComputedStyle(el).opacity),
+            pointer:getComputedStyle(el).pointerEvents,
+            photoScale:m?parseFloat(m[1]):1,
+            firstBlindsOpen:[...document.querySelectorAll('#at-mask-0 g rect')]
+              .filter(x=>parseFloat(x.getAttribute('height'))>.002).length
+          };
+        });
         await at(page,introStart);
+        await page.waitForTimeout(650);
         const entering=await introStyle();
-        await at(page,introStart+700);
+        await at(page,introStart+Math.round(900*.70));
+        await page.waitForTimeout(2500);
+        const reading=await introStyle();
+        assert(entering.opacity>=.80,'The single floral intro must be visible on entry '+width+': '+JSON.stringify(entering));
+        assert(reading.opacity>=.84&&reading.firstBlindsOpen===0,
+          'Reading pause must stay readable BEFORE the first mask '+width+': '+JSON.stringify(reading));
+        assert(reading.photoScale>=1.02,
+          'Photo needs a subtle scroll-linked zoom during the reading pause '+width+': '+JSON.stringify(reading));
+        if(width===1440)
+          await page.locator('.at-mask-stage').screenshot({
+            path:path.join(dest,'intro-reading-hold-1440.png'),animations:'disabled',timeout:30000
+          });
+        await at(page,introStart+Math.round(900*1.55));
+        await page.waitForTimeout(3100);
         const leaving=await introStyle();
-        await at(page,introStart);
-        const returning=await introStyle();
-        assert(entering.opacity>=.80,'Single intro must be visible when scene enters '+width+': '+JSON.stringify(entering));
         assert(leaving.opacity<=.15 && leaving.pointer==='none',
-          'Single intro must yield to Body Massage and stop intercepting taps '+width+': '+JSON.stringify(leaving));
+          'Intro must yield AFTER the pause and stop capturing clicks '+width+': '+JSON.stringify(leaving));
+        assert(leaving.firstBlindsOpen>0,'Body Massage should open after the reading hold '+width);
+        await at(page,introStart);
+        await page.waitForTimeout(2500);
+        const returning=await introStyle();
         assert(returning.opacity>=.80 && returning.pointer==='auto',
-          'Single intro must return when scrolling back up '+width+': '+JSON.stringify(returning));
+          'Single intro must return on reverse scroll '+width+': '+JSON.stringify(returning));
       }
       // Reset to the document start before testing downward menu hide.
       await at(page,0);
@@ -178,6 +202,30 @@ async function computed(page){
 
       assert.equal(c.menuSource,'./assets/images/martes/body-editorial.webp','Menu must use new approved uploaded photo');
       assert(c.heroCTA.radius>=c.heroCTA.height*.45,'Home hero CTA must be a pill');
+      const heroVisual=await page.evaluate(()=>{
+        const eyebrow=document.querySelector('.intro__content .eyebrow--light');
+        const primary=document.querySelector('.intro__actions .button--garnet');
+        const stage=document.querySelector('.at-mask-stage');
+        return {
+          eyebrowColor:getComputedStyle(eyebrow).color,
+          eyebrowShadow:getComputedStyle(eyebrow).textShadow,
+          primaryBackground:getComputedStyle(primary).backgroundColor,
+          primaryHeight:primary.getBoundingClientRect().height,
+          primaryBlur:getComputedStyle(primary).backdropFilter,
+          fadeBackground:getComputedStyle(stage,'::after').backgroundImage
+        };
+      });
+      assert(heroVisual.eyebrowColor==='rgb(250, 248, 242)'&&heroVisual.eyebrowShadow!=='none',
+        'Hero eyebrow must have legible warm-white contrast at '+width+': '+JSON.stringify(heroVisual));
+      assert(heroVisual.primaryBackground.startsWith('rgba(')&&
+        parseFloat(heroVisual.primaryBackground.match(/,\\s*([0-9.]+)\\)$/)?.[1]||'1')<.5,
+        'Hero booking CTA should have light, translucent smoked glass at '+width);
+      assert(heroVisual.primaryHeight>=44&&heroVisual.primaryHeight<=57,
+        'Hero booking should stay a light but tappable pill at '+width);
+      assert(heroVisual.primaryBlur.includes('blur('),'Hero button needs real smoked-glass blur at '+width);
+      assert(heroVisual.fadeBackground.includes('linear-gradient('),
+        'Gallery must dissolve into a real white-to-transparent transition at '+width);
+
       assert(c.menuCTA.radius>=c.menuCTA.height*.45,'Home menu CTA must be a pill');
       assert.equal(c.heroSecondary.borderLeft,'0px','Second Hero action must not be outlined as a box');
       assert(parseFloat(c.heroSecondary.borderBottom)>=1,'Second Hero action must be underlined text');
