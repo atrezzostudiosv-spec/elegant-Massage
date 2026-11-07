@@ -75,57 +75,30 @@ body[data-page="body"] .em-body .em-book--ghost:hover{
   max-width:61ch;color:var(--agate-ocean);font-size:clamp(1rem,1.3vw,1.17rem);
   line-height:1.85;
 }
+/* Body: same full-bleed chapter-wipe system as the approved Home. */
 .em-journey{position:relative;isolation:isolate;background:var(--em-ink);color:#fff}
-.em-journey__canvas{
-  position:sticky;top:0;height:100svh;overflow:hidden;z-index:0;
-  margin-bottom:-100svh;background:var(--em-ink);pointer-events:none;
-}
-.em-journey__photo{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:center;opacity:0;
-  transform:scale(1.055);
-  transition:opacity .9s cubic-bezier(.22,1,.36,1),transform 1.6s cubic-bezier(.22,1,.36,1);
-}
-.em-journey__photo.is-active,.em-journey__photo:first-child:not(.is-suppressed){
-  opacity:1;transform:scale(1);
-}
-.em-journey__scrim{
-  position:absolute;inset:0;z-index:2;
-  background:linear-gradient(90deg,rgba(0,0,0,.66) 0%,rgba(0,0,0,.30) 47%,rgba(0,0,0,.035) 93%),
-  linear-gradient(0deg,rgba(0,0,0,.22),transparent 55%);
-}
-.em-journey__chapters{position:relative;z-index:2}
-.em-journey__chapter{
-  position:relative;min-height:100svh;
-  display:flex;align-items:center;padding:125px var(--gutter) 120px;
-  scroll-margin-top:90px;isolation:isolate;
-}
+.em-journey__canvas{display:none}
+.em-journey__chapters{position:relative;isolation:isolate}
+.em-journey__chapter{position:sticky;top:0;height:100svh;min-height:620px;display:flex;align-items:flex-end;overflow:hidden;padding:125px var(--gutter) clamp(80px,11vh,130px);scroll-margin-top:90px;isolation:isolate;color:#fff}
+.em-journey__chapter:nth-child(1){z-index:1}
+.em-journey__chapter:nth-child(2){z-index:2}
+.em-journey__chapter:nth-child(3){z-index:3}
+.em-journey__chapter::before{content:'';position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center;transform:scale(var(--em-slide-zoom,1.025));pointer-events:none}
+.em-journey__chapter:nth-child(1)::before{background-image:url('../images/martes/body-detail.webp')}
+.em-journey__chapter:nth-child(2)::before{background-image:url('../images/elegant-massage-warm-oil-cinematic.webp')}
+.em-journey__chapter:nth-child(3)::before{background-image:url('../images/elegant-massage-relaxation-atmosphere-cinematic.webp')}
+.em-journey__chapter::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.69),rgba(0,0,0,.3) 55%,rgba(0,0,0,.07)),linear-gradient(0deg,rgba(0,0,0,.34),transparent 65%)}
 .em-journey__chapter-inner{width:min(620px,100%);color:#fff}
 .em-journey__chapter:nth-child(2) .em-journey__chapter-inner{margin-left:0;margin-right:auto}
 .em-journey__chapter .em-kicker{color:var(--agate-mint)}
-.em-journey__chapter h2{
-  font-size:clamp(4.7rem,8.6vw,9.25rem);line-height:.94;
-  max-width:12ch;margin:23px 0 22px;color:#fff;
-}
+.em-journey__chapter h2{font-size:clamp(4.7rem,8.6vw,9.25rem);line-height:.94;max-width:12ch;margin:23px 0 22px;color:#fff}
 .em-journey__chapter h2 em{color:var(--agate-mint)}
-.em-journey__chapter p:not(.em-kicker){
-  max-width:43ch;color:rgba(255,255,255,.91);
-  font-size:clamp(1rem,1.3vw,1.15rem);line-height:1.78;
-}
-.em-journey__more{
-  display:inline-flex;align-items:center;gap:30px;
-  margin-top:32px;padding:13px 0 11px;
-  background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.65);
-  color:#fff;text-decoration:none;cursor:pointer;
-  font:600 .75rem/1.4 var(--sans,'Open Sans',Arial,sans-serif);letter-spacing:.08em;
-  text-transform:uppercase;
-}
+.em-journey__chapter p:not(.em-kicker){max-width:43ch;color:rgba(255,255,255,.91);font-size:clamp(1rem,1.3vw,1.15rem);line-height:1.78}
+.em-journey__more{display:inline-flex;align-items:center;gap:30px;margin-top:32px;padding:13px 0 11px;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.65);color:#fff;text-decoration:none;cursor:pointer;font:600 .75rem/1.4 var(--sans,'Open Sans',Arial,sans-serif);letter-spacing:.08em;text-transform:uppercase}
 .em-journey__more:hover{color:var(--agate-mint);border-color:var(--agate-mint)}
 .em-journey__mobile-photo{display:none}
-.em-journey__counter{
-  position:absolute;bottom:clamp(30px,5vw,65px);right:var(--gutter);
-  color:rgba(255,255,255,.8);font:500 .72rem/1.4 var(--sans,'Open Sans',Arial,sans-serif);letter-spacing:.12em;
-}
+.em-journey__counter{position:absolute;bottom:clamp(30px,5vw,65px);right:var(--gutter);color:rgba(255,255,255,.8);font:500 .72rem/1.4 var(--sans,'Open Sans',Arial,sans-serif);letter-spacing:.12em}
+@media (min-width:871px) and (min-height:650px) and (prefers-reduced-motion:no-preference){.em-journey.is-cinematic .em-journey__chapter:not(:first-child){clip-path:inset(calc(var(--em-slide-wipe,0)*100%) 0 0 0)}}
 .em-body-cta{
   position:relative;height:185svh;background:var(--em-ink);color:#fff;
 }
@@ -182,21 +155,8 @@ body[data-page="body"] .em-body .em-book--ghost:hover{
 @media(max-width:870px){
   .em-body-hero{min-height:82svh;padding:155px var(--gutter) 85px}
   .em-body-hero h1{font-size:clamp(4.2rem,10.4vw,7rem)}
-  .em-journey__canvas{display:none}
-  .em-journey__chapter{
-    min-height:85svh;display:flex;align-items:flex-end;
-    padding:clamp(120px,21vh,185px) var(--gutter) 80px;
-    overflow:hidden;background:var(--agate-ocean);
-  }
-  .em-journey__chapter::before{
-    content:'';position:absolute;inset:0;z-index:-2;
-    background-size:cover;background-position:center;background-repeat:no-repeat;
-  }
-  .em-journey__chapter:nth-child(1)::before{background-image:url('../images/elegant-massage-massage-touch-detail.webp')}
-  .em-journey__chapter:nth-child(2)::before{background-image:url('../images/elegant-massage-warm-oil-cinematic.webp')}
-  .em-journey__chapter:nth-child(3)::before{background-image:url('../images/elegant-massage-relaxation-atmosphere-cinematic.webp')}
-  .em-journey__chapter::after{content:'';position:absolute;inset:0;z-index:-1;
-    background:linear-gradient(0deg,rgba(0,0,0,.72),rgba(0,0,0,.16) 85%)}
+  .em-journey__chapter{position:relative;top:auto;height:auto;min-height:85svh;clip-path:none!important;padding:clamp(120px,21vh,185px) var(--gutter) 80px}
+  .em-journey__chapter::before{transform:none}
   .em-journey__chapter:nth-child(2) .em-journey__chapter-inner{margin:0}
   .em-journey__chapter h2{font-size:clamp(4.1rem,9vw,6.4rem)}
   .em-body-cta{height:auto}
@@ -223,28 +183,8 @@ body[data-page="body"] .em-body .em-book--ghost:hover{
   .em-body-modal h2{font-size:clamp(3rem,10vw,4rem)}
 }
 @media(prefers-reduced-motion:reduce){
-  .em-journey__photo{transition:none!important;transform:none!important}
+  .em-journey__chapter{position:relative;top:auto;height:auto;min-height:90svh;clip-path:none!important}\n  .em-journey__chapter::before{transform:none!important}
   .em-body-cta__photo{transform:none!important;will-change:auto}
   .em-body .em-book{transition:none!important}
 }
 
-/* Home-aligned reading hold for desktop narrative scenes.
-   Before: only .em-journey__canvas was sticky and article copy scrolled away.
-   Keep each article in native flow, make only its readable content sticky
-   inside a longer chapter. Each scene pauses the copy for ~1 viewport of
-   scroll while the full-bleed background stays fixed. No scroll hijack. */
-@media (min-width:871px) and (min-height:750px) and (prefers-reduced-motion:no-preference) {
-  body[data-page="body"] .em-journey__chapter {
-    display:block;
-    min-height:205svh;
-    padding-top:25svh;
-    padding-bottom:12svh;
-  }
-  body[data-page="body"] .em-journey__chapter-inner {
-    position:sticky;
-    top:24svh;
-    align-self:auto;
-  }
-}
-/* Mobile, short viewports and reduced-motion users retain the existing
-   directly readable, full-background sections without prolonged pinning. */
