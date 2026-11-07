@@ -48,7 +48,7 @@ const widths=[375,390,430,768,1024,1440];
     firstContentClip:getComputedStyle(document.querySelector('.chapter--body .chapter__content')).clipPath
    }));
    assert(Math.abs(motion.gridHeight-4.25)<.01,'Approved source Sticky Grid needs 425vh travel: '+motion.gridHeight);
-   assert(Math.abs(motion.chapterHeight-7.666667)<.01,'Five source-paced chapters need approximately 766.67svh: '+motion.chapterHeight);
+   assert(Math.abs(motion.chapterHeight-8.816667)<.01,'Five source-paced chapters plus native reading prelude need approximately 881.67svh: '+motion.chapterHeight);
    assert.equal(motion.firstBlinds,0,'The source opens its first photographic mask from black');
    assert.equal(motion.scrollBehavior,'auto','Native scroll should be immediate and controllable');
    assert(motion.firstContentClip.startsWith('inset(100%'),'The source first headline enters after its blind reveal: '+motion.firstContentClip);
@@ -62,8 +62,8 @@ const widths=[375,390,430,768,1024,1440];
   }
   assert(state.themePresent,width+': agate palette must load');
   assert.equal(state.bodyColor,'rgb(255, 255, 255)',width+': Home white paper');
-  assert.deepEqual(state.headerBook,{background:'rgb(83, 203, 217)',text:'rgb(37, 68, 96)'},width+': aqua header CTA with ocean text');
-  assert.equal(state.realPlace,'rgb(221, 235, 200)',width+': natural lime authentic location');
+  assert.deepEqual(state.headerBook,{background:'rgba(255, 255, 255, 0.14)',text:'rgb(255, 255, 255)'},width+': approved translucent header glass');
+  assert.equal(state.realPlace,'rgb(29, 53, 64)',width+': the approved dark backdrop behind the new user-supplied storefront photograph');
   assert.equal(state.footerColor,'rgb(37, 68, 96)',width+': ocean footer');
   assert.equal(state.grid,12,'12 authentic Sticky Grid items');
   assert.equal(state.chapters,5,'Five massage chapters');
@@ -91,7 +91,7 @@ const widths=[375,390,430,768,1024,1440];
      stageSticky:getComputedStyle(document.querySelector('.at-mask-stage')).position,
    }));
    assert(Math.abs(motion.gridHeight-4.25)<.01,'Approved source Sticky Grid needs 425vh travel at every width: '+motion.gridHeight);
-   assert(Math.abs(motion.chapterHeight-7.666667)<.01,'Five source-paced masks need approximately 766.67svh: '+motion.chapterHeight);
+   assert(Math.abs(motion.chapterHeight-8.816667)<.01,'Five source-paced masks plus reading prelude need approximately 881.67svh: '+motion.chapterHeight);
    assert.equal(motion.stageSticky,'sticky','mobile and tablet masks need a sticky viewport');
    assert.equal(motion.sticky,'sticky','responsive photographic gallery must be sticky');
    assert.equal(motion.visibleImages,12,'show all 12 photographic tiles on mobile and tablet');
@@ -162,7 +162,7 @@ const widths=[375,390,430,768,1024,1440];
     await page.evaluate(()=>window.scrollTo(0,0));
     await page.waitForTimeout(1300);
     const observed=[];
-    for(const fraction of [.13,.33,.53,.73,.93]){
+    for(const fraction of [.26,.43,.60,.77,.94]){
       await page.evaluate(y=>window.scrollTo(0,y),stage.top+(stage.height-900)*fraction);
       await page.waitForTimeout(2900);
       const current=await page.evaluate(()=>{
@@ -181,6 +181,17 @@ const widths=[375,390,430,768,1024,1440];
     await page.waitForTimeout(250);
   }
   if(width===1440 || width===390){
+    // The sole selector lives inside the introductory floral slide, and
+    // intentionally fades out as the treatment masks take over. Return to
+    // the floral reading scene before exercising its visible interaction.
+    const introY=await page.evaluate(()=>{
+      const r=document.querySelector('#cinema-track').getBoundingClientRect();
+      return Math.round(window.scrollY+r.top+8);
+    });
+    await page.evaluate(y=>window.scrollTo({top:y,behavior:'instant'}),introY);
+    await page.waitForTimeout(2200);
+    assert(await page.locator('#chapter-selector').isVisible(),
+      'Chapter selector should be visible during the floral reading hold at '+width);
     await page.locator('#chapter-selector').selectOption('chair-thai');
     await page.waitForTimeout(2900);
     const pos=await page.evaluate(()=>{

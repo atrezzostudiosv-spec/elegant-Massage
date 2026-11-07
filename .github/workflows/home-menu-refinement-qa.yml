@@ -1,0 +1,48 @@
+name: Elegant Massage — Home Menu/Navigation Refinement QA
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'assets/css/home-adjustments-2026.css'
+      - 'assets/js/home-scroll-nav-2026.js'
+      - 'assets/js/home-closings-2026.js'
+      - 'assets/js/codrops-original-motion.js'
+      - 'tests/codrops-original-motion-qa.cjs'
+      - 'tests/home-menu-refinement-qa.cjs'
+      - 'tests/home-closing-sections-qa.cjs'
+      - '.github/workflows/home-menu-refinement-qa.yml'
+  workflow_dispatch:
+
+jobs:
+  home-menu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify refined Home on four viewports and original sections
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/elegant-home-http.log 2>&1 &
+          sleep 2
+          node tests/home-menu-refinement-qa.cjs
+          node tests/home-closing-sections-qa.cjs
+          node tests/codrops-original-motion-qa.cjs
+      - name: Upload visual QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elegant-home-menu-refinement
+          path: |
+            qa-artifacts/home-menu-refinement/
+            qa-artifacts/home-closings/
+            qa-artifacts/codrops-motion/
+          if-no-files-found: warn
+          retention-days: 14

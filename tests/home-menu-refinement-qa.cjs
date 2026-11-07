@@ -1,0 +1,338 @@
+'use strict';
+const { chromium } = require('playwright');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const origin='http://127.0.0.1:8765/';
+const widths=[375,768,1024,1440];
+const dest=path.join('qa-artifacts','home-menu-refinement');
+fs.mkdirSync(dest,{recursive:true});
+
+const sleep=t=>new Promise(r=>setTimeout(r,t));
+async function at(page,y){
+  await page.evaluate(y=>window.scrollTo({top:y,behavior:'instant'}),y);
+  await sleep(750);
+}
+async function computed(page){
+  return page.evaluate(()=>{
+    const q=s=>document.querySelector(s);
+    const style=s=>getComputedStyle(q(s));
+    const radius=s=>parseFloat(style(s).borderTopLeftRadius);
+    const height=s=>q(s).getBoundingClientRect().height;
+    const menu=q('.menu-pause'), rect=menu?.getBoundingClientRect();
+    return {
+      vw:innerWidth,
+      scrollWidth:document.documentElement.scrollWidth,
+      menuSource:q('.menu-pause__photo img')?.getAttribute('src'),
+      menuImageLoaded:!!q('.menu-pause__photo img')?.naturalWidth,
+      menuStagePosition:style('.menu-pause__stage').position,
+      menuHeight:rect?.height,
+      menuTop:scrollY+(rect?.top||0),
+      subtitleDisplay:style('.at-grid__description').display,
+      heroCTA:{radius:radius('.intro__actions .button--garnet'),height:height('.intro__actions .button--garnet')},
+      heroSecondary:{borderBottom:style('.intro__actions .button--outline-light').borderBottomWidth,borderLeft:style('.intro__actions .button--outline-light').borderLeftWidth},
+      menuCTA:{radius:radius('.menu-pause__cta'),height:height('.menu-pause__cta')},
+      navHidden:q('.glass-header').classList.contains('em-home-header-hidden'),
+      noindex:q('meta[name="robots"]')?.content.includes('noindex'),
+      docSections:[...document.querySelectorAll('main > section')].map(x=>x.id)
+    };
+  });
+}
+(async()=>{
+  const browser=await chromium.launch({headless:true});
+  const results=[];
+  try {
+    for(const width of widths){
+      const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'no-preference'});
+      const errors=[];
+      page.on('pageerror',e=>errors.push(e.message));
+      const resp=await page.goto(origin,{waitUntil:'domcontentloaded',timeout:30000});
+      assert.equal(resp.status(),200);
+      await sleep(1500);
+      const c=await computed(page);
+      assert(c.noindex,'Home remains noindex');
+      assert(c.scrollWidth<=width+2,'Horizontal overflow '+width+' '+c.scrollWidth);
+      assert(c.docSections.includes('introduction')&&c.docSections.includes('atrezzo-original-grid')&&c.docSections.includes('find-your-massage'),'Original Home journey preserved');
+      assert(c.docSections.includes('massage-menu-preview'),'Menu stage retained');
+
+      // Uploaded photographic delivery: exactly 12 distinct editorial
+      // gallery scenes + exactly 5 service backgrounds, with the SVG masks
+      // and the responsive <picture> pointing to the SAME slide asset.
+      const uploaded=await page.evaluate(async()=>{
+        const gallery=[...document.querySelectorAll('.at-grid__images .at-grid__image')]
+          .map(im=>im.getAttribute('src'));
+        const chapters=[...document.querySelectorAll('#cinema-track .chapter')].map(el=>({
+          id:el.id,
+          svg:el.querySelector('svg .at-mask-layer image, svg image')?.getAttribute('href')||'',
+          img:el.querySelector('.chapter__image img')?.getAttribute('src')||'',
+          mobile:el.querySelector('.chapter__image source')?.getAttribute('srcset')||''
+        }));
+        const paths=[...gallery,...chapters.map(x=>x.img)];
+        const decoded=await Promise.all(paths.map(async src=>{
+          const i=new Image();i.src=src;
+          try{await i.decode();return {src,ok:i.naturalWidth>0,width:i.naturalWidth,height:i.naturalHeight}}
+          catch(e){return {src,ok:false,width:0,height:0}}
+        }));
+        return {gallery,chapters,decoded};
+      });
+      assert.equal(uploaded.gallery.length,12,'The grid requires exactly 12 user-supplied images');
+      assert.equal(new Set(uploaded.gallery).size,12,'Every grid image must be unique');
+      assert.equal(uploaded.chapters.length,5,'All 5 original treatment chapters remain intact');
+      for(const [i,x] of uploaded.chapters.entries()){
+        const expected='./assets/images/home-2026/home-slide-0'+(i+1)+'-';
+        assert(x.svg.startsWith(expected)&&x.svg===x.img&&x.img===x.mobile,
+          'The SVG blind, responsive picture and slide backdrop must display one and the same new photo '+x.id+': '+JSON.stringify(x));
+      }
+      assert(uploaded.gallery.every(x=>x.startsWith('./assets/images/home-2026/home-grid-')),
+        'All gallery tiles must be replaced with the supplied optimized photos');
+      assert(uploaded.decoded.every(x=>x.ok),
+        'All 17 uploaded WebPs must decode successfully: '+JSON.stringify(uploaded.decoded.filter(x=>!x.ok)));
+      assert(uploaded.decoded.slice(0,12).every(x=>x.width>=1000&&x.height>=1000),
+        'Grid needs 1000px+ photographic sources');
+      assert(uploaded.decoded.slice(12).every(x=>x.width>=1600&&x.height>=900),
+        'Mask slides need genuine widescreen sources');
+
+      // A clean, illustrative spa still-life replaces the opaque background
+      // under the first SVG mask; keep the SVG stage and its reveal unchanged.
+      const bridge=await page.evaluate(()=>{
+        const stage=document.querySelector('.at-mask-stage');
+        const css=getComputedStyle(stage);
+        const chapters=document.querySelectorAll('#cinema-track .chapter');
+        return {backgroundImage:css.backgroundImage,backgroundColor:css.backgroundColor,
+          stagePresent:!!stage,chapters:chapters.length,
+          imageUrl:'./assets/images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp'};
+      });
+      assert(bridge.stagePresent&&bridge.chapters===5,'Original 5-chapter stage preserved');
+      assert(bridge.backgroundImage.includes('elegant-massage-spa-stilllife-blossoms-stones-candle.webp'),
+             'Transition must show still-life photo rather than flat colour at '+width);
+      const loaded=await page.evaluate(async()=>{
+        const im=new Image();
+        im.src='./assets/images/elegant-massage-spa-stilllife-blossoms-stones-candle.webp';
+        try{await im.decode();return {ok:im.naturalWidth>0,width:im.naturalWidth,height:im.naturalHeight}}catch(e){return {ok:false,width:0,height:0}}
+      });
+      assert(loaded.ok,'The spa still-life asset must decode at '+width);
+      assert(loaded.width>=600&&loaded.height>=650,
+             'The background needs a genuine responsive-quality source at '+width+': '+JSON.stringify(loaded));
+
+      const editorial=await page.evaluate(()=>{
+        const opening=document.querySelector('.treatments__opening');
+        const stage=document.querySelector('.at-mask-stage');
+        const title=opening.querySelector('h2');
+        const jump=opening.querySelector('.chapter-jump');
+        const st=getComputedStyle(stage),op=getComputedStyle(opening);
+        const rr=opening.getBoundingClientRect(),hr=title.getBoundingClientRect(),jr=jump.getBoundingClientRect();
+        return {
+          openingCount:document.querySelectorAll('.treatments__opening').length,
+          headingCount:document.querySelectorAll('#treatments-title').length,
+          selectorCount:document.querySelectorAll('#chapter-selector').length,
+          introIsStageChild:opening.parentElement===stage,
+          introBeforeTrack:!!document.querySelector('.treatments > .treatments__opening'),
+          openingWidth:rr.width,openingLeft:rr.left,headingLeft:hr.left,
+          headingRight:hr.right,jumpLeft:jr.left,openingBackground:op.backgroundImage,
+          openingPosition:op.position,maskBackground:st.backgroundImage,
+          maskSize:st.backgroundSize,headingAlign:getComputedStyle(title).textAlign,
+          maskActive:document.documentElement.classList.contains('at-original-active')
+        };
+      });
+      const imageFile='elegant-massage-spa-stilllife-blossoms-stones-candle.webp';
+      assert(editorial.openingCount===1&&editorial.headingCount===1&&editorial.selectorCount===1,
+        'Find Your Massage title, copy and selector MUST NOT be duplicated at '+width);
+      assert(editorial.introIsStageChild&&!editorial.introBeforeTrack,
+        'The sole introduction MUST be moved inside the floral scene, not left above it at '+width);
+      assert(editorial.openingWidth>=width-2&&Math.abs(editorial.openingLeft)<2,
+        'Single floral introduction spans the whole viewport at '+width+': '+JSON.stringify(editorial));
+      assert(editorial.maskBackground.includes(imageFile),
+        'The new title and selector must share the underlying mask-stage photograph at '+width);
+      assert(editorial.maskSize.split(',')[2]?.trim()==='cover',
+        'The masked-chapter WebP must fill the full width at '+width+': '+editorial.maskSize);
+      if(editorial.maskActive)
+        assert(editorial.openingPosition==='absolute'&&
+          editorial.openingBackground.includes('linear-gradient(')&&
+          !editorial.openingBackground.includes(imageFile),
+          'Active introduction must use ONLY a soft reading veil over the single mask-stage photo, not a second photo panel');
+      else
+        assert(editorial.openingBackground.includes(imageFile),
+          'Fallback should show the photo behind the sole intro, not a blank panel');
+      assert(editorial.headingLeft>=-2&&editorial.headingRight<=width+2,
+        'Title must not clip at '+width);
+      assert(Math.abs(editorial.jumpLeft-editorial.headingLeft)<4,
+        'Selector and title must align at the left reading edge at '+width);
+      assert(editorial.headingAlign==='left',
+        'Title must read as left-led editorial copy, not centered at '+width);
+      // Screenshot the actual incoming scene, not a second standalone photo.
+      if([375,768,1440].includes(width)){
+        const y=await page.evaluate(()=>{
+          const rect=document.querySelector('#cinema-track').getBoundingClientRect();
+          return Math.round(window.scrollY+rect.top+2);
+        });
+        await at(page,y);
+        await page.locator('.at-mask-stage').screenshot({
+          path:path.join(dest,'single-intro-over-floral-'+width+'.png'),
+          animations:'disabled',timeout:30000
+        });
+      }
+
+
+      // Capture the exact frame that formerly showed a solid blue rectangle.
+      // The first mask starts closed; the photographic canvas must be visible.
+      const trackY=await page.evaluate(()=>{
+        const r=document.querySelector('#cinema-track').getBoundingClientRect();
+        return window.scrollY+r.top;
+      });
+      await page.evaluate(y=>window.scrollTo({top:y+3,behavior:'instant'}),trackY);
+      await sleep(800);
+      if(width===375||width===768||width===1440)
+        await page.locator('.at-mask-stage').screenshot({
+          path:path.join(dest,'transition-'+width+'.png'),
+          animations:'disabled',timeout:30000
+        });
+      // The new intro stays readable for nearly one complete viewport of
+      // natural scroll; photo-only zoom begins before the first of five masks.
+      if(editorial.maskActive && [375,1440].includes(width)){
+        const introStart=await page.evaluate(()=>{
+          const r=document.querySelector('#cinema-track').getBoundingClientRect();
+          return Math.round(window.scrollY+r.top);
+        });
+        const introStyle=async()=>page.evaluate(()=>{
+          const el=document.querySelector('.at-mask-stage > .treatments__opening');
+          const stage=document.querySelector('.at-mask-stage');
+          const transform=getComputedStyle(stage,'::before').transform;
+          const scale=transform.startsWith('matrix(')?Number(transform.slice(7).split(',')[0]):1;
+          return {
+            opacity:parseFloat(getComputedStyle(el).opacity),
+            pointer:getComputedStyle(el).pointerEvents,
+            galleryFade:parseFloat(getComputedStyle(stage,'::after').opacity),
+            photoScale:scale,
+            firstBlindsOpen:[...document.querySelectorAll('#at-mask-0 g rect')]
+              .filter(x=>parseFloat(x.getAttribute('height'))>.002).length
+          };
+        });
+        await at(page,introStart);
+        await page.waitForTimeout(650);
+        const entering=await introStyle();
+        await at(page,introStart+Math.round(900*.70));
+        await page.waitForTimeout(2500);
+        const reading=await introStyle();
+        assert(entering.opacity>=.80,'The single floral intro must be visible on entry '+width+': '+JSON.stringify(entering));
+        assert(reading.opacity>=.84&&reading.firstBlindsOpen===0,
+          'Reading pause must stay readable BEFORE the first mask '+width+': '+JSON.stringify(reading));
+        assert(reading.photoScale>=1.02,
+          'Photo needs a subtle scroll-linked zoom during the reading pause '+width+': '+JSON.stringify(reading));
+        assert(entering.galleryFade>=.85,
+          'White fade should merge gallery into the floral introduction on entry '+width+': '+JSON.stringify(entering));
+        assert(reading.galleryFade<=.08,
+          'White fade must disappear during the FLORAL reading pause, before any treatment image opens '+width+': '+JSON.stringify(reading));
+        if(width===1440)
+          await page.locator('.at-mask-stage').screenshot({
+            path:path.join(dest,'intro-reading-hold-1440.png'),animations:'disabled',timeout:30000
+          });
+        await at(page,introStart+Math.round(900*1.55));
+        await page.waitForTimeout(3100);
+        const leaving=await introStyle();
+        assert(leaving.opacity<=.15 && leaving.pointer==='none',
+          'Intro must yield AFTER the pause and stop capturing clicks '+width+': '+JSON.stringify(leaving));
+        assert(leaving.firstBlindsOpen>0,'Body Massage should open after the reading hold '+width);
+        assert(leaving.galleryFade<=.02,
+          'White top gradient must be invisible over Body Massage and every later slide '+width+': '+JSON.stringify(leaving));
+        if(width===1440)
+          await page.locator('.at-mask-stage').screenshot({
+            path:path.join(dest,'body-massage-clean-no-white-fade-1440.png'),
+            animations:'disabled',timeout:30000
+          });
+        await at(page,introStart);
+        await page.waitForTimeout(2500);
+        const returning=await introStyle();
+        assert(returning.opacity>=.80 && returning.pointer==='auto',
+          'Single intro must return on reverse scroll '+width+': '+JSON.stringify(returning));
+        assert(returning.galleryFade>=.85,
+          'The white-to-floral seamless entrance must return when scrolling back up '+width+': '+JSON.stringify(returning));
+      }
+      // Reset to the document start before testing downward menu hide.
+      await at(page,0);
+
+
+      assert.equal(c.menuSource,'./assets/images/martes/body-editorial.webp','Menu must use new approved uploaded photo');
+      assert(c.heroCTA.radius>=c.heroCTA.height*.45,'Home hero CTA must be a pill');
+      const heroVisual=await page.evaluate(()=>{
+        const eyebrow=document.querySelector('.intro__content .eyebrow--light');
+        const primary=document.querySelector('.intro__actions .button--garnet');
+        const stage=document.querySelector('.at-mask-stage');
+        return {
+          eyebrowColor:getComputedStyle(eyebrow).color,
+          eyebrowShadow:getComputedStyle(eyebrow).textShadow,
+          primaryBackground:getComputedStyle(primary).backgroundColor,
+          primaryHeight:primary.getBoundingClientRect().height,
+          primaryBlur:getComputedStyle(primary).backdropFilter,
+          fadeBackground:getComputedStyle(stage,'::after').backgroundImage
+        };
+      });
+      assert(heroVisual.eyebrowColor==='rgb(250, 248, 242)'&&heroVisual.eyebrowShadow!=='none',
+        'Hero eyebrow must have legible warm-white contrast at '+width+': '+JSON.stringify(heroVisual));
+      assert(heroVisual.primaryBackground.startsWith('rgba(')&&
+        parseFloat(heroVisual.primaryBackground.split(',').pop().replace(')','').trim()||'1')<.5,
+        'Hero booking CTA should have light, translucent smoked glass at '+width);
+      assert(heroVisual.primaryHeight>=44&&heroVisual.primaryHeight<=57,
+        'Hero booking should stay a light but tappable pill at '+width);
+      assert(heroVisual.primaryBlur.includes('blur('),'Hero button needs real smoked-glass blur at '+width);
+      assert(heroVisual.fadeBackground.includes('linear-gradient('),
+        'Gallery must dissolve into a real white-to-transparent transition at '+width);
+
+      assert(c.menuCTA.radius>=c.menuCTA.height*.45,'Home menu CTA must be a pill');
+      assert.equal(c.heroSecondary.borderLeft,'0px','Second Hero action must not be outlined as a box');
+      assert(parseFloat(c.heroSecondary.borderBottom)>=1,'Second Hero action must be underlined text');
+      if(width<=700)assert.equal(c.subtitleDisplay,'none','Hide grid caption only on mobile');
+      else assert.notEqual(c.subtitleDisplay,'none','Preserve grid caption on desktop/tablet');
+      if(width>=768)assert.equal(c.menuStagePosition,'sticky','Menu photo needs a sticky reading hold');
+      else assert.equal(c.menuStagePosition,'relative','Mobile should use natural reading flow');
+
+      // Functional auto-hide and reveal from the actual scroll direction.
+      await at(page,680);
+      const hiddenDown=await page.locator('.glass-header').evaluate(el=>el.classList.contains('em-home-header-hidden'));
+      assert(hiddenDown,'Header must hide when scrolling down at '+width);
+      await at(page,450);
+      const shownUp=await page.locator('.glass-header').evaluate(el=>!el.classList.contains('em-home-header-hidden'));
+      assert(shownUp,'Header must reveal on upward scroll at '+width);
+      await at(page,0);
+      assert(await page.locator('.glass-header').evaluate(el=>!el.classList.contains('em-home-header-hidden')),'Header visible at top');
+
+      // Confirm image and layout at the reading hold after actual scroll.
+      await at(page,c.menuTop+Math.min(120,Math.max(10,c.menuHeight-900)));
+      await page.waitForFunction(()=>{const im=document.querySelector('.menu-pause__photo img');return !!im&&im.complete&&im.naturalWidth>0;},null,{timeout:12000});
+      const sc=await page.evaluate(()=>{
+        const photo=document.querySelector('.menu-pause__photo img');
+        const css=getComputedStyle(photo).transform;
+        const title=document.querySelector('#menu-pause-heading')?.getBoundingClientRect();
+        return {css,title:{left:title.left,right:title.right,top:title.top,bottom:title.bottom},viewport:innerWidth};
+      });
+      assert(sc.title.right<=width+3&&sc.title.left>=-3,'Menu heading clipped '+width+' '+JSON.stringify(sc.title));
+      if(width>=768){
+        const sample=async offset=>{
+          await at(page,c.menuTop+offset);
+          await sleep(350);
+          const s=await page.locator('.menu-pause__photo img').evaluate(el=>getComputedStyle(el).transform);
+          return s.startsWith('matrix(')?Number(s.slice(7).split(',')[0]):1;
+        };
+        const early=await sample(35);
+        const late=await sample(Math.min(c.menuHeight-900-30,570));
+        assert(late>=early+.020,'Menu photo needs meaningful progress-linked zoom '+width+': '+early+' '+late);
+        results.push({width,early,late,header:{hiddenDown,shownUp},menuSource:c.menuSource});
+      }else results.push({width,header:{hiddenDown,shownUp},menuSource:c.menuSource});
+      await page.locator('.menu-pause__stage').screenshot({path:path.join(dest,'menu-'+width+'.png'),timeout:30000,animations:'disabled'});
+      assert.equal(errors.length,0,'JS errors '+width+': '+errors.join('|'));
+      await page.close();
+    }
+    const reduced=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
+    await reduced.goto(origin,{waitUntil:'domcontentloaded'});
+    await sleep(300);
+    const reducedState=await reduced.evaluate(()=>({
+      menuPosition:getComputedStyle(document.querySelector('.menu-pause__stage')).position,
+      photoTransform:getComputedStyle(document.querySelector('.menu-pause__photo img')).transform
+    }));
+    assert.notEqual(reducedState.menuPosition,'sticky','No sticky scroll hold under reduced-motion');
+    assert.equal(reducedState.photoTransform,'none','No zoom under reduced-motion');
+    await reduced.close();
+    fs.writeFileSync(path.join(dest,'results.json'),JSON.stringify({results,reduced:reducedState},null,2));
+    console.log('HOME MENU/HEADER QA PASS '+JSON.stringify({results,reduced:reducedState}));
+  } finally {await browser.close();}
+})().catch(e=>{console.error(e);process.exit(1)});

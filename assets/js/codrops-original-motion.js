@@ -166,6 +166,13 @@
     trigger:track,start:'top top',end:'bottom bottom',scrub:2.5,
     anticipatePin:1,invalidateOnRefresh:true
   }});
+  // A native-scroll reading prelude BEFORE the first blind opens. This is
+  // additional scroll distance, not a changed treatment sequence: all five
+  // existing openBlinds/textIn/textOut tweens remain exactly as delivered.
+  // At 881.6667svh total track height this reads as ~115svh of breathing room.
+  const introReading={progress:0};
+  maskMaster.to(introReading,{progress:1,duration:4.2,ease:'none'});
+  maskMaster.addLabel('intro-reading-complete');
   blindSets.forEach((blinds,i)=>{
     maskMaster.addLabel(`chapter-${i}-transition`);
     maskMaster.add(openBlinds(blinds));
