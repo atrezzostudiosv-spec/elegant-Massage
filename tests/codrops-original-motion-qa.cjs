@@ -63,7 +63,7 @@ const widths=[375,390,430,768,1024,1440];
   assert(state.themePresent,width+': agate palette must load');
   assert.equal(state.bodyColor,'rgb(255, 255, 255)',width+': Home white paper');
   assert.deepEqual(state.headerBook,{background:'rgba(255, 255, 255, 0.14)',text:'rgb(255, 255, 255)'},width+': approved translucent header glass');
-  assert.equal(state.realPlace,'rgb(221, 235, 200)',width+': natural lime authentic location');
+  assert.equal(state.realPlace,'rgb(29, 53, 64)',width+': the approved dark backdrop behind the new user-supplied storefront photograph');
   assert.equal(state.footerColor,'rgb(37, 68, 96)',width+': ocean footer');
   assert.equal(state.grid,12,'12 authentic Sticky Grid items');
   assert.equal(state.chapters,5,'Five massage chapters');
