@@ -55,6 +55,44 @@ async function computed(page){
       assert(c.scrollWidth<=width+2,'Horizontal overflow '+width+' '+c.scrollWidth);
       assert(c.docSections.includes('introduction')&&c.docSections.includes('atrezzo-original-grid')&&c.docSections.includes('find-your-massage'),'Original Home journey preserved');
       assert(c.docSections.includes('massage-menu-preview'),'Menu stage retained');
+
+      // Uploaded photographic delivery: exactly 12 distinct editorial
+      // gallery scenes + exactly 5 service backgrounds, with the SVG masks
+      // and the responsive <picture> pointing to the SAME slide asset.
+      const uploaded=await page.evaluate(async()=>{
+        const gallery=[...document.querySelectorAll('.at-grid__images .at-grid__image')]
+          .map(im=>im.getAttribute('src'));
+        const chapters=[...document.querySelectorAll('#cinema-track .chapter')].map(el=>({
+          id:el.id,
+          svg:el.querySelector('svg .at-mask-layer image, svg image')?.getAttribute('href')||'',
+          img:el.querySelector('.chapter__image img')?.getAttribute('src')||'',
+          mobile:el.querySelector('.chapter__image source')?.getAttribute('srcset')||''
+        }));
+        const paths=[...gallery,...chapters.map(x=>x.img)];
+        const decoded=await Promise.all(paths.map(async src=>{
+          const i=new Image();i.src=src;
+          try{await i.decode();return {src,ok:i.naturalWidth>0,width:i.naturalWidth,height:i.naturalHeight}}
+          catch(e){return {src,ok:false,width:0,height:0}}
+        }));
+        return {gallery,chapters,decoded};
+      });
+      assert.equal(uploaded.gallery.length,12,'The grid requires exactly 12 user-supplied images');
+      assert.equal(new Set(uploaded.gallery).size,12,'Every grid image must be unique');
+      assert.equal(uploaded.chapters.length,5,'All 5 original treatment chapters remain intact');
+      for(const [i,x] of uploaded.chapters.entries()){
+        const expected='./assets/images/home-2026/home-slide-0'+(i+1)+'-';
+        assert(x.svg.startsWith(expected)&&x.svg===x.img&&x.img===x.mobile,
+          'The SVG blind, responsive picture and slide backdrop must display one and the same new photo '+x.id+': '+JSON.stringify(x));
+      }
+      assert(uploaded.gallery.every(x=>x.startsWith('./assets/images/home-2026/home-grid-')),
+        'All gallery tiles must be replaced with the supplied optimized photos');
+      assert(uploaded.decoded.every(x=>x.ok),
+        'All 17 uploaded WebPs must decode successfully: '+JSON.stringify(uploaded.decoded.filter(x=>!x.ok)));
+      assert(uploaded.decoded.slice(0,12).every(x=>x.width>=1000&&x.height>=1000),
+        'Grid needs 1000px+ photographic sources');
+      assert(uploaded.decoded.slice(12).every(x=>x.width>=1600&&x.height>=900),
+        'Mask slides need genuine widescreen sources');
+
       // A clean, illustrative spa still-life replaces the opaque background
       // under the first SVG mask; keep the SVG stage and its reveal unchanged.
       const bridge=await page.evaluate(()=>{
