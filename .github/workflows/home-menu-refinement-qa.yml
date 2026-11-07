@@ -6,6 +6,8 @@ on:
       - 'assets/css/home-adjustments-2026.css'
       - 'assets/js/home-scroll-nav-2026.js'
       - 'assets/js/home-closings-2026.js'
+      - 'assets/js/codrops-original-motion.js'
+      - 'tests/codrops-original-motion-qa.cjs'
       - 'tests/home-menu-refinement-qa.cjs'
       - 'tests/home-closing-sections-qa.cjs'
       - '.github/workflows/home-menu-refinement-qa.yml'
@@ -32,6 +34,7 @@ jobs:
           sleep 2
           node tests/home-menu-refinement-qa.cjs
           node tests/home-closing-sections-qa.cjs
+          node tests/codrops-original-motion-qa.cjs
       - name: Upload visual QA evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -40,5 +43,6 @@ jobs:
           path: |
             qa-artifacts/home-menu-refinement/
             qa-artifacts/home-closings/
+            qa-artifacts/codrops-motion/
           if-no-files-found: warn
           retention-days: 14
