@@ -491,6 +491,9 @@
   height:clamp(105px,19svh,240px);
   z-index:10;
   pointer-events:none;
+  /* Only the gallery-to-floral handoff needs white. The value is
+     scrubbed to zero BEFORE any treatment SVG blinds become visible. */
+  opacity:var(--at-gallery-fade-opacity,1);
   background:linear-gradient(180deg,
     #fff 0%,
     rgba(255,255,255,.96) 12%,
