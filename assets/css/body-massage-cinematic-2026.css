@@ -183,8 +183,15 @@ body[data-page="body"] .em-body .em-book--ghost:hover{
   .em-body-modal h2{font-size:clamp(3rem,10vw,4rem)}
 }
 @media(prefers-reduced-motion:reduce){
-  .em-journey__chapter{position:relative;top:auto;height:auto;min-height:90svh;clip-path:none!important}\n  .em-journey__chapter::before{transform:none!important}
+  .em-journey__chapter{position:relative;top:auto;height:auto;min-height:90svh;clip-path:none!important}
+  .em-journey__chapter::before{transform:none!important}
   .em-body-cta__photo{transform:none!important;will-change:auto}
   .em-body .em-book{transition:none!important}
 }
 
+
+/* Short viewports cannot safely hold an immersive pinned scene. */
+@media (min-width:871px) and (max-height:649px){
+  .em-journey__chapter{position:relative;top:auto;height:auto;min-height:100svh;clip-path:none!important}
+  .em-journey__chapter::before{transform:none}
+}
