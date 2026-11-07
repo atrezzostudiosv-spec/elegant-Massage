@@ -120,6 +120,24 @@ async function place(page,selector){
        assert(details.photo.includes('webp'),'Individual photographic background '+i);
        assert(Math.abs(details.top)<2,'Chapter pinned to top '+i);
      }
+     // Slide 02 must remain fully readable before slide 03 begins its wipe.
+     const middleHold=await page.evaluate(async()=>{
+       const slides=[...document.querySelectorAll('[data-em-journey-chapter]')];
+       const second=slides[1],third=slides[2];
+       const top=scrollY+second.getBoundingClientRect().top;
+       scrollTo({top:top+innerHeight*.42,behavior:'instant'});
+       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+       return {secondTop:second.getBoundingClientRect().top,
+         thirdTop:third.getBoundingClientRect().top,
+         margin:parseFloat(getComputedStyle(second).marginBottom),
+         secondHeading:second.querySelector('h2').textContent.trim()};
+     });
+     assert(middleHold.margin>=innerHeight*.79,
+       'Slide 02 has the reading hold: '+JSON.stringify(middleHold));
+     assert(Math.abs(middleHold.secondTop)<3,
+       'Slide 02 remains pinned during reading: '+JSON.stringify(middleHold));
+     assert(middleHold.thirdTop>innerHeight,
+       'Slide 03 must not begin covering 02 during hold: '+JSON.stringify(middleHold));
      // The next photo must descend from the TOP over the previous slide.
      const wipe=await page.evaluate(async()=>{
        const el=document.querySelectorAll('[data-em-journey-chapter]')[1];
