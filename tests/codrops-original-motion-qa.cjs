@@ -181,6 +181,17 @@ const widths=[375,390,430,768,1024,1440];
     await page.waitForTimeout(250);
   }
   if(width===1440 || width===390){
+    // The sole selector lives inside the introductory floral slide, and
+    // intentionally fades out as the treatment masks take over. Return to
+    // the floral reading scene before exercising its visible interaction.
+    const introY=await page.evaluate(()=>{
+      const r=document.querySelector('#cinema-track').getBoundingClientRect();
+      return Math.round(window.scrollY+r.top+8);
+    });
+    await page.evaluate(y=>window.scrollTo({top:y,behavior:'instant'}),introY);
+    await page.waitForTimeout(2200);
+    assert(await page.locator('#chapter-selector').isVisible(),
+      'Chapter selector should be visible during the floral reading hold at '+width);
     await page.locator('#chapter-selector').selectOption('chair-thai');
     await page.waitForTimeout(2900);
     const pos=await page.evaluate(()=>{
