@@ -204,3 +204,10 @@ body[data-page="body"] .em-body .em-book--ghost:hover{
     content:'';display:block;height:80svh;pointer-events:none;
   }
 }
+
+/* Reading hold for 02 / 03 THE FLOW. The second slide remains sticky
+   for 80svh after it fully arrives; only then does slide 03 wipe over it.
+   Native scroll, no wheel interception. Mobile/reduced motion unchanged. */
+@media (min-width:871px) and (min-height:650px) and (prefers-reduced-motion:no-preference){
+  .em-journey__chapter:nth-child(2){margin-bottom:80svh}
+}
