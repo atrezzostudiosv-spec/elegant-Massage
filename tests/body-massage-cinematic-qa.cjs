@@ -77,7 +77,7 @@ async function place(page,selector){
    assert(aesthetics.headingFont.includes('Playfair Display'),'Home approved headline type');
    assert(aesthetics.bodyFont.includes('Open Sans'),'Home approved body type');
    assert(aesthetics.chapter2Left<=width*.16,'All scroll narration stays at LEFT at '+width+': '+aesthetics.chapter2Left);
-   assert(aesthetics.journeyScrim.includes('rgba(0, 0, 0, 0.66)'),'Lighter neutral-black left-edge scrim');
+   assert.equal(await page.locator('.em-journey__chapter').count(),3,'Three independent full-bleed slides');
    assert(aesthetics.heroScrim.includes('rgba(0, 0, 0, 0.68)'),'Lighter hero overlay');
    assert(aesthetics.ctaScrim.includes('rgba(0, 0, 0, 0.66)'),'Subtle final photo CTA overlay');
    assert.equal(aesthetics.dialogBg,'rgb(255, 255, 255)','Home white background modal');
@@ -107,52 +107,35 @@ async function place(page,selector){
    assert(!(await dialog.evaluate(x=>x.open)),'Close button works');
    if(width>870){
      for(let i=0;i<3;i++){
-       await place(page,'[data-em-journey-chapter]:nth-child('+(i+1)+')');
-       await page.waitForTimeout(150);
-       const selected=await page.locator('[data-em-journey-photo].is-active').count();
-       assert.equal(selected,1,'Exactly one photo active '+i);
-       const photoIdx=await page.locator('[data-em-journey-photo]').evaluateAll(n=>n.findIndex(x=>x.classList.contains('is-active')));
-       assert.equal(photoIdx,i,'Photo synchronized to chapter '+i+' width '+width);
+       const details=await page.evaluate(async index=>{
+         const el=document.querySelectorAll('[data-em-journey-chapter]')[index];
+         const top=scrollY+el.getBoundingClientRect().top;
+         scrollTo({top:top,behavior:'instant'});
+         await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+         const style=getComputedStyle(el);
+         return {position:style.position,photo:getComputedStyle(el,'::before').backgroundImage,
+           top:el.getBoundingClientRect().top};
+       },i);
+       assert.equal(details.position,'sticky','Home-aligned sticky chapter '+i);
+       assert(details.photo.includes('webp'),'Individual photographic background '+i);
+       assert(Math.abs(details.top)<2,'Chapter pinned to top '+i);
      }
-     // The Home's key motion holds editorial copy on screen while the
-     // document and full-bleed photograph continue their native scroll.
-     // This is separate from the existing background-change assertions.
-     if(width>=871){
-       for(let index=0;index<3;index++){
-         const hold=await page.evaluate(async i=>{
-           const article=document.querySelectorAll('[data-em-journey-chapter]')[i];
-           const text=article.querySelector('.em-journey__chapter-inner');
-           const parentTop=scrollY+article.getBoundingClientRect().top;
-           async function capture(offset){
-             scrollTo({top:parentTop+innerHeight*offset,behavior:'instant'});
-             await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-             const r=text.getBoundingClientRect();
-             return {top:r.top,bottom:r.bottom,left:r.left,visible:r.top>=0&&r.bottom<=innerHeight+3,
-               scroll:scrollY,style:getComputedStyle(text).position};
-           }
-           return {first:await capture(.45),second:await capture(.93)};
-         },index);
-         assert.equal(hold.first.style,'sticky','Text must actually be sticky on desktop');
-         assert(hold.second.scroll-hold.first.scroll>400,
-           'Native page scroll should travel while text holds: '+JSON.stringify(hold));
-         assert(Math.abs(hold.second.top-hold.first.top)<3,
-           'Pinned text must hold its vertical position throughout chapter '+index+' at '+width+': '+JSON.stringify(hold));
-         assert(hold.first.visible&&hold.second.visible,
-           'Copy remains fully visible while scene progresses at '+width+': '+JSON.stringify(hold));
+     // The next photo must descend from the TOP over the previous slide.
+     const wipe=await page.evaluate(async()=>{
+       const el=document.querySelectorAll('[data-em-journey-chapter]')[1];
+       const top=scrollY+el.getBoundingClientRect().top;
+       async function at(offset){
+         scrollTo({top:top-innerHeight*offset,behavior:'instant'});
+         await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+         return {wipe:parseFloat(getComputedStyle(el).getPropertyValue('--em-slide-wipe')),
+           clip:getComputedStyle(el).clipPath};
        }
-       if(width===1440){
-         await page.evaluate(()=>{
-           const node=document.querySelectorAll('[data-em-journey-chapter]')[1];
-           const top=scrollY+node.getBoundingClientRect().top;
-           scrollTo({top:top+innerHeight*.84,behavior:'instant'});
-         });
-         await page.waitForTimeout(180);
-         await page.screenshot({path:path.join(output,'body-massage-1440-text-hold.png'),animations:'disabled'});
-       }
-     }
-     await place(page,'[data-em-journey-chapter]:first-child');
-     await page.waitForTimeout(150);
-     assert.equal(await page.locator('[data-em-journey-photo]').evaluateAll(n=>n.findIndex(x=>x.classList.contains('is-active'))),0,'Reverse scroll resets image');
+       return {before:await at(.8),during:await at(.35),arrived:await at(0)};
+     });
+     assert(wipe.before.wipe>wipe.during.wipe&&wipe.during.wipe>wipe.arrived.wipe,
+       'Slide reveal follows natural downward scroll: '+JSON.stringify(wipe));
+     assert(wipe.before.clip.includes('inset'),'Home-like top-edge wipe enabled');
+     await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));
      const scale=await page.evaluate(async()=>{
        const cta=document.querySelector('[data-em-body-cta]');
        const top=cta.getBoundingClientRect().top+scrollY;
