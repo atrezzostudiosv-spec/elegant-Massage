@@ -160,11 +160,11 @@ async function computed(page){
           const el=document.querySelector('.at-mask-stage > .treatments__opening');
           const stage=document.querySelector('.at-mask-stage');
           const transform=getComputedStyle(stage,'::before').transform;
-          const m=transform.match(/^matrix\\(([^,]+)/);
+          const scale=transform.startsWith('matrix(')?Number(transform.slice(7).split(',')[0]):1;
           return {
             opacity:parseFloat(getComputedStyle(el).opacity),
             pointer:getComputedStyle(el).pointerEvents,
-            photoScale:m?parseFloat(m[1]):1,
+            photoScale:scale,
             firstBlindsOpen:[...document.querySelectorAll('#at-mask-0 g rect')]
               .filter(x=>parseFloat(x.getAttribute('height'))>.002).length
           };
@@ -218,7 +218,7 @@ async function computed(page){
       assert(heroVisual.eyebrowColor==='rgb(250, 248, 242)'&&heroVisual.eyebrowShadow!=='none',
         'Hero eyebrow must have legible warm-white contrast at '+width+': '+JSON.stringify(heroVisual));
       assert(heroVisual.primaryBackground.startsWith('rgba(')&&
-        parseFloat(heroVisual.primaryBackground.match(/,\\s*([0-9.]+)\\)$/)?.[1]||'1')<.5,
+        parseFloat(heroVisual.primaryBackground.split(',').pop().replace(')','').trim()||'1')<.5,
         'Hero booking CTA should have light, translucent smoked glass at '+width);
       assert(heroVisual.primaryHeight>=44&&heroVisual.primaryHeight<=57,
         'Hero booking should stay a light but tappable pill at '+width);
