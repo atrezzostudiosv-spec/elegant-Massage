@@ -195,3 +195,12 @@ body[data-page="body"] .em-body .em-book--ghost:hover{
   .em-journey__chapter{position:relative;top:auto;height:auto;min-height:100svh;clip-path:none!important}
   .em-journey__chapter::before{transform:none}
 }
+
+/* Final chapter reading pause: Hot Stone Therapy remains pinned for another
+   80svh of native scroll, then releases naturally into the closing booking scene.
+   No JS scroll lock and no additional visual slide. */
+@media (min-width:871px) and (min-height:650px) and (prefers-reduced-motion:no-preference){
+  .em-journey__chapters::after{
+    content:'';display:block;height:80svh;pointer-events:none;
+  }
+}
