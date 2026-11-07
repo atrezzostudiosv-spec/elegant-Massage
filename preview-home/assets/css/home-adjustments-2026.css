@@ -518,3 +518,271 @@
   .touch-home .at-mask-stage::after{height:clamp(105px,19svh,220px)}
   .touch-home .at-mask-stage::before{content:none}
 }
+
+/* ATREZZO / 2026-11-07 / Two closing scenes: supplied backgrounds + native-scroll holds. */
+/* The Home has one photographic chapter for the actual business and one
+   location chapter, each with a single genuine map. Only the BACKGROUND
+   images are zoomed; the text, buttons and map stay completely stationary.
+   Never intercept touch, wheel, keyboard or navigation to emulate a stop. */
+.touch-home .real-place--cinematic{
+  display:block;
+  min-height:0;
+  padding:0;
+  background:#1d3540;
+  isolation:auto;
+  overflow:visible;
+}
+.touch-home .real-place--cinematic .real-place__stage{
+  position:relative;
+  display:grid;
+  align-items:center;
+  width:100%;
+  min-height:clamp(700px,100svh,1050px);
+  padding:clamp(92px,10svh,130px) 0 clamp(54px,7svh,88px);
+  overflow:hidden;
+  isolation:isolate;
+}
+.touch-home .real-place--cinematic .real-place__scene{z-index:0}
+.touch-home .real-place--cinematic .real-place__scrim{z-index:1}
+.touch-home .real-place--cinematic .real-place__inner{z-index:2}
+.touch-home .real-place--cinematic .real-place__scene img{
+  object-position:61% 50%;
+  transform:scale(1.01);
+  transform-origin:65% 50%;
+}
+.touch-home .real-place--cinematic .real-place__scrim{
+  background:
+    linear-gradient(90deg,
+      rgba(11,28,37,.75) 0%,rgba(11,28,37,.66) 30%,
+      rgba(11,28,37,.40) 60%,rgba(11,28,37,.09) 100%),
+    linear-gradient(0deg,rgba(7,18,25,.45),transparent 38%);
+}
+.touch-home .real-place--cinematic .real-place__source{
+  color:rgba(255,255,255,.84);
+  margin-top:clamp(30px,5svh,65px);
+  max-width:580px;
+}
+/* Approved design language: one light, smoked-glass capsule; the other
+   action is an underlined editorial text link, not a second button. */
+.touch-home .real-place--cinematic .real-place__action--primary{
+  min-height:49px;
+  padding:11px 22px;
+  border:1px solid rgba(255,255,255,.54);
+  border-radius:999px;
+  background:rgba(18,39,49,.37);
+  color:#fff;
+  -webkit-backdrop-filter:blur(16px) saturate(112%);
+  backdrop-filter:blur(16px) saturate(112%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13);
+  letter-spacing:.075em;
+}
+.touch-home .real-place--cinematic .real-place__action--primary:hover,
+.touch-home .real-place--cinematic .real-place__action--primary:focus-visible{
+  background:rgba(18,39,49,.72);
+  border-color:rgba(255,255,255,.82);
+  color:#fff;
+}
+.touch-home .real-place--cinematic .real-place__action:not(.real-place__action--primary){
+  min-height:44px;
+  padding:10px 0 12px;
+  border:0;
+  border-bottom:1px solid rgba(255,255,255,.79);
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  color:#fff;
+}
+/* The floral background is a true entire-section photographic layer. The
+   live Google map remains in front and retains normal pointer interaction. */
+.touch-home .visit--mapped{
+  position:relative;
+  display:block;
+  min-height:0;
+  padding:0;
+  background:#f8f7f4;
+  isolation:auto;
+  overflow:visible;
+}
+.touch-home .visit--mapped .visit__stage{
+  position:relative;
+  display:grid;
+  align-items:center;
+  min-height:clamp(850px,100svh,1100px);
+  width:100%;
+  padding:clamp(65px,8svh,100px) 0;
+  overflow:hidden;
+  isolation:isolate;
+  background:#f8f7f4;
+}
+.touch-home .visit--mapped .visit__backdrop,
+.touch-home .visit--mapped .visit__veil{
+  position:absolute;
+  inset:0;
+  width:100%;height:100%;
+  pointer-events:none;
+}
+.touch-home .visit--mapped .visit__backdrop{
+  overflow:hidden;
+  z-index:0;
+}
+.touch-home .visit--mapped .visit__backdrop img{
+  display:block;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center center;
+  transform:scale(1.01);
+  transform-origin:64% 51%;
+  will-change:transform;
+}
+.touch-home .visit--mapped .visit__veil{
+  z-index:1;
+  background:
+    linear-gradient(90deg,
+      rgba(250,249,247,.92) 0%,rgba(250,249,247,.80) 32%,
+      rgba(250,249,247,.51) 61%,rgba(250,249,247,.33) 100%),
+    linear-gradient(180deg,
+      rgba(255,255,255,.28),transparent 26%,
+      transparent 75%,rgba(250,249,247,.48));
+}
+.touch-home .visit--mapped .visit__grid{
+  position:relative;
+  z-index:2;
+}
+.touch-home .visit--mapped .visit__map-frame{
+  background:#fff;
+  border-color:rgba(37,68,96,.26);
+  box-shadow:0 22px 64px rgba(27,50,63,.14);
+}
+.touch-home .visit--mapped .visit__details,
+.touch-home .visit--mapped .visit__map-column{
+  position:relative;
+  z-index:2;
+}
+/* At this Home location the user explicitly requested ALL THREE actions as
+   plain text. Their hrefs remain functional, and the booking link is kept. */
+.touch-home .visit--mapped .visit__actions .button,
+.touch-home .visit--mapped .visit__actions .visit__book{
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:clamp(13px,1.6vw,28px);
+  width:auto;
+  max-width:100%;
+  min-width:0;
+  min-height:44px;
+  margin:0;
+  padding:10px 0 12px;
+  border:0;
+  border-bottom:1px solid currentColor;
+  border-radius:0;
+  background:transparent;
+  color:#254460;
+  box-shadow:none;
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+  text-decoration:none;
+  font:700 clamp(.74rem,.88vw,.86rem)/1.4 var(--sans);
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.touch-home .visit--mapped .visit__actions .button:hover,
+.touch-home .visit--mapped .visit__actions .visit__book:hover,
+.touch-home .visit--mapped .visit__actions .button:focus-visible,
+.touch-home .visit--mapped .visit__actions .visit__book:focus-visible{
+  transform:none;
+  color:#17364c;
+  background:transparent;
+  border-color:#17364c;
+  box-shadow:none;
+}
+.touch-home .visit--mapped .visit__actions{gap:clamp(16px,2vw,30px)}
+/* An actual pause: sticky storytelling stages with a full viewport and extra
+   native scroll distance before the next chapter is allowed to enter. */
+@media(min-width:768px) and (min-height:681px) and (prefers-reduced-motion:no-preference){
+  .touch-home .real-place--cinematic{
+    height:188svh;
+    min-height:0;
+    overflow:visible;
+  }
+  .touch-home .real-place--cinematic .real-place__stage{
+    position:sticky;
+    top:0;
+    height:100svh;
+    min-height:0;
+    padding:clamp(70px,8svh,98px) 0 clamp(48px,6svh,70px);
+  }
+  .touch-home .visit--mapped{
+    height:186svh;
+    min-height:0;
+  }
+  .touch-home .visit--mapped .visit__stage{
+    position:sticky;
+    top:0;
+    height:100svh;
+    min-height:0;
+    padding:clamp(48px,6svh,76px) 0;
+  }
+}
+@media(max-width:767px){
+  .touch-home .real-place--cinematic,
+  .touch-home .visit--mapped{
+    height:auto;
+    min-height:0;
+    padding:0;
+  }
+  .touch-home .real-place--cinematic .real-place__stage{
+    position:relative;top:auto;height:auto;
+    min-height:max(710px,100svh);
+    padding:95px 0 53px;
+  }
+  .touch-home .real-place--cinematic .real-place__scene img{
+    object-position:68% center;
+  }
+  .touch-home .real-place--cinematic .real-place__scrim{
+    background:
+      linear-gradient(90deg,rgba(9,27,35,.86),rgba(11,29,37,.56)),
+      linear-gradient(0deg,rgba(9,27,35,.37),transparent 48%);
+  }
+  .touch-home .visit--mapped .visit__stage{
+    position:relative;top:auto;height:auto;
+    min-height:0;padding:90px 0 93px;
+  }
+  .touch-home .visit--mapped .visit__veil{
+    background:
+      linear-gradient(180deg,
+        rgba(250,249,247,.95),rgba(250,249,247,.86) 47%,
+        rgba(250,249,247,.76) 73%,rgba(250,249,247,.93)),
+      linear-gradient(90deg,rgba(250,249,247,.55),transparent);
+  }
+  .touch-home .visit--mapped .visit__actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    width:100%;
+  }
+  .touch-home .visit--mapped .visit__actions .button,
+  .touch-home .visit--mapped .visit__actions .visit__book{
+    width:auto;
+    grid-column:auto;
+  }
+}
+@media(max-height:680px) and (min-width:768px){
+  .touch-home .real-place--cinematic,
+  .touch-home .visit--mapped{height:auto;min-height:0;padding:0}
+  .touch-home .real-place--cinematic .real-place__stage,
+  .touch-home .visit--mapped .visit__stage{
+    position:relative;top:auto;height:auto;min-height:0;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .touch-home .real-place--cinematic,
+  .touch-home .visit--mapped{height:auto;min-height:0;padding:0}
+  .touch-home .real-place--cinematic .real-place__stage,
+  .touch-home .visit--mapped .visit__stage{
+    position:relative;top:auto;height:auto;min-height:0;
+  }
+  .touch-home .real-place--cinematic .real-place__scene img,
+  .touch-home .visit--mapped .visit__backdrop img{
+    transform:none!important;will-change:auto;
+  }
+}

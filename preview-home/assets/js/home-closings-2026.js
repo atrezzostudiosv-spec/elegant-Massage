@@ -7,19 +7,32 @@
     const Trigger=window.ScrollTrigger;
     if(!gsap||!Trigger || matchMedia('(prefers-reduced-motion: reduce)').matches)return;
     gsap.registerPlugin(Trigger);
-    const shots=[
-      {section:document.querySelector('.real-place--cinematic'),photo:document.querySelector('.real-place--cinematic .real-place__scene img'),zoom:1.07}
-    ];
     const motions=[];
-    for(const shot of shots){
-      if(!shot.section || !shot.photo)continue;
-      motions.push(gsap.fromTo(shot.photo,
-        {scale:1.015},
-        {scale:shot.zoom,ease:'none',scrollTrigger:{
-          trigger:shot.section,start:'top bottom',end:'bottom top',
-          scrub:.6,invalidateOnRefresh:true
-        }}
-      ));
+    // A native-scroll reading hold (one full viewport + ~0.86–0.88 extra
+    // viewport of travel) for EACH of the two final photographic chapters.
+    // Their interiors remain sticky. Zoom ONLY the photograph, never the
+    // map, the wordmark, buttons, address or any other readable content.
+    // Short screens and phones retain natural non-sticky content flow.
+    const immersiveClosing=matchMedia(
+      '(min-width:768px) and (min-height:681px) and (prefers-reduced-motion:no-preference)'
+    );
+    const shots=[
+      {section:document.querySelector('.real-place--cinematic'),
+       photo:document.querySelector('.real-place__scene img'),zoom:1.115},
+      {section:document.querySelector('.visit--mapped'),
+       photo:document.querySelector('.visit__backdrop img'),zoom:1.095}
+    ];
+    if(immersiveClosing.matches){
+      for(const shot of shots){
+        if(!shot.section || !shot.photo)continue;
+        motions.push(gsap.fromTo(shot.photo,
+          {scale:1.01},
+          {scale:shot.zoom,ease:'none',scrollTrigger:{
+            trigger:shot.section,start:'top top',end:'bottom bottom',
+            scrub:.75,invalidateOnRefresh:true
+          }}
+        ));
+      }
     }
     // The new Menu chapter stays visually fixed while native scroll spends
     // its dedicated reading distance. Only the photo changes scale: the text
