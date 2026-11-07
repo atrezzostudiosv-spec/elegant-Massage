@@ -295,3 +295,11 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Home `index.html` **not modified**, original blob SHA `92ec96a468c15f51110abd6b025aec4185e8bdc6`.
 - Verified statically after merge: 12/12 internal pages maintain `noindex,nofollow`, link the new CSS, contain one location section before footer, and preserve final booking CTA. Earlier PR-branch browser QA (48 route/viewport combinations) passed at 375, 768, 1024, 1440 px, including left-aligned CTA checks.
 - Commercial launch **NOT** authorized. Remaining checks that do NOT reopen visual approval: latest main-branch Pages deploy and regression, real Safari/iOS/Android, external maps, social scraping, final domain and any outstanding exact photo-to-page replacement decisions.
+
+## 2026-11-07 — Body Massage / Home-aligned photographic slides
+- User requested replacing the current Body Massage crossfade with the existing Home slide-transition model and publishing updates to the same non-indexed demo URL.
+- **IMPLEMENTED ON MAIN:** Body Massage's three full-bleed narrative chapters are individually sticky, replace one another by a top-edge vertical wipe during native scrolling and use restrained image zoom. Removed the competing shared-canvas crossfade controller and obsolete desktop text-hold rule. Chapter content, detail dialogs, booking links and closing CTA remain intact.
+- Source files: `assets/css/body-massage-cinematic-2026.css`, `assets/js/body-massage-cinematic-2026.js`; synchronized mirrors in `preview-internal/assets/`. Focused QA assertions updated at `tests/body-massage-cinematic-qa.cjs`.
+- Fallback: at <=870px, reduced motion or desktop height under 650px, scenes return to normal readable flow. Demo remains `noindex`; Home unchanged.
+- **VALIDATION:** GitHub commits confirmed for changed files, but CI/browser-scroll screenshots and GitHub Pages deployment status have not yet been verified in this intervention. Therefore status is **EN VALIDACIÓN**, not visually closed.
+- **NEXT ACTION:** Run/inspect Body Cinematic Playwright QA plus Pages deployment and review the actual forward/reverse scroll at desktop and mobile.
