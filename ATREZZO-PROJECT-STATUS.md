@@ -314,3 +314,9 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - Applied a desktop-only `margin-bottom:80svh` to the second sticky photo chapter. This extends the second chapter's native-scroll hold before the third slide begins its top-edge wipe; previous third-slide pause and Home remain untouched.
 - Main and preview-internal CSS mirrors synchronized. Added regression assertions to `tests/body-massage-cinematic-qa.cjs` checking the hold, second scene pinned at top and third scene not covering it mid-hold.
 - Status **EN VALIDACIÓN** until latest GitHub Actions / deployment and browser test report are confirmed. No commercial launch authorized; demo remains `noindex`.
+
+## 2026-11-07 — Home SEO, favicon and social share
+- User requested Home SEO, favicon ('emoticon') and a share preview image for social platforms. Scoped edit only to `index.html` head; existing Home layout, animations, navigation and booking remain unchanged.
+- Added/updated descriptive title and local SEO description, canonical and full Open Graph/Twitter tags with verified existing `assets/brand/elegant-massage-social-share.png` (1200x630 PNG, recorded in repo), and linked existing SVG favicon `assets/brand/elegant-massage-favicon.svg`.
+- Added JSON-LD `HealthAndBeautyBusiness`, `WebSite` and `WebPage` using the currently documented business name, Flower Mound address, phone and email. The canonical/OG URLs use the current GitHub Pages demo address and require replacement with final commercial domain at launch.
+- **STATIC QA PASS**: re-fetched Home and confirmed favicon, OG/Twitter metadata, schema parses, canonical and `noindex,nofollow` remain present. **NOT VERIFIED**: live social crawler previews and latest Pages deployment. Demo remains nonindexed and this does not authorize publication.
