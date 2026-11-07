@@ -43,13 +43,29 @@
     const treatmentTrack=document.querySelector('#cinema-track');
     const stageIntro=treatmentTrack?.querySelector('.at-mask-stage > .treatments__opening');
     if(treatmentTrack&&stageIntro&&matchMedia('(min-height:650px)').matches){
+      // First ~115svh is now a reading hold in the mask master timeline.
+      // Give the original floral photograph a tiny scroll-linked zoom with
+      // no scroll interception. The text remains fully readable most of
+      // that distance, then dissolves as the first blind begins.
+      const stage=treatmentTrack.querySelector('.at-mask-stage');
+      if(stage){
+        motions.push(gsap.fromTo(stage,
+          {'--at-intro-scale':1},
+          {'--at-intro-scale':1.065,ease:'none',scrollTrigger:{
+            trigger:treatmentTrack,
+            start:'top top',
+            end:()=>`top top-=${Math.round(window.innerHeight*1.16)}`,
+            scrub:.65,invalidateOnRefresh:true
+          }}
+        ));
+      }
       motions.push(gsap.fromTo(stageIntro,
         {autoAlpha:1,y:0},
-        {autoAlpha:0,y:-18,ease:'none',scrollTrigger:{
+        {autoAlpha:0,y:-14,ease:'none',scrollTrigger:{
           trigger:treatmentTrack,
-          start:'top top',
-          end:()=>'+='+Math.round(Math.max(250,window.innerHeight*.44)),
-          scrub:.55,invalidateOnRefresh:true,
+          start:()=>`top top-=${Math.round(window.innerHeight*.88)}`,
+          end:()=>`top top-=${Math.round(window.innerHeight*1.20)}`,
+          scrub:.48,invalidateOnRefresh:true,
           onUpdate:self=>{stageIntro.style.pointerEvents=self.progress>.70?'none':'auto';},
           onLeave:()=>{stageIntro.style.pointerEvents='none';},
           onEnterBack:()=>{stageIntro.style.pointerEvents='auto';}
