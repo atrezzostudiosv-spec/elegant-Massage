@@ -124,7 +124,8 @@ async function place(page,selector){
      const middleHold=await page.evaluate(async()=>{
        const slides=[...document.querySelectorAll('[data-em-journey-chapter]')];
        const second=slides[1],third=slides[2];
-       const top=scrollY+second.getBoundingClientRect().top;
+       const track=document.querySelector('.em-journey__chapters');
+       const top=scrollY+track.getBoundingClientRect().top+slides[0].offsetHeight;
        scrollTo({top:top+innerHeight*.42,behavior:'instant'});
        await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
        return {secondTop:second.getBoundingClientRect().top,
