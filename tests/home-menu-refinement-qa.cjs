@@ -164,6 +164,7 @@ async function computed(page){
           return {
             opacity:parseFloat(getComputedStyle(el).opacity),
             pointer:getComputedStyle(el).pointerEvents,
+            galleryFade:parseFloat(getComputedStyle(stage,'::after').opacity),
             photoScale:scale,
             firstBlindsOpen:[...document.querySelectorAll('#at-mask-0 g rect')]
               .filter(x=>parseFloat(x.getAttribute('height'))>.002).length
@@ -180,6 +181,10 @@ async function computed(page){
           'Reading pause must stay readable BEFORE the first mask '+width+': '+JSON.stringify(reading));
         assert(reading.photoScale>=1.02,
           'Photo needs a subtle scroll-linked zoom during the reading pause '+width+': '+JSON.stringify(reading));
+        assert(entering.galleryFade>=.85,
+          'White fade should merge gallery into the floral introduction on entry '+width+': '+JSON.stringify(entering));
+        assert(reading.galleryFade<=.08,
+          'White fade must disappear during the FLORAL reading pause, before any treatment image opens '+width+': '+JSON.stringify(reading));
         if(width===1440)
           await page.locator('.at-mask-stage').screenshot({
             path:path.join(dest,'intro-reading-hold-1440.png'),animations:'disabled',timeout:30000
@@ -190,11 +195,20 @@ async function computed(page){
         assert(leaving.opacity<=.15 && leaving.pointer==='none',
           'Intro must yield AFTER the pause and stop capturing clicks '+width+': '+JSON.stringify(leaving));
         assert(leaving.firstBlindsOpen>0,'Body Massage should open after the reading hold '+width);
+        assert(leaving.galleryFade<=.02,
+          'White top gradient must be invisible over Body Massage and every later slide '+width+': '+JSON.stringify(leaving));
+        if(width===1440)
+          await page.locator('.at-mask-stage').screenshot({
+            path:path.join(dest,'body-massage-clean-no-white-fade-1440.png'),
+            animations:'disabled',timeout:30000
+          });
         await at(page,introStart);
         await page.waitForTimeout(2500);
         const returning=await introStyle();
         assert(returning.opacity>=.80 && returning.pointer==='auto',
           'Single intro must return on reverse scroll '+width+': '+JSON.stringify(returning));
+        assert(returning.galleryFade>=.85,
+          'The white-to-floral seamless entrance must return when scrolling back up '+width+': '+JSON.stringify(returning));
       }
       // Reset to the document start before testing downward menu hide.
       await at(page,0);
