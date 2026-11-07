@@ -49,6 +49,18 @@
       // that distance, then dissolves as the first blind begins.
       const stage=treatmentTrack.querySelector('.at-mask-stage');
       if(stage){
+        // The white wash exists ONLY to merge the gallery with the floral
+        // introduction. Dissolve it well before the first SVG blind opens;
+        // reversing scroll naturally restores the seamless upper handoff.
+        motions.push(gsap.fromTo(stage,
+          {'--at-gallery-fade-opacity':1},
+          {'--at-gallery-fade-opacity':0,ease:'none',scrollTrigger:{
+            trigger:treatmentTrack,
+            start:'top top',
+            end:()=>`top top-=${Math.round(window.innerHeight*.65)}`,
+            scrub:.45,invalidateOnRefresh:true
+          }}
+        ));
         motions.push(gsap.fromTo(stage,
           {'--at-intro-scale':1},
           {'--at-intro-scale':1.065,ease:'none',scrollTrigger:{
