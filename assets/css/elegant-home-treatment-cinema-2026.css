@@ -39,7 +39,7 @@ html.em-cinema-ready .touch-home #atrezzo-mask-stage > .chapter {
   clip-path:none!important;transform:none;
   isolation:isolate!important;background:#111!important;
   opacity:0;visibility:visible!important;
-  pointer-events:none!important;
+  pointer-events:none;
   transition:none!important;
 }
 html.em-cinema-ready .touch-home #atrezzo-mask-stage > .chapter:first-of-type {
