@@ -14,8 +14,8 @@
  const intro=qs('#introduction'),introFilm=qs('#intro-film');
  const jump=qs('#chapter-selector');
  const grid=qs('.at-grid'),track=qs('#cinema-track');
- const gridMedia=matchMedia('(min-width:768px) and (min-height:540px) and (prefers-reduced-motion:no-preference)');
- const maskMedia=matchMedia('(min-width:768px) and (min-height:650px) and (prefers-reduced-motion:no-preference)');
+ const gridMedia=matchMedia('(min-width:871px) and (min-height:540px) and (prefers-reduced-motion:no-preference)');
+ const maskMedia=matchMedia('(min-width:871px) and (min-height:650px) and (prefers-reduced-motion:no-preference)');
  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
  const gridActive=()=>gridMedia.matches && !!window.gsap && !!window.ScrollTrigger;
  const maskActive=()=>gridActive() && maskMedia.matches;
