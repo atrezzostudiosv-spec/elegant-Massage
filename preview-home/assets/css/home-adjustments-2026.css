@@ -790,13 +790,13 @@
 /* 2026-11-09 — Mobile editorial corrections.
    The 12-photo Sticky Grid is intentionally DESKTOP/TABLET only. On phones,
    move directly from the cinematic hero to the five treatment photographs. */
-@media(max-width:767px){
+@media(max-width:870px){
  .touch-home #atrezzo-original-grid{display:none!important}
 }
 /* Phone treatment chapters use a dedicated native-scroll track: full-screen
    photo + copy, one reading hold, then the next image wipes down over it.
    No forced snap, no scroll-lock, and reversing scroll is supported. */
-@media(max-width:767px) and (min-height:540px) and (prefers-reduced-motion:no-preference){
+@media(max-width:870px) and (min-height:540px) and (prefers-reduced-motion:no-preference){
  .em-mobile-photo-slides .touch-home #cinema-track{
    position:relative!important;height:auto!important;overflow:visible!important;
    background:#111!important;isolation:isolate;
@@ -867,7 +867,7 @@
 }
 /* Native sticky reading holds on phones with sufficient vertical space.
    Short landscape displays and reduced-motion users retain ordinary flow. */
-@media(max-width:767px) and (min-height:740px) and (prefers-reduced-motion:no-preference){
+@media(max-width:870px) and (min-height:740px) and (prefers-reduced-motion:no-preference){
  .touch-home .menu-pause{height:176svh!important;min-height:0!important;overflow:visible!important}
  .touch-home .menu-pause .menu-pause__stage{
    position:sticky!important;top:0!important;height:100svh!important;
@@ -899,4 +899,25 @@
 .touch-home .chapter__shade{
  background:linear-gradient(90deg,rgba(0,0,0,.77),rgba(0,0,0,.28) 64%,rgba(0,0,0,.10)),
  linear-gradient(0deg,rgba(0,0,0,.65),transparent 67%)!important;
+}
+
+/* iPhone photographic direction: prioritize hands and subjects, not a shared
+   50/50 landscape crop. Each service can be framed independently. */
+@media(max-width:870px) and (min-height:540px) and (prefers-reduced-motion:no-preference){
+ .em-mobile-photo-slides .touch-home .chapter__image{background:#101010}
+ .em-mobile-photo-slides .touch-home .chapter__image img{
+   object-fit:cover!important;
+   object-position:var(--em-photo-x,50%) var(--em-photo-y,45%)!important;
+ }
+ .em-mobile-photo-slides .touch-home .chapter--body{--em-photo-x:57%;--em-photo-y:48%}
+ .em-mobile-photo-slides .touch-home .chapter--combo{--em-photo-x:50%;--em-photo-y:50%}
+ .em-mobile-photo-slides .touch-home .chapter--couples{--em-photo-x:51%;--em-photo-y:49%}
+ .em-mobile-photo-slides .touch-home .chapter--chair{--em-photo-x:49%;--em-photo-y:42%}
+ .em-mobile-photo-slides .touch-home .chapter--four{--em-photo-x:48%;--em-photo-y:46%}
+}
+/* Hide mosaic across ALL responsive phone orientations, before/after JS.
+   The interaction engine adds the hidden property as a second safeguard. */
+@media(max-width:870px){
+ .touch-home #atrezzo-original-grid,
+ .touch-home #atrezzo-original-grid[hidden]{display:none!important}
 }
