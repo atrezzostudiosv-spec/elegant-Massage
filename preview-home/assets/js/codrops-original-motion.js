@@ -18,7 +18,8 @@
  const maskMedia=matchMedia('(min-width:871px) and (min-height:650px) and (prefers-reduced-motion:no-preference)');
  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
  const gridActive=()=>gridMedia.matches && !!window.gsap && !!window.ScrollTrigger;
- const maskActive=()=>gridActive() && maskMedia.matches;
+ // The five treatment slides are owned by the shared responsive cinematic controller.
+ const maskActive=()=>false;
  let gridTL=[],maskMaster=null,progressST=null,resizeTimer=null,initialHashHandled=false;
  const scenes=qsa('.chapter',track);
  const ensureVideo=()=>{
