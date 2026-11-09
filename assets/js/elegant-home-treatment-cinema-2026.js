@@ -57,7 +57,7 @@
    }
    originals.forEach(({ch,img,source},i)=>{
      if(!img)return;
-     const url=new URL(portraitFiles[i],imageBase).href;
+     const url=new URL(portraitFiles[i],imageBase).href+(i===0?'?v=20261109-photo01':'');
      const apply=()=>{
        if(version!==requestVersion||!mobile.matches)return;
        // Set both picture source and img for correct behavior on Safari iOS.
