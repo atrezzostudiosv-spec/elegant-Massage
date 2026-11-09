@@ -7,13 +7,16 @@
  const track=document.querySelector('#cinema-track');
  const stage=track?.querySelector('.at-mask-stage');
  const chapters=stage?[...stage.querySelectorAll(':scope > .chapter')]:[];
- const small=matchMedia('(max-width:767px) and (min-height:540px) and (prefers-reduced-motion:no-preference)');
+ const phone=matchMedia('(max-width:870px)');
+ const small=matchMedia('(max-width:870px) and (min-height:540px) and (prefers-reduced-motion:no-preference)');
+ const grid=document.querySelector('#atrezzo-original-grid');
  if(!track||!stage||chapters.length!==5)return;
  let queued=false;
  const clamp=n=>Math.max(0,Math.min(1,n));
  const active=()=>small.matches;
  function update(){
    queued=false;
+   if(grid){grid.hidden=phone.matches;grid.setAttribute('aria-hidden',String(phone.matches));}
    const enabled=active();
    root.classList.toggle('em-mobile-photo-slides',enabled);
    chapters.forEach((ch,i)=>{
@@ -34,5 +37,6 @@
  addEventListener('resize',schedule,{passive:true});
  addEventListener('pageshow',schedule);
  small.addEventListener?.('change',schedule);
+ phone.addEventListener?.('change',schedule);
  schedule();
 })();
