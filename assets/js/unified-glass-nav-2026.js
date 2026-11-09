@@ -29,7 +29,8 @@
     });
     let lastY=Math.max(0,scrollY),travel=0,direction=0,queued=false;
     const expanded=()=>header.classList.contains('menu-open')||btn?.getAttribute('aria-expanded')==='true'||!!header.querySelector('.treatments-menu[open]');
-    const interacting=()=>expanded()||header.matches(':focus-within')||header.matches(':hover');
+    const hoverCapable=matchMedia('(hover:hover) and (pointer:fine)');
+    const interacting=()=>expanded()||header.matches(':focus-within')||(hoverCapable.matches&&header.matches(':hover'));
     function update(){
       queued=false;
       const y=Math.max(0,scrollY),delta=y-lastY;
