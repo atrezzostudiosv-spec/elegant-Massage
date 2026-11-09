@@ -72,3 +72,15 @@ body[data-page="menu"] .em-menu-focus .em-menu-extra .em-menu-extra__cta{display
  body[data-page="menu"] .em-menu-focus .atz-focus-photo,
  body[data-page="menu"] .em-menu-focus .atz-focus-detail{transition:none!important}
 }
+
+/* Progressive enhancement: if JS does not initialize, every treatment stays
+   readable and its real booking/treatment links remain accessible. */
+body[data-page="menu"] .em-menu-focus:not(.has-js) .atz-focus-stage{height:auto;min-height:0}
+body[data-page="menu"] .em-menu-focus:not(.has-js) .atz-focus-inside{position:relative;display:block;min-height:680px}
+body[data-page="menu"] .em-menu-focus:not(.has-js) .atz-focus-choice{display:none}
+body[data-page="menu"] .em-menu-focus:not(.has-js) .atz-focus-details{display:block;min-height:0;max-width:850px}
+body[data-page="menu"] .em-menu-focus:not(.has-js) .atz-focus-detail{position:relative;display:block;opacity:1;visibility:visible;transform:none;border-bottom:1px solid #ffffff45;padding:28px 0}
+body[data-page="menu"] .em-menu-focus:not(.has-js) .atz-focus-detail h3{font-size:clamp(3.2rem,6vw,6rem)}
+body[data-page="menu"] .em-menu-focus:not(.has-js) .atz-focus-photo{opacity:0}
+body[data-page="menu"] .em-menu-focus:not(.has-js) .atz-focus-photo:first-child{opacity:1;clip-path:none}
+body[data-page="menu"] .em-menu-focus:not(.has-js) .atz-focus-index{display:none}
