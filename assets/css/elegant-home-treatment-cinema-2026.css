@@ -258,3 +258,12 @@ html.em-cinema-ready .touch-home #atrezzo-mask-stage{
 }
 /* Never expose the original separate image-frame version while the responsive
    controller is active. Every image covers the scene, including on tablets. */
+
+/* Mobile-only placement correction: the legacy phone layout sets
+   flex-direction:column, so align-items:flex-end does not move the copy down.
+   Align its main axis to the bottom while keeping existing CTA/nav clearance. */
+@media(max-width:767px) and (min-height:560px) and (prefers-reduced-motion:no-preference){
+ html.em-cinema-ready .touch-home #atrezzo-mask-stage > .chapter {
+   justify-content:flex-end!important;
+ }
+}
