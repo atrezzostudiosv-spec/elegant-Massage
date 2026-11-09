@@ -921,3 +921,29 @@
  .touch-home #atrezzo-original-grid,
  .touch-home #atrezzo-original-grid[hidden]{display:none!important}
 }
+
+/* ATREZZO / MENU 02 — approved lower mobile editorial alignment.
+   Match the vertical anchoring of the treatment scenes above without touching
+   images, sticky scroll timing, CTA styling, tablet or desktop. */
+@media (max-width:767px) and (min-height:740px) and (prefers-reduced-motion:no-preference){
+  .touch-home #massage-menu-preview .menu-pause__stage{
+    align-items:end!important;
+    padding-top:clamp(16px,2svh,25px)!important;
+    padding-bottom:calc(98px + env(safe-area-inset-bottom,0px))!important;
+  }
+  .touch-home #massage-menu-preview .menu-pause__body{
+    padding:0!important;
+    margin:0 auto!important;
+  }
+  .touch-home #massage-menu-preview .menu-pause__layout{
+    margin-top:16px!important;
+    gap:16px!important;
+  }
+  .touch-home #massage-menu-preview .menu-pause__copy p{
+    margin-bottom:16px!important;
+  }
+  .touch-home #massage-menu-preview .menu-pause__footer{
+    margin-top:17px!important;
+    padding-top:15px!important;
+  }
+}
