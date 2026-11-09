@@ -29,7 +29,7 @@
    'mobile-slide-04-chair-massage.webp',
    'mobile-slide-05-four-hands.webp'
  ];
- const imageBase=new URL('../images/home-2026/',document.currentScript?.src || location.href);
+ const imageBase=new URL('../../preview-home/assets/images/home-2026/',document.currentScript?.src || location.href);
  const originals=chapters.map(ch=>{
    const picture=ch.querySelector('.chapter__image');
    const img=picture?.querySelector('img');
