@@ -352,3 +352,12 @@ New image assets for reflexology generated locally; their GitHub upload and fina
 - `preview-home/assets/js/codrops-original-motion.js`: GSAP Sticky Grid and desktop SVG blinds now initialize only from width 768px upward; avoids two competing mobile engines. Existing desktop choreography untouched.
 - `preview-home/assets/js/home-closings-2026.js`: photo-only zoom enabled on taller phone portrait where native sticky holds operate; desktop-only stage-intro fade no longer affects phone slides. Mobile Menu 02 and real-place reading stages use sticky only on portrait heights >=740px; shorter screens/reduced-motion retain natural readable flow.
 - **Static checks passed**: root and preview script links, five original treatment chapters, disabled phone grid/mask, presence of phone reading holds and black overlay rules. **Still unverified:** live browser/iPhone screenshots, full GitHub Pages deployment and JavaScript interaction QA. Demo remains noindex; no commercial launch authorized.
+
+## 2026-11-09 — iPhone responsive follow-up and booking ribbon
+- User reported visible phone Sticky Grid, off-center photo subjects, static internal headers and an oversized floating booking button.
+- Expanded phone grid hiding to <=870px including iPhone landscape: CSS display:none and JS hidden / aria-hidden fallback. Desktop animation only activates at >=871px to avoid double animation.
+- Added five per-treatment mobile object-position focal settings; full-bleed slides and native reading pauses retained.
+- Shared navigation JS/CSS now hides internal-page header on downscroll and reveals on upscroll, preserving access when nav/focus/dropdown is active; touchscreen sticky hover does not prevent hiding.
+- Replaced floating booking anchor with a full-width light editorial ribbon, message Make time for yourself, Call Us telephone link and separate Book Now pill button, on Home and all internal pages in mobile layout.
+- Cache-busted CSS/JS links in main and preview Home, all internal routes, and internal preview routes using v=20261109c.
+- Static checks passed for links and selectors. Browser could not reach deployed GitHub Pages from this environment (ERR_BLOCKED_BY_ADMINISTRATOR), so iPhone and live visual behavior still unverified; demo remains noindex.
