@@ -119,16 +119,5 @@
  document.addEventListener('visibilitychange',schedule);
  mobile.addEventListener?.('change',schedule);
  motion.addEventListener?.('change',schedule);
- const select=document.getElementById('chapter-selector');
- if(select){
-   select.addEventListener('change',()=>{
-     const i=chapters.findIndex(ch=>ch.id===select.value);
-     if(i<0||!enabled)return;
-     const top=window.scrollY+track.getBoundingClientRect().top;
-     const dist=Math.max(1,track.offsetHeight-stage.offsetHeight);
-     window.scrollTo({top:top+dist*(i+.12)/chapters.length,behavior:'instant'});
-     schedule();
-   });
- }
  schedule();
 })();
