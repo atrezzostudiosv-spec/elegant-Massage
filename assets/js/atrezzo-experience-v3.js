@@ -17,7 +17,7 @@
     booking.target = '_blank';
     booking.rel = 'noopener noreferrer';
     booking.setAttribute('aria-label', 'Book an appointment with Elegant Massage');
-    booking.innerHTML = 'Book an Appointment <span aria-hidden="true">↗</span>';
+    booking.innerHTML = 'Book an Appointment ';
     doc.body.append(booking);
   }
 
