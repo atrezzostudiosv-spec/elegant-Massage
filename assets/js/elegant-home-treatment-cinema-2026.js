@@ -19,6 +19,63 @@
  const clamp=n=>Math.max(0,Math.min(1,n));
  const ease=n=>{const v=clamp(n);return v*v*(3-2*v)};
  const labels=['Body Massage','Foot & Back','Couples Massage','Chair & Thai','Four Hands'];
+ /* Portrait assets supplied by the owner. Preload before swapping so a pending
+    upload or failed request never produces a broken photo in the live slider.
+    Image URLs resolve from this JS file on root and /preview-home/ equally. */
+ const portraitFiles=[
+   'mobile-slide-01-body-massage.webp',
+   'mobile-slide-02-foot-back.webp',
+   'mobile-slide-03-couples-massage.webp',
+   'mobile-slide-04-chair-massage.webp',
+   'mobile-slide-05-four-hands.webp'
+ ];
+ const imageBase=new URL('../images/home-2026/',document.currentScript?.src || location.href);
+ const originals=chapters.map(ch=>{
+   const picture=ch.querySelector('.chapter__image');
+   const img=picture?.querySelector('img');
+   const source=picture?.querySelector('source');
+   return {ch,img,source,
+     imgSrc:img?.getAttribute('src')||'',
+     srcset:source?.getAttribute('srcset')||'',
+     media:source?.getAttribute('media')||''};
+ });
+ const available=new Map();
+ let requestVersion=0;
+ function updatePortraits(){
+   const version=++requestVersion;
+   if(!mobile.matches){
+     originals.forEach(({ch,img,source,imgSrc,srcset,media})=>{
+       if(img)img.setAttribute('src',imgSrc);
+       if(source){
+         source.setAttribute('srcset',srcset);
+         source.setAttribute('media',media);
+       }
+       ch.style.removeProperty('--em-focus-x');
+       ch.style.removeProperty('--em-focus-y');
+     });
+     return;
+   }
+   originals.forEach(({ch,img,source},i)=>{
+     if(!img)return;
+     const url=new URL(portraitFiles[i],imageBase).href;
+     const apply=()=>{
+       if(version!==requestVersion||!mobile.matches)return;
+       // Set both picture source and img for correct behavior on Safari iOS.
+       if(source){source.setAttribute('media','(max-width: 870px)');source.setAttribute('srcset',url);}
+       img.src=url;
+       ch.style.setProperty('--em-focus-x','50%');
+       ch.style.setProperty('--em-focus-y','50%');
+     };
+     if(available.get(url)===true){apply();return;}
+     const preloader=new Image();
+     preloader.onload=()=>{available.set(url,true);apply();};
+     preloader.onerror=()=>{available.set(url,false);}; // retain original
+     preloader.src=url;
+   });
+ }
+ mobile.addEventListener?.('change',updatePortraits);
+ updatePortraits();
+
  let chrome,buttons=[],active=-1,raf=0,enabled=false;
  if(opening){section.insertBefore(opening,track);}
  function createChrome(){
