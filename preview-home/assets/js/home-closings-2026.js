@@ -14,7 +14,7 @@
     // map, the wordmark, buttons, address or any other readable content.
     // Short screens and phones retain natural non-sticky content flow.
     const immersiveClosing=matchMedia(
-      '(min-width:768px) and (min-height:681px) and (prefers-reduced-motion:no-preference)'
+      '(min-height:740px) and (prefers-reduced-motion:no-preference)'
     );
     const shots=[
       {section:document.querySelector('.real-place--cinematic'),
@@ -39,7 +39,7 @@
     // and CTA remain fully readable, with no wheel or touch interception.
     const menu=document.querySelector('.menu-pause');
     const menuPhoto=menu?.querySelector('.menu-pause__photo img');
-    const immersiveMenu=matchMedia('(min-width:768px) and (min-height:681px)');
+    const immersiveMenu=matchMedia('(min-height:740px) and (prefers-reduced-motion:no-preference)');
     if(menu&&menuPhoto&&immersiveMenu.matches){
       motions.push(gsap.fromTo(menuPhoto,{scale:1.015},{
         scale:1.092,ease:'none',
@@ -55,7 +55,7 @@
     // No modifications to Codrops/Hiroki's original five treatment timeline.
     const treatmentTrack=document.querySelector('#cinema-track');
     const stageIntro=treatmentTrack?.querySelector('.at-mask-stage > .treatments__opening');
-    if(treatmentTrack&&stageIntro&&matchMedia('(min-height:650px)').matches){
+    if(treatmentTrack&&stageIntro&&matchMedia('(min-width:768px) and (min-height:650px)').matches){
       // First ~115svh is now a reading hold in the mask master timeline.
       // Give the original floral photograph a tiny scroll-linked zoom with
       // no scroll interception. The text remains fully readable most of
