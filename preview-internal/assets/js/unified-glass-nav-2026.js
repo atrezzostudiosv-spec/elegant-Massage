@@ -14,7 +14,7 @@
     a.href=booking;
     a.target='_blank';a.rel='noopener noreferrer';
     a.setAttribute('aria-label','Book an appointment with Elegant Massage');
-    a.innerHTML='Book an Appointment <span aria-hidden="true">↗</span>';
+    a.innerHTML='Book an Appointment ';
     d.body.appendChild(a);
   }
   /* Internal pages use the original, verified menu script. This closes an
